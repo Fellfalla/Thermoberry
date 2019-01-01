@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<!--
+Achtung:
+Die in einer Zeile mit den sog. {placeholder} befindlichen tags werden an jede Zeile die in den placeholder
+geschrieben wird angefügt
+-->
+<html>
+<head lang="de">
+    <meta charset="UTF-8">
+    <title>Heizung</title>
+    <meta http-equiv="refresh" content="60">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div class="overview">
+        <div id="Kopfzeile">
+            <div style="float: left"><h1>Zustandswerte der Heizung:</h1></div>
+            <div style="float: right"><h1>{uhrzeit}</h1></div>
+            <div style="float: right"><img src="u.jpg"></div>
+            <!--<div style="float: left; width: 100%"><hr></div>-->
+        </div>
+    </div>
+
+    <div class="overview">
+        <div class="datafield">
+            <div>
+                <h2>Sensoren</h2>
+            </div>
+            <table>
+               <tr>
+                   <th>Sensorname</th>
+                   <th>Temperatur</th>
+                   <th>ID</th>
+                   <th>Master</th>
+               </tr>
+               {sensoren}
+            </table>
+        </div>
+
+        <div class="datafield">
+            <div>
+                <h2>Puffer</h2>
+            </div>
+            <div>{puffer}</div>
+        </div>
+
+        <div class="datafield">
+            <div>
+                <h2>Rest</h2>
+            </div>
+            <!--<div>-->
+                <p style="white-space: pre;">{rest}</p>
+            <!--</div>-->
+        </div>
+
+        <div class="datafield">
+            <div>
+                <h2>Parameter</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li>{parameter}</li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="datafield">
+            <div>
+                <h2>Errors</h2>
+            </div>
+            <button>clear List</button>
+            <p style="white-space: pre; line-height: 50%; color: red">{errors}</p>
+        </div>
+
+        <div class="datafield">
+            <div>
+                <h2>Hier kannst du nonsens eingeben</h2>
+            </div>
+            <label>
+                <textarea name="user_eingabe" cols="50" rows="50"></textarea>
+            </label>
+        </div>
+    </div>
+    <!--<script language="JavaScript" type="text/javascript" src="randomizeBlur.js"></script>-->
+</body>
+
+</html>
+

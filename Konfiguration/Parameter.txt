@@ -1,0 +1,145 @@
+﻿#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+Abtastzeit=2
+ProtokollierungsIntervall=180   #Sekunden
+ProtokollierungsIntervallBeiFehler=5 #Stunden
+MinProtokollierteZeitspanne=20  #Stunden
+ZeilenanzahlFehlerDatei=500    #Gibt an wie viele Zeilen in der Fehlerdatei stehen bleiben
+MailsAktiviert=False            #True zum aktivieren
+
+# MischerSteuerung
+Zyklenzeit=30
+TempZeitKoeff=3.3               # s/°C -> 240s pro 60 °C
+Tendenzgewichtung=2.8           # Faktor um den die Tendenz mehr eingerechnet wird als das DeltaT
+MischerModus=0                  #0-automatic , 1-Waermer, 2-Kaelter, 3-Handbetrieb, 4-Sleep
+TemperaturRaumSollTag=22
+TemperaturRaumSollNacht=18	
+DeltaTMinInnenAussen=3          # Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet
+MischerHysterese=0.6            #verwendet in Mischer.Regeln()
+AussentemperaturErsatz=0
+HeizungVorlaufSollSteigung=4.4
+HeizungVorlaufParallelverschiebung=2
+HeizungVorlaufTemperaturSollNotfall=50
+HeizungswasserUeberRaumSollMin=4 # °C die das Heizungswasser über der geforderden Raumtemperatur sein muss, sonst schaltet der Mischer ab
+TagBeginn=5:30
+TagEnde=23:00
+
+
+# #Puffermanagemant:
+Pufferlogging=False
+PufferHeizraumMaxTemperatur=77   #Durchschnittstemperatur bei der der Puffer voll ist
+PufferHeizraumMinTemperatur=30   #Durchschnittstemperatur bei der der Puffer leer ist
+#SensorPufferHeizraum6Max=65
+SensorPufferHeizraum4Max=65      # DIESER WERT GILT NUR BEI 4 SENSOREN
+
+PufferHeizungMaxTemperatur=68   #Durchschnittstemperatur bei der der Puffer voll ist
+PufferHeizungMinTemperatur=25   #Durchschnittstemperatur bei der der Puffer leer ist
+SensorPufferHeizung4Max=55
+#SensorPufferHeizung1Min=20
+
+PufferHygieneMaxTemperatur=70   #Durchschnittstemperatur bei der der Puffer voll ist
+PufferHygieneMinTemperatur=40   #Durchschnittstemperatur bei der der Puffer leer ist
+SensorPufferHygiene3Max=50
+SensorPufferHygiene1Min=55
+
+MindestPumpVolumen=350      #Volumen in liter, das mindestens vorhanden sein muss, damit die Pumpe einschaltet
+FehlerPufferVoll=False      # falls aktiviert wird ein fehler gemeldet, wenn ein Puffer voller als 100% ist
+
+
+
+#BrauchwasserMinTemperaturFühler=BrauchwasserOben
+#BrauchwasserMinTemperatur=55 #°C
+#BrauchwasserladungBisFühler=BrauchwasserUnten
+#BrauchwasserladungBisFühlerTemperatur=50 #°C
+#BrauchwasserbereitungAus=20.00 #Uhr
+#BrauchwasserbereitungEin=06.00 #Uhr
+#MindesttemperaturvorsprungderPufferfürBrauchwasserladungFühler=HeizraumpufferOben
+#MindesttemperaturvorsprungderPufferfürBrauchwasserladung=5 #°C
+#Trendzyklus=100
+#Trendfaktor=5
+#SignalWennNutzbarePufferkapazitätUnter=20
+#MindesttemperaturvorsprungPufferHeizraumfürPuffer2LadebeginnFühler=HeizraumpufferOben
+#MindesttemperaturvorsprungPufferHeizraumfürPuffer2LadebeginnTemperatur=40 #°C
+# " Hysterese Fühler=(Fühlerbezeichnung) Temperatur=+()°C
+#VerzögerungNachBetriebsbeginDesHeizkesselsZyklen=1000
+    
+	
+# Heizungssteuerung:
+#Blokierschuz=1
+#Brauchwasservorrang=1
+# verzögerung nach betriebsbegin des Heizkessels in min.=()
+
+# SEGMENT: Heizkörper
+# HeizbeginnBeiAussentmperaturUnter°C=20
+#Sollraumtemperatur=23 # °C
+#Steilheit=1.00
+#Paralellverschiebung=+5
+#Nachtabsenkung(ein/aus)=1
+#NachtabsenkungVon=22.00
+#NachtabsenkungBis=05.30
+#Nachtabsenkung°C=-3
+#minimalePuffertemperaturfürBetrieb=35 #°C
+#SchaltintervallMischer=10 #Zyklen
+#PausnzeitMischer=5 #(Zahlenfaktorfür Formel)
+#Trendzyklus=50
+#Trendfaktor=3
+#SignalWennNutzbarePufferkapazitätUnter%=30 #(*Aussentemperaturfaktor)
+#Aussentemperaturfaktor=1,0
+
+# SEGMENT: Heizkörper
+ # Führungsgröße = (Aussentemperatur / Raumtemperatur / Thermostat) ((Auswahl))
+ # Sollwert =() °C
+ # Hysterese =() °C
+
+# SEGMENT: Fußbodenheizung
+# HeizbeginnBeiAussentmperaturUnter=22 # °C
+# SollraumtemperaturFussbodenheizung=23 # °C
+# Steilheit=1.00
+# Paralellverschiebung=+5
+# Nachtabsenkung(ein/aus)=0
+# NachtabsenkungVon=00.00
+# NachtabsenkungBis=00.00
+# Nachtabsenkung°C=-
+# minimalePuffertemperaturfürBetrieb°C=25
+# SchaltintervallMischer=20 #Zyklen
+# PausnzeitMischer=10 #(Zahlenfaktorfür Formel)
+# Trendzyklus=50
+# Trendfaktor=3
+# SignalWennNutzbarePufferkapazitätUnter%=10 #(*Aussentemperaturfaktor)
+# Aussentemperaturfaktor=1,0
+# Segment1:
+
+# SEGMENT: FußbodenheizungDusche
+# Führungsgröße=Aussentemperatur #(Aussentemperatur / Raumtemperatur / Thermostat) ((Auswahl))
+# Sollwert°C=21
+# Hysterese°C=1
+
+# SEGMENT: Fußbodenheizung_Küche
+# Führungsgröße=Thermostat
+# Sollwert=1
+# Hysterese =() °C
+
+# SEGMENT: Fußbodenheizung_Bügelzimmer
+# Führungsgröße = Thermostat 
+# Sollwert=1
+# Hysterese =() °C
+
+# SEGMENT: Wandheizung Umkleide
+# Führungsgröße = (Aussentemperatur / Raumtemperatur / Thermostat) ((Auswahl))
+# Sollwert =() °C
+# Hysterese =() °C
+
+# SEGMENT: Wandheizung Markus
+# Führungsgröße = (Aussentemperatur / Raumtemperatur / Thermostat) ((Auswahl))
+# Sollwert =() °C
+# Hysterese =() °C
+
+# SEGMENT:
+# Führungsgröße = (Aussentemperatur / Raumtemperatur / Thermostat) ((Auswahl))
+# Sollwert =() °C
+# Hysterese =() °C
+
+# (weitere Segmente)
+
+# evtl. weitere Heizkreise sowie Zuordnung der Ein- und Ausgänge

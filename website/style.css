@@ -1,0 +1,175 @@
+.kursiv  {font-style: italic;}
+.oblique {font-style: oblique;}
+
+body{
+    font-family: Estrangelo Edessa, sans-serif;
+    height: 100vh;
+}
+
+
+li{
+    line-height: 1.5em;
+    font-size: 16px;
+}
+
+h1{
+    font-size: 45px;
+}
+
+hr{
+    width: 100%;
+}
+
+#Kopfzeile div img, #Kopfzeile div{
+    margin: 5px;
+    max-height: 10vh;
+    font-size: 10vh;
+}
+
+#Kopfzeile {
+    width: 100%;
+    float:left;
+    border-bottom: 1px solid black;
+    /*margin: 0 0 1vh 0;*/
+    padding-bottom: 1vh;
+}
+
+
+p:hover, tr:hover, h1:hover, h2:hover, li:hover{
+    transition-duration: 0.25s ;
+    text-shadow: 0 0 4px #000000;
+
+    /*font-size: 105% ;*/
+    /*font-weight: bold;*/
+    /*filter: blur(1px)*/
+}
+
+
+.datafield{
+    /*display: table-cell;*/
+    border: 3px solid #000000;
+    padding: 0 20px 0;
+    margin: 5px;
+    height: 75vh;
+    float: left;
+    overflow: auto;
+    box-shadow: 0 0 5px black;
+}
+
+.datafield h2 {
+    text-align: center;
+
+}
+
+div:hover{
+    -webkit-animation-name: BotderAction;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    animation-name: BotderAction;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+}
+
+
+
+table {
+    border-collapse: collapse;
+    /*margin: 10px;*/
+}
+
+table, td, th{
+    border: 1px solid #000000;
+    color: #000000;
+    padding: 4px;
+    /*transition: width 2s;*/
+    /*-webkit-transition: width 2s;*/
+
+}
+
+
+@keyframes BotderAction {
+    0% {border-color: rgba(255, 255, 255 ,0);}
+    18% {border-color: aqua;}
+    36% {border-color: #22ff25;}
+    52% {border-color: #fff22e;}
+    76% {border-color: #ff17e3;}
+    100% {border-color: #ffffff;}
+}
+
+@-webkit-keyframes BotderAction {
+    0% {border-color: rgba(255, 255, 255 ,0);}
+    18% {border-color: aqua;}
+    36% {border-color: #22ff25;}
+    52% {border-color: #fff22e;}
+    76% {border-color: #ff17e3;}
+    100% {border-color: #ffffff;}
+}
+
+tr:hover{
+    /*font-size: larger;*/
+    /*transition-duration: 1s ;*/
+    -webkit-animation-name: LSDData;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    animation-name: LSDData;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: linear;
+}
+
+.BlinkOnChange {
+    -webkit-animation-name: ChangedData;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+
+    animation-name: ChangedData;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-timing-function: linear;}
+
+
+@-webkit-keyframes LSDData {
+    0% {background-color: rgba(255, 255, 255 ,0);}
+    20% {background-color: #49ff3e;}
+    40% {background-color: #ff8fa7;}
+    60% {background-color: #454dff;}
+    80% {background-color: #27fdff;}
+    100% {background-color: #ceff25;}
+}
+
+@keyframes LSDData {
+    0% {background-color: rgba(255, 255, 255 ,0);}
+    20% {background-color: #49ff3e;}
+    40% {background-color: #ff8fa7;}
+    60% {background-color: #454dff;}
+    80% {background-color: #27fdff;}
+    100% {background-color: #ceff25;}
+}
+
+@-webkit-keyframes ChangedData {
+    0% {background-color: rgba(255, 255, 255 ,0);}
+    5% {background-color: #ff951b;}
+    50% {background-color: #ff951b;}
+}
+
+@keyframes ChangedData {
+    0% {background-color: rgba(255, 255, 255 ,0);}
+    5% {background-color: #ff951b;}
+    50% {background-color: #ff951b;}
+}
+
+@keyframes Wahnsinn {
+    0% {transform: translateX(0) rotate(0deg)}
+    100% {transform: translateX(0) rotate(360deg)}
+}
+
+@-webkit-keyframes Wahnsinn {
+    0% {transform: translateX(0) rotate(0deg)}
+    100% {transform: translateX(0) rotate(360deg)}
+}

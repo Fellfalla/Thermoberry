@@ -1,0 +1,46 @@
+Raspi 1 bzw. 2
+
+Autostart: /home/pi/heizung - wird ausgeführt mit rc.local - chmod 777
+Mount mit \\raspi2\root\etc\fstab bzw. \\raspi2\root\etc\fstab 
+
+Autostart Methode 2: http://jankarres.de/2014/07/raspberry-pi-autostart-von-programmen-einrichten/
+
+Senden der Router IP an no-ip.com mit noip2 script
+
+Ports:	(mit externer IP nur durch key auf googleDrive zugänglich)
+	raspi2 SSH: 			22 und 62000 - eingestellt über /etc/ssh/sshd_config
+	raspi2 Webserver: 	62001 - eingestellt im Heizungsprogramm
+	raspi1 SSH: 22 und 		61000 - eingestellt über /etc/ssh/sshd_config
+	
+
+
+Autostart rc.local:
+	#!/bin/sh -e
+	#
+	# rc.local
+	#
+	# This script is executed at the end of each multiuser runlevel.
+	# Make sure that the script will "exit 0" on success or any other
+	# value on error.
+	#
+	# In order to enable or disable this script just change the execution
+	# bits.
+	#
+	# By default this script does nothing.
+
+	# Print the IP address
+	_IP=$(hostname -I) || true
+	if [ "$_IP" ]; then
+	  printf "My IP address is %s\n" "$_IP"
+	fi
+	autostart=/home/pi/exchange/autostartraspi1
+	while [ ! -f $autostart ]
+	do
+	    echo $autostart "no autostartraspi1"
+	#    sudo umount /mnt/SHAREMOUNTPOINT
+	#    sleep 5
+	#    sudo mount -t cifs //YOURSHAREADDRESS /mnt/SHAREMOUNTPOINT -o sec=ntlm,username=USERNAME,password=PASSWORD,dir_mode=0777,file_mode=0777
+	    sleep 1
+	done
+	su pi -c ./$autostart #'/home/pi/exchange/autostartraspi1'
+	exit 0

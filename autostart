@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "Doing autostart on raspi2..."
+
+
+tmux kill-session -t Thermoberry
+tmux new-session -d -s Thermoberry
+
+tmux send -t Thermoberry "cd /media/mainusb" ENTER 
+tmux send -t Thermoberry "python Thermoberry.py Datenserver Temperatursteuerung Mischersteuerung Puffersteuerung" ENTER 
+

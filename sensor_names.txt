@@ -1,0 +1,23 @@
+# Sensoren Hygienespeicher
+SensorPufferHygiene1
+SensorPufferHygiene2
+SensorPufferHygiene3
+SensorPufferHygiene4
+
+#Sensoren Heizungswasserspeicher
+SensorPufferHeizung1
+SensorPufferHeizung2
+SensorPufferHeizung3
+SensorPufferHeizung4
+
+#Sensoren Grosser Puffer im Heizraum
+SensorPufferHeizraum1
+SensorPufferHeizraum2
+SensorPufferHeizraum3
+SensorPufferHeizraum4
+SensorPufferHeizraum5
+SensorPufferHeizraum6
+
+# Sonstige Sensoren
+SensorAussentemperatur
+SensorMischerKeller
