@@ -65,3 +65,6 @@ target/
 /System Volume Information
 /website/IoThermoberry/IoThermoberry/private_variables.py
 /website/IoThermoberry/db.sqlite3
+
+# Machine Specific Settings
+settings.ini
