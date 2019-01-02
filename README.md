@@ -31,7 +31,7 @@ Datenserver = True
 SensorAuswertung = True
 Mischer = True
 PufferSteuerung = True
-Puffersteuerungraspi1 = False
+PufferSteuerungRaspi1 = False
 DatenbankModul = False
 
 ```
