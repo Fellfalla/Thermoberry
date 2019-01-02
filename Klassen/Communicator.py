@@ -4,13 +4,19 @@ import os
 import cPickle as pickle
 import time
 import datetime
-import fcntl
 import xmlrpclib
 import SensorListe
 from GlobalVariables import *
 import traceback
 import socket
 import ConfigParser as configparser
+
+FLOCK_OS_NAME = 'posix'
+FLOCK_ENABLED = os.name is FLOCK_OS_NAME
+if FLOCK_ENABLED:
+    import fcntl
+else:
+    print("Warning: File locking only on " + FLOCK_OS_NAME + " systems available")
 
 DATA_SERVER_ADDRESS = 'http://'+ DATENSERVER_NAME +':{port}'.format(port=PORT_DATENSERVER)
 
@@ -95,7 +101,8 @@ def PickleReader(dateiname, dateipfad=EMPTY_STRING, createFile=True, datentyp=No
     for _ in range(LESEVERSUCHE):
         try:
             with open(dateipfad + dateiname, "rb") as Source:
-                fcntl.flock (Source.fileno(), fcntl.LOCK_SH)
+                if FLOCK_ENABLED:
+                    fcntl.flock (Source.fileno(), fcntl.LOCK_SH)
                 Datei = pickle.load(Source)
             return Datei
         except EOFError:		#falls Source leer
@@ -124,13 +131,15 @@ def PickleWriter(daten, dateiname, ordner=EMPTY_STRING):
 
 def _openLockAndRead(dateiname, ordnerPfad=EMPTY_STRING):
     with open (os.path.join(ordnerPfad, dateiname),"r") as Datei:
-        fcntl.flock (Datei.fileno(), fcntl.LOCK_SH)
+        if FLOCK_ENABLED:
+            fcntl.flock (Datei.fileno(), fcntl.LOCK_SH)
         Inhalt = Datei.readlines()
     return Inhalt
 
 def fileSaver(daten, dateiname, ordner=PFAD_HAUPTPROGRAMM):
     with open(os.path.join(ordner, dateiname), "rb+") as Datei:
-        fcntl.flock (Datei.fileno(), fcntl.LOCK_EX) #Datei wird gesperrt
+        if FLOCK_ENABLED:
+            fcntl.flock (Datei.fileno(), fcntl.LOCK_EX) #Datei wird gesperrt
         Datei.truncate (0)
         Datei.write (daten)
     print ('saved Data at {dateipfad}'.format(dateipfad=os.path.join(ordner,dateiname)))
@@ -330,7 +339,8 @@ def SchreibeFehler(exception, Programmteil = "Unbekannter Programmteil", dateina
       
     try:
         with open (os.path.join(dateipfad,dateiname),"r") as WarnDatei:
-            fcntl.flock (WarnDatei, fcntl.LOCK_SH) #Datei wird gesperrt
+            if FLOCK_ENABLED:
+                fcntl.flock (WarnDatei, fcntl.LOCK_SH) #Datei wird gesperrt
             AlteErrors = WarnDatei.readlines()
             maxLines = GetParameter(PARAMETER_ZEILENANZAHL_FEHLERDATEI, ERSATZPARAMETER_ZEILENANZAHL_FEHLERDATEI)
             if len(AlteErrors) > maxLines and maxLines is not None:
@@ -338,14 +348,16 @@ def SchreibeFehler(exception, Programmteil = "Unbekannter Programmteil", dateina
             for line in AlteErrors:
                 Warnungen.append(line)
         with open (os.path.join(dateipfad,dateiname),"r+") as WarnDatei:
-            fcntl.flock (WarnDatei, fcntl.LOCK_EX) #Datei wird gesperrt
+            if FLOCK_ENABLED:
+                fcntl.flock (WarnDatei, fcntl.LOCK_EX) #Datei wird gesperrt
             WarnDatei.truncate (0)
             WarnDatei.writelines(Warnungen)
             WarnDatei.close()
     except IOError: #falls Datei nicht forhanden
         FileCreator(dateiname=dateiname, dateipfad=dateipfad)
         with open (os.path.join(dateipfad,dateiname),"r+") as WarnDatei:
-            fcntl.flock (WarnDatei, fcntl.LOCK_EX) #Datei wird gesperrt
+            if FLOCK_ENABLED:
+                fcntl.flock (WarnDatei, fcntl.LOCK_EX) #Datei wird gesperrt
             WarnDatei.truncate (0)
             WarnDatei.writelines(Warnungen)
             WarnDatei.close()
@@ -360,7 +372,8 @@ def Log(Daten, MaxZeilen=0):
     if len(Inhalt) > MaxZeilen != 0:
         Inhalt = Inhalt[0:int(MaxZeilen)]
     with open (os.path.join(ORDNER_LOGS + DATEINAME_LOG),"r+") as LogBuch:
-        fcntl.flock (LogBuch, fcntl.LOCK_EX)
+        if FLOCK_ENABLED:
+            fcntl.flock (LogBuch, fcntl.LOCK_EX)
         for line in Inhalt:
             LogBuch.write ( str(line))
     print ("Logging abgeschlossen\n")

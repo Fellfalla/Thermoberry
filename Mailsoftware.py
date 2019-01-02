@@ -11,6 +11,7 @@ def main(argv):
     #to.append('tobias.obermayer@gmail.com')
 
     user = 'myraspberry@web.de'
+    raise NotImplementedError('The password has to be read from local file')
     passwort= 'REMOVED'
     i = 0
     while i < 1:

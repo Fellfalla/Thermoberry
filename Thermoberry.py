@@ -2,11 +2,15 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Markus Weber'
 import sys
-from threading import Thread, Lock, Event
+from threading import Thread, Event
 import time
+import importlib
 
 from Klassen import Communicator
-from Modules import Datenserver, PufferSteuerungRaspi1, PufferSteuerung, Mischer, SensorAuswertung
+import ConfigParser as configparser
+import GlobalVariables as gv
+
+# from Modules import Datenserver, PufferSteuerungRaspi1, PufferSteuerung, Mischer, SensorAuswertung
 
 #todo: hinzufügen einer schnittstelle zum manuellen neustarten spezifischer module
 #todo: parsen der argumente ( groß und kleinschreibung vernachlässigen )
@@ -15,27 +19,32 @@ from Modules import Datenserver, PufferSteuerungRaspi1, PufferSteuerung, Mischer
 
 
 # Achte auf die reihendfolge der Module! Abhängige module ganz unten
-Modules = {"Datenserver" : Datenserver.main,
-            "Temperatursteuerung" : SensorAuswertung.main,
-            "Mischersteuerung" : Mischer.main,
-            "Puffersteuerung" : PufferSteuerung.main,
-            "Puffersteuerungraspi1" : PufferSteuerungRaspi1.main,
-           }
+# Modules = {"Datenserver" : Datenserver.main,
+#             "Temperatursteuerung" : SensorAuswertung.main,
+#             "Mischersteuerung" : Mischer.main,
+#             "Puffersteuerung" : PufferSteuerung.main,
+#             "Puffersteuerungraspi1" : PufferSteuerungRaspi1.main,
+#            }
 
+# Laden der modul config
+configparser = configparser.ConfigParser()
+configparser.optionxform = str # Deals with case sensitive module imports
+configparser.read(gv.SETINGS_FILE_PATH)
+modules_settings = [(key, enabled) for key, enabled in configparser.items('MODULES') if key not in configparser.defaults()]
 
 # Define Module Threads
-class FuncThread(Thread):
+class ModuleThread(Thread):
     """
     Dieser thread startet die angegebene funktion mit den übergebenen argumenten
     """
-    def __init__(self, target, name="unnamed Module", *args):
-        super(FuncThread, self).__init__()
+    def __init__(self, target, module_name, *args):
+        super(ModuleThread, self).__init__()
         self._target = None
         self._args = None
 
         self.setTarget(target)
         self.setArgs(args)
-        self.setName(name)
+        self.setName(module_name)
         self._stop = Event()
         self.setDaemon(True)
 
@@ -66,48 +75,54 @@ class FuncThread(Thread):
     def __str__(self):
         return "{name} is running: {status}".format(name=self.getName(), status=self.isAlive())
 
-def RestartModule(module, active_modules):
+def restart_module(module, active_modules):
+    """ Startet module neu und ersetzt das objekt in active_modules """
     active_modules.remove(module)
-    module = FuncThread(module.getTarget(), module.getName(), module.getArgs())
+    module = ModuleThread(module.getTarget(), module.getName(), module.getArgs())
     active_modules.append(module)
     module.start()
 
-def CreateModules(argv):
+def create_module_threads(argv):
     """
     erzeugt aus den in der Commandozeile übergebenen Modulen die Module, welche ausgeführt werden sollen
     :param argv: vom System übergebene variablen
     :return:
     """
-    modules_to_run = []
-    for arg in argv:
-        if Modules.has_key(arg):
-            module_entry = Modules[arg]
-            module_name = arg
-            module = FuncThread(module_entry, module_name, argv)
-            modules_to_run.append(module)
+    module_threads =  []
+    
+    # Laden der module
+    for module_name, is_enabled in modules_settings:
+        if is_enabled in [True, str(True), 'true', 'enabled', str(1), 1]:
+            try:
+                module = importlib.import_module("Modules." + module_name, package='')
+            except ImportError as e:
+                print("ERROR: Make shure you use the correct module name in " + gv.SETINGS_FILE_PATH)
+            module_entry = module.main
+            module_thread = ModuleThread(module_entry, module_name, argv)
+            module_threads.append(module_thread)
 
-    return modules_to_run
+    return module_threads
 
 if __name__ == "__main__" :
     try:
 
         # Ausgabe der verfügbaren module
         availableModules = ""
-        for key in Modules.keys():
-            availableModules += "\t- {key}\n".format(key=key)
+        for module_name, _ in modules_settings:
+            availableModules += "\t- {key}\n".format(key=module_name)
         print("Verfügbare Module:\n{availableModules}".format(availableModules=availableModules))
 
 
-        active_modules = CreateModules(sys.argv)
+        module_threads = create_module_threads(sys.argv)
 
         # Ausgabe der aktiven module
         selectedModules = ""
-        for module in active_modules:
+        for module in module_threads:
             selectedModules += "\t- {key}\n".format(key=module.getName())
         print("Aktive Module:\n{activemodules}".format(activemodules=selectedModules))
 
         # Starten der Module
-        for module in active_modules:
+        for module in module_threads:
             # print("\nStarting module: " + module.name)
             # TODO: warte bis modul fertig gestartet wurde, bevor das nächste modul gestartet wird
             module.start()
@@ -116,17 +131,17 @@ if __name__ == "__main__" :
 
         while True:
             # Warten und die Threads ihre Sachen machen lassen
-            for module in active_modules:
+            for module in module_threads:
                 if module.isAlive() is False:
                     Communicator.SchreibeFehler("Das Modul {name} ist offline!".format(name= module.getName()), "main@Thermoberry")
                     print("Trying to restart {moduleName}".format(moduleName=module.getName()))
-                    RestartModule(module, active_modules)
+                    restart_module(module, module_threads)
             time.sleep(25)
 
     except KeyboardInterrupt:
         print ('\n'*2)
         print ('-'*8 + 'SHUTDOWN' + '-'*8)
-        for module in active_modules:
+        for module in module_threads:
             print (module)
             module.stop() #todo: das funktioniert so noch nicht
         time.sleep(0.2)

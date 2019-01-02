@@ -149,31 +149,29 @@ class Manager:
             else: # Anhalten falls selber voll und reserve nicht voll
                 self.PufferHeizung.BeladepumpeAus()
 
-        # Fall 2: Ausgangstemperatur zu niedrig zum Laden
-        elif self.PufferHeizung.getMaxTemperatur() <= temperaturAusgangMin: # Pumpe ausschalten, falls Temperaturniveau zu niedrig
-            #Entladepumpe,
-            self.PufferHeizung.EntladepumpeAus()
-   
-        # Fall 3: HeizungsPuffer Leer
+        # Fall 2: HeizungsPuffer Leer
         elif self.PufferHeizung.Leer:
             #Beladepumpe
             try:
                 temperaturEingangMin = heizungMinTemperatur + ERSATZPARAMETER_TEMPERATUR_PUMPVERLUSTE + ERSATZPARAMETER_TEMPERATURDIFFERENZ_MIN_PUMPEN
                 mindestvolumen =  Communicator.GetParameter(parameter=PARAMETER_MINDESTVOLUMEN_PUMPEN)
                 volumenEingang = self.PufferReserve.VolumenUeberTemperatur(temperaturEingangMin)
-            except KeyError:
-                mindestvolumen = ERSATZPARAMETER_MINDESTVOLUMEN_PUMPEN
+                if volumenEingang > mindestvolumen:
+                    self.PufferHeizung.BeladepumpeEin()
+                else:
                     
-            if volumenEingang > mindestvolumen:
-                self.PufferHeizung.BeladepumpeEin()
-            else:
-                print("PufferHeizung kann nicht laden, da nur " + volumenEingang + "/" + mindestvolumen + " Mindestvolumen verfuegbar")
-                pass
-                #Communicator.SchreibeFehler('PufferHeizung laedt nicht',
-                #'\nVorhandenes Volumen: ' + str(volumenEingang) + 
-                #'\nErforderlichesVolumen: ' + str(mindestvolumen))
-
+                    Communicator.SchreibeFehler('PufferHeizung laedt nicht',
+                    '\nVorhandenes Volumen: ' + str(volumenEingang) + 
+                    '\nErforderlichesVolumen: ' + str(mindestvolumen))
+            except KeyError:
+                if volumenEingang > ERSATZPARAMETER_MINDESTVOLUMEN_PUMPEN:
+                    self.PufferHeizung.BeladepumpeEin()
             #Entladepumpe
+            self.PufferHeizung.EntladepumpeAus()
+
+        # Fall 3: Ausgangstemperatur zu niedrig zum Laden
+        if self.PufferHeizung.getMaxTemperatur() <= temperaturAusgangMin: # Pumpe ausschalten, falls Temperaturniveau zu niedrig
+            #Entladepumpe,
             self.PufferHeizung.EntladepumpeAus()
 
             
