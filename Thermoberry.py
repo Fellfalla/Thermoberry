@@ -96,7 +96,7 @@ def create_module_threads(argv):
             try:
                 module = importlib.import_module("Modules." + module_name, package='')
             except ImportError as e:
-                print("ERROR: Make shure you use the correct module name in " + gv.SETINGS_FILE_PATH)
+                print("ERROR: Make shure you use the correct module name (" + module_name + ") in " + gv.SETINGS_FILE_PATH)
             module_entry = module.main
             module_thread = ModuleThread(module_entry, module_name, argv)
             module_threads.append(module_thread)
