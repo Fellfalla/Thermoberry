@@ -45,6 +45,7 @@ class Mischer:
         self.TemperaturRaumSoll = None
         self.Tag = None
         self.Heizbetrieb = None
+        self.HeizTMin = None
         self.status = STATUS_MISCHER_IDLE
 
 
@@ -52,7 +53,7 @@ class Mischer:
         # detent um triple-quote strings einruecken zu koennen, ohne dass diese im string als einrueckung gewertet wird
         return dedent("""\
         {name}:
-                 Heizbetrieb : {aktiv:7s}
+                 Heizbetrieb : {aktiv:7s} (min{heizmin}°C)
                  GPIO-Wärmer : {iowarm:02d}
                  GPIO-Kälter : {iokalt:02d}
                 Tagschaltung : {tag}
@@ -64,6 +65,7 @@ class Mischer:
                  Ausgang-Ist : {ausgangist} °C
                       Status : {status}""").format(name=self.getName(),
                                              aktiv=str(self.Heizbetrieb),
+                                             heizmin=str(self.HeizTMin),
                                              iowarm=self.PinWaermer,
                                              iokalt=self.PinKaelter,
                                              raumsoll=self.TemperaturRaumSoll,
@@ -187,7 +189,15 @@ class Mischer:
                 versorgungspuffer = Communicator.loadObjectFromServer(name=self.versorgungsPuffer)
                 if versorgungspuffer is None:
                     SchreibeFehler(self.versorgungsPuffer + " auf dem server nicht vorhanden. Heizbetrieb nicht möglich")
-                if self.TemperaturAusgangSoll > versorgungspuffer.getMaxTemperatur():
+                
+                
+                # Abschalten falls minimaltemperatur unterschritten wurde
+                try:
+                    self.HeizTMin = self.Parameter[PARAMETER_HEIZBETRIEB_MINIMALTEMPERATUR]
+                except KeyError:
+                    self.HeizTMin = ERSATZPARAMETER_HEIZBETRIEB_MINIMALTEMPERATUR
+                    print("!!ERSATZPARAMETER_HEIZBETRIEB_MINIMALTEMPERATUR!!")
+                if versorgungspuffer.getMaxTemperatur() < self.HeizTMin:
                     self.SetHeizbetrieb(False)
                     return
 
