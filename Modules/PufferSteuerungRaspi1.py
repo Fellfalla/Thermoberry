@@ -18,7 +18,7 @@ class cSteuerung:
 
 
     def ControlGPIO(self):
-        _, NewGPIOList = Communicator.GetGPIO(raspberry=socket.gethostname())
+        NewGPIOList = Communicator.GetGPIO()
         for Pin in NewGPIOList.keys():
             try:
                 if self.GPIOPins[Pin] != NewGPIOList[Pin]:
@@ -27,7 +27,7 @@ class cSteuerung:
                 self.SetGPIO()
 
     def SetGPIO(self):
-        _, self.GPIOPins = Communicator.GetGPIO(raspberry=socket.gethostname())
+        self.GPIOPins = Communicator.GetGPIO()
         for Pin in self.GPIOPins.keys():
             GPIO.setup(self.GPIOPins[Pin], GPIO.OUT)
             GPIO.output(self.GPIOPins[Pin], GPIO.HIGH)
@@ -37,7 +37,7 @@ class cSteuerung:
         if GPIO_Befehle is None:
             print ("Keine Befehle vorhanden oder Datenserver offline -> abwarten und eierschaukeln")
             return
-        gpioGeraete =  Communicator.GetGPIO(raspberry=socket.gethostname())[1].keys()
+        gpioGeraete =  Communicator.GetGPIO().keys()
         self.ControlGPIO()
         for GPIO_Name in [GPIO_Name for GPIO_Name in GPIO_Befehle.keys() if GPIO_Name in gpioGeraete]:
             if GPIO_Befehle[GPIO_Name]: # Falls True uebergeben wird
