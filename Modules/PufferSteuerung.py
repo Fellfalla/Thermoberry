@@ -105,7 +105,8 @@ class Manager:
         heizungMinTemperatur = self.PufferHeizung.getMinTemperatur()
         if heizungMinTemperatur is None: # kein wert vorhanden
             return
-        temperaturAusgangMin = heizungMinTemperatur + ERSATZPARAMETER_TEMPERATUR_PUMPVERLUSTE + ERSATZPARAMETER_TEMPERATURDIFFERENZ_MIN_PUMPEN
+        pumpverluste = Communicator.GetParameter(parameter=PARAMETER_TEMPERATUR_PUMPVERLUSTE, ersatzparameter=ERSATZPARAMETER_TEMPERATUR_PUMPVERLUSTE)
+        temperaturAusgangMin = heizungMinTemperatur + pumpverluste
         # Fall 1: Puffer Voll
         if self.PufferReserve.Voll:  #ohne Gnade entleeren, falls Puffer Voll
             self.PufferReserve.EntladepumpeEin()
