@@ -46,7 +46,7 @@ SensorPufferHygiene1Min=55
 
 MindestPumpVolumen=350      #Volumen in liter, das mindestens vorhanden sein muss, damit die Pumpe einschaltet
 FehlerPufferVoll=False      # falls aktiviert wird ein fehler gemeldet, wenn ein Puffer voller als 100% ist
-
+Pumpverluste=6	# °C Verlust beim pumpen von heizraum zu keller
 
 
 #BrauchwasserMinTemperaturFühler=BrauchwasserOben

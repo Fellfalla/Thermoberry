@@ -179,9 +179,9 @@ class Puffer(object):
         minimaleTemperaturen.append(Communicator.GetParameter(self.Bezeichnung + PARAMETER_PUFFER_TEMPERATUR_MIN, ERSATZPARAMETER_PUFFER_TEMPERATUR_MIN))
 
         if self.VersorgtePuffer:    # Suche nach minimaler Temperatur in VersorgtePuffer[]
-            for puffer in self.VersorgtePuffer:
+            for target_puffer in self.VersorgtePuffer:
                 try:
-                    minimaleTemperaturen.append(puffer.getMinTemperatur())
+                    minimaleTemperaturen.append(target_puffer.getMinTemperatur())
                 except Exception as e:
                     Communicator.SchreibeFehler(e,'Aktualisieren@Puffer')
 
