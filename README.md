@@ -21,7 +21,7 @@ Contains server an machine information
 ; settings.ini
 [DEFAULT]
 MACHINE_NAME = raspi2
-DATA_SERVER_ADDRESS = 192.168.1.32
+DATA_SERVER_ADDRESS = raspi2
 DATA_SERVER_PORT = 7070
 PATH_TO_SOFTWARE = /media/mainusb
 

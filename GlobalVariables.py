@@ -31,7 +31,7 @@ PFAD_HAUPTPROGRAMM = config_parser.get('DEFAULT','PATH_TO_SOFTWARE', os.path.dir
 DATABASE = 'heizung'        #Name der Datenbank fuer das logging der Heizungsdaten
 TABLENAME_TEMPERATUREN = 'Temperaturen' # Tabellenname fuer das Temperaturlogging
 COLUMN_TIMESTAMP = 'timestamp'  # SQL-Befehl fuer den Datentyp timestamp
-HOST = '192.168.1.31'       # IP-Adresse des Datenbankservers bzw. von raspi1
+HOST = 'raspi1'       # IP-Adresse des Datenbankservers bzw. von raspi1
 USER = 'pi'     # Benutzername zum Einloggen in die Datenbank
 USER_PW = 'raspberry'   # Passwort zu o.g. Benutzernamen
 
