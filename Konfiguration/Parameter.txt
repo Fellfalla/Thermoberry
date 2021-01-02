@@ -16,6 +16,7 @@ MischerModus=0                  #0-automatic , 1-Waermer, 2-Kaelter, 3-Handbetri
 TemperaturRaumSollTag=22
 TemperaturRaumSollNacht=18	
 MinimalTemperaturHeizbetrieb=27 # Minimaltemperatur, damit Heizbetrieb aktiviert wird
+MinimalladungHeizbetriebWaehrendLadevorgang=0.2 # Minimalladung während ladevorgang, damit Heizbetrieb aktiviert wird
 DeltaTMinInnenAussen=3          # Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet
 MischerHysterese=0.6            #verwendet in Mischer.Regeln()
 AussentemperaturErsatz=0
