@@ -186,8 +186,8 @@ class Mischer:
             # Heizbetrieb abschalten, wenn die benötigte Temperatur nicht geliefert werden kann
             if self.versorgungsPuffer:  # Teste ob einer zugewiesen wurde
                 # Ermittelt die maximale lieferbare Temperatur
-                versorgungspuffer = Communicator.loadObjectFromServer(name=self.versorgungsPuffer)
-                if versorgungspuffer is None:
+                versorgungsPuffer = Communicator.loadObjectFromServer(name=self.versorgungsPuffer)
+                if versorgungsPuffer is None:
                     SchreibeFehler(self.versorgungsPuffer + " auf dem server nicht vorhanden. Heizbetrieb nicht möglich")
 
                 # Abschalten falls minimaltemperatur unterschritten wurde
@@ -196,7 +196,7 @@ class Mischer:
                 except KeyError:
                     self.HeizTMin = ERSATZPARAMETER_HEIZBETRIEB_MINIMALTEMPERATUR
                     print("!!ERSATZPARAMETER_HEIZBETRIEB_MINIMALTEMPERATUR!!")
-                if versorgungspuffer.getMaxTemperatur() < self.HeizTMin:
+                if versorgungsPuffer.getMaxTemperatur() < self.HeizTMin:
                     self.SetHeizbetrieb(False)
                     return
 
