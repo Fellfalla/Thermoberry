@@ -2,7 +2,7 @@ logging:
   level: DEBUG
   
 sensors:
-  sensor_dir: C:\sys\bus\w1\devices
+  sensor_dir: /sys/bus/w1/devices
   quality_of_service: 0 # MQTT quality of service
   mapping:
     28-0004633651ff: Aussentemperatur
