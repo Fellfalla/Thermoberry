@@ -18,7 +18,7 @@ Connected = False
 logger = logging.getLogger("TemperatureSensors")
 logger.setLevel(logging.DEBUG)
 
-def read_temp(device_id):
+def read_temp(sensor_dir, device_id):
     valid = False
     temp = 0
 
@@ -81,7 +81,8 @@ def measurement_loop(cfg):
         for device_id in device_ids:
 
             # 1. Read the Temperature
-            temp = read_temp(device_id)
+            logger.debug("Reading device %s"%(device_id))
+            temp = read_temp(sensor_dir, device_id)
 
             # 2. Handl reading errors
             if temp is not None:
