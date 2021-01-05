@@ -68,7 +68,7 @@ def measurement_loop(cfg):
         mqtt_client.publish(os.path.join(machine, "modules/sensors"), payload=1, qos=0, retain=False)
 
         # Retrieve a new list of devices every iteration to allow plug and play
-        device_ids = [os.path.basename(x) for x in glob.glob(os.path.join(s, '28-*'))]
+        device_ids = [os.path.basename(x) for x in glob.glob(os.path.join(sensor_dir, '28-*'))]
         
 
         for device_id in device_ids:
