@@ -13,10 +13,11 @@ import paho.mqtt.client as paho
 import hydra
 from omegaconf import DictConfig
 
+# Local files
+import utils
+
 # Global variables
-Connected = False
 logger = logging.getLogger("TemperatureSensors")
-logger.setLevel(logging.DEBUG)
 
 def read_temp(sensor_dir, device_id):
     valid = False
@@ -36,44 +37,35 @@ def read_temp(sensor_dir, device_id):
     else:
         return None
 
-def on_connect(client, userdata, flags, rc):
-    logger.debug("Connected with result code " + str(rc))
-    if rc == 0:
-        logger.info("Connected to broker")
-        global Connected
-        Connected = True
-    else:
-        logger.info("Connection failed")
-
-def on_publish(client, userdata, mid):
-    logger.debug("Data published %s"%(str(mid)))
-
-@hydra.main(config_path="config.yaml")
+@hydra.main(config_path="conf/config.yaml")
 def measurement_loop(cfg):
     # Read the config
     machine = cfg.get('machine', socket.gethostname()) # with default value
-    broker = cfg.mqtt.broker
-    port = cfg.mqtt.port
     sensor_dir = cfg.sensors.sensor_dir
     sensor_id_mapping = cfg.sensors.mapping
+    qos = cfg.sensors.quality_of_service
 
-    # Create the MQTT client
-    mqtt_client = paho.Client("Python")
-    mqtt_client.on_connect = on_connect
-    mqtt_client.on_publish = on_publish
-    mqtt_client.connect(broker, port) # establish connection
-    
-    # Connect the MQTT client
-    mqtt_client.loop_start()
-    while Connected != True: #Wait for connection
-        time.sleep(0.1)
-        
-    
+    # Prepare logging
+    new_log_level = cfg.logging.level
+    logger.info("Setting loglevel to %s"%(str(new_log_level)))
+    logger.setLevel(new_log_level)
+
+    # Connect to MQTT broker
+    logger.info("Connecting to MQTT broker...")
+    mqtt_client = utils.create_mqtt_client(client_id="TemperatureModule@%s"%(machine), **cfg.mqtt)
+    if mqtt_client:
+        logger.info("Connection to MQTT broker: OK")
+    else:
+        logger.error("Connection to MQTT broker: FAILED")
+        return
+
     # Run the measurement and publishing loop 
+    logger.info("Run measurement loop")
+
     while True:
 
         # Show that we are alive
-        mqtt_client.publish(os.path.join(machine, "modules/sensors"), payload=1, retain=False)
+        mqtt_client.publish(os.path.join(machine, "modules/sensors"), payload=1, qos=0, retain=False)
 
         # Retrieve a new list of devices every iteration to allow plug and play
         device_ids = [os.path.basename(x) for x in glob.glob(sensor_dir + '28-*')]
@@ -83,24 +75,29 @@ def measurement_loop(cfg):
             # 1. Read the Temperature
             logger.debug("Reading device %s"%(device_id))
             temp = read_temp(sensor_dir, device_id)
-
-            # 2. Handl reading errors
-            if temp is not None:
-                topic = os.path.join("sensors", device_id)
-                _ = mqtt_client.publish(topic, payload=temp, retain=True) 
-            else:
-                logger.error("Reading %s failed"%(device_id))
                 
-            # 3. Notify about missing information
+            # 2. Notify about missing information
             if device_id not in sensor_id_mapping:
                 logger.warning(("No mapping found for %s"%(device_id)))
+                sensor_name = device_id
+            else:
+                sensor_name = sensor_id_mapping[device_id]
+
+            # 3. Handl reading errors
+            if temp is not None:
+                _ = mqtt_client.publish(os.path.join("sensors", sensor_name, "temperature"), payload=temp, qos=qos, retain=True) 
+                _ = mqtt_client.publish(os.path.join("sensors", sensor_name, "id"), payload=device_id, qos=qos, retain=True) 
+                
+            else:
+                logger.error("Reading %s failed"%(device_id))
 
         time.sleep(1)
 
+
 if __name__ == "__main__":
     try: 
-        print("##### Start Measurement #####")
         measurement_loop()
     except KeyboardInterrupt:
-        print("##### Shutdown #####")
-        pass
+        logger.info("##### Shutdown by Keyboard Interrupt#####")
+    except Exception as e:
+        logger.exception(e)
