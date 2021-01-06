@@ -1,25 +1,61 @@
 logging:
-  level: DEBUG
+  level: WARN
   
 sensors:
   sensor_dir: /sys/bus/w1/devices
   quality_of_service: 0 # MQTT quality of service
   mapping:
-    28-0004633651ff: Aussentemperatur
-    28-00044a21bcff: MischerKeller
-    28-0004641778ff: Heizraum/1
-    28-00044c86b7ff: Heizraum/2
-    28-0004633961ff: Heizraum/3
-    28-0004612509ff: Heizraum/4
-    28-0004633827ff: Heizung/1
-    28-00046335f6ff: Heizung/2
-    28-00044e6b6dff: Heizung/3
-    28-00044c86c8ff: Heizung/4
-    28-00044e6cc1ff: Hygiene/1
-    28-00044e7371ff: Hygiene/2
-    28-00044e7edbff: Hygiene/3
-    28-00044e75daff: Hygiene/4
+    28-0004633651ff: sensors/aussentemperatur
+    28-00044a21bcff: sensors/heizkreis/vorlauf_ist
+    28-0004641778ff: sensors/heizraum/1
+    28-00044c86b7ff: sensors/heizraum/2
+    28-0004633961ff: sensors/heizraum/3
+    28-0004612509ff: sensors/heizraum/4
+    28-0004633827ff: sensors/heizkreis/1
+    28-00046335f6ff: sensors/heizkreis/2
+    28-00044e6b6dff: sensors/heizkreis/3
+    28-00044c86c8ff: sensors/heizkreis/4
+    28-00044e6cc1ff: sensors/brauchwasser/1
+    28-00044e7371ff: sensors/brauchwasser/2
+    28-00044e7edbff: sensors/brauchwasser/3
+    28-00044e75daff: sensors/brauchwasser/4
 
+heating_circuits:
+  - id: heizkoerper
+    TemperaturRaumSollTag: 22
+    TemperaturRaumSollNacht: 18
+    TagBeginn: 5:30
+    TagEnde: 23:00
+    Zyklenzeit: 30
+    TempZeitKoeff: 3.3               # s/°C -> 240s pro 60 °C
+    Tendenzgewichtung: 2.8           # Faktor um den die Tendenz mehr eingerechnet wird als das DeltaT
+    MinimalTemperaturHeizbetrieb: 27 # Minimaltemperatur, damit Heizbetrieb aktiviert wird
+    MinimalladungHeizbetriebWaehrendLadevorgang: 0.2 # Minimalladung während ladevorgang, damit Heizbetrieb aktiviert wird
+    DeltaTMinInnenAussen: 3          # Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet
+    MischerHysterese: 0.6            #verwendet in Mischer.Regeln()
+    HeizungVorlaufSollSteigung: 4.4
+    HeizungVorlaufParallelverschiebung: 2
+    HeizungVorlaufTemperaturSollNotfall: 50
+    HeizungswasserUeberRaumSollMin: 4 # °C die das Heizungswasser über der geforderden Raumtemperatur sein muss, sonst schaltet der Mischer ab
+
+buffers:
+  - id: heizraum
+  - id: heizkreis
+    inputs:
+      sensors/heizraum/1:
+        loss: 6 #°C
+    max_temperatures: # disables loading
+      "sensors/heizkreis/4/temperature": 77
+    min_temperatures: # enables loading
+      "sensors/heizkreis/1/temperature": 30
+  - id: brauchwasser
+    inputs:
+      sensors/heizkreis/1:
+        loss: 2 #°C
+    max_temperatures: # disables loading
+      "sensors/brauchwasser/3": 50
+    min_temperatures: # enables loading
+      "sensors/brauchwasser/1": 55
 
 mqtt:
   broker: 192.168.178.40

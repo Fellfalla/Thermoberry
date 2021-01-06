@@ -86,8 +86,8 @@ def measurement_loop(cfg):
 
             # 3. Handl reading errors
             if temp is not None:
-                _ = mqtt_client.publish(os.path.join("sensors", sensor_name, "temperature"), payload=temp, qos=qos, retain=True) 
-                _ = mqtt_client.publish(os.path.join("sensors", sensor_name, "id"), payload=device_id, qos=qos, retain=True) 
+                _ = mqtt_client.publish(os.path.join(sensor_name, "temperature"), payload=temp, qos=qos, retain=True) 
+                _ = mqtt_client.publish(os.path.join(sensor_name, "id"), payload=device_id, qos=qos, retain=True) 
                 
             else:
                 logger.error("Reading %s failed"%(device_id))
