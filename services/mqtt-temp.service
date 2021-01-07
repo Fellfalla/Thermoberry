@@ -1,20 +1,16 @@
 [Unit]
-Description=MQTT Temperature sensor
+Description=MQTT 1-Wire Sensor Module
 After=network.target
+Conflicts=getty@tty1.service
 
 [Service]
-# Hack because Python can't cope with a DynamicUser with no HOME
-Environment="HOME=/home/pi/"
-ExecStart=${executable}
-
-DynamicUser=yes
-MemoryDenyWriteExecute=true
-PrivateDevices=true
-ProtectKernelTunables=true
-ProtectControlGroups=true
-RestrictRealtime=true
-RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
-RestrictNamespaces=true
+ExecStart=/usr/bin/python3 -u sensors.py logging.level=INFO
+WorkingDirectory=${working_dir}
+StandardInput=tty-force
+User=pi
+Restart=always
+StandardError=inherit
+StandardOutput=inherit
 
 [Install]
 WantedBy=multi-user.target
