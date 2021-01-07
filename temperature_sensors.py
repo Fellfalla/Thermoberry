@@ -7,6 +7,7 @@ import time
 import subprocess
 import socket
 import logging
+import json
 
 # 3rd party libraries
 import paho.mqtt.client as paho
@@ -63,7 +64,7 @@ def measurement_loop(cfg):
     logger.info("Run measurement loop")
 
     heartbeat_topic = machine + "/modules/sensors"
-    mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
+    mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2, retain=True) # Show that we are alive
     mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
 
     while True:
