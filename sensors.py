@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 #Source: https://www.earth.li/~noodles/blog/2018/05/rpi-mqtt-temp.html
 
 import os
@@ -19,6 +19,7 @@ import utils
 
 # Global variables
 logger = logging.getLogger("TemperatureSensors")
+logger.info("Sensing Module loaded.")
 
 def read_temp(sensor_dir, device_id):
     valid = False
@@ -41,12 +42,14 @@ def read_temp(sensor_dir, device_id):
 @hydra.main(config_path="conf/config.yaml")
 def measurement_loop(cfg):
     # Read the config
+    logger.info("Read config file")
     machine = cfg.get('machine', socket.gethostname()) # with default value
     sensor_dir = cfg.sensors.sensor_dir
     sensor_id_mapping = cfg.sensors.mapping
     qos = cfg.sensors.quality_of_service
 
     # Prepare logging
+    logger.info("Configure logging")
     new_log_level = cfg.logging.level
     logger.info("Setting loglevel to %s"%(str(new_log_level)))
     logger.setLevel(new_log_level)
