@@ -4,23 +4,24 @@ import os
 import socket
 import logging
 import time 
+import json
 
 # 3rd party libraries
-# import paho.mqtt.client as paho
-import paho
 import hydra
+
 # Local Variables
 import utils
 import helpers
+from iot_entity import IotEntity
 
 # Global variables
 logger = logging.getLogger()
 machine = socket.gethostname()
 
 
-class Buffer(object):
+class Buffer(IotEntity):
     def __init__(self):
-        self.id = None
+        super().__init__()
         self.inputs = {}
         self.max_temperatures = {}
         self.min_temperatures = {}
@@ -41,22 +42,22 @@ class Buffer(object):
         # Rule 4: Force loading if supplier is overheading
         # TODO
         supplier_overheating = False
-
+        
         logger.debug("is_hot: %s | is_cold: %s | can_load: %s"%(is_hot, is_cold, can_load))
 
         if self.mqtt_client and self.mqtt_client.is_connected():
             if supplier_overheating:
                 # protect the supplier by taking the hot water
-                self.mqtt_client.publish(os.path.join(self.id, "load"), payload=True, retain=True)
-            if is_hot:
+                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(True), retain=True)
+            elif is_hot:
                 # stop in case of overheating
-                self.mqtt_client.publish(os.path.join(self.id, "load"), payload=False, retain=True)
+                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(False), retain=True)
             elif is_cold and can_load:
                 # start loading as soon as we are getting too cold
-                self.mqtt_client.publish(os.path.join(self.id, "load"), payload=True, retain=True)
+                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(True), retain=True)
             elif not can_load:
                 # disable as soon as we cannot load anymore
-                self.mqtt_client.publish(os.path.join(self.id, "load"), payload=False, retain=True)
+                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(False), retain=True)
 
     def on_temperature_change(self, client, userdata, message):
         self.temperatures[message.topic] = float(message.payload)
@@ -66,7 +67,6 @@ class Buffer(object):
         self.temperatures_supply[message.topic] = float(message.payload)
 
     def enable(self, broker="localhost", port=1883):
-
         # Connect to MQTT broker
         logger.info("Connecting %s to MQTT broker."%(self.id))
 
@@ -97,12 +97,6 @@ class Buffer(object):
             logger.info("Disconnecting %s from MQTT broker."%(self.id))
             self.mqtt_client.disconnect()
 
-    @staticmethod
-    def from_dict(cfg):
-        buffer_instance = Buffer()
-        buffer_instance.__dict__.update(cfg)
-        return buffer_instance
-
 @hydra.main(config_path="conf/config.yaml")
 def buffers_loop(cfg):
     # Prepare logging
@@ -130,11 +124,11 @@ def buffers_loop(cfg):
         logger.error("Connection to MQTT broker: FAILED")
         return
 
+    heartbeat_topic = machine + "/modules/buffers"
+    mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
+    mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
+    # TODO: add atexit and disconnect the mqtt client then. Looks as if otherwise the "will" will not be sent
     while True:
-
-        # Show that we are alive
-        mqtt_client.publish(os.path.join(machine, "modules/buffers"), payload=1, retain=False)
-        
         time.sleep(1)
 
 

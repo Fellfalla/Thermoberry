@@ -1,5 +1,5 @@
 logging:
-  level: WARN
+  level: DEBUG
   
 sensors:
   sensor_dir: /sys/bus/w1/devices
@@ -38,11 +38,24 @@ heating_circuits:
     HeizungVorlaufTemperaturSollNotfall: 50
     HeizungswasserUeberRaumSollMin: 4 # °C die das Heizungswasser über der geforderden Raumtemperatur sein muss, sonst schaltet der Mischer ab
 
+mixers:
+  - id: heizkreis/mischer
+    topic_output_actual: sensors/heizkreis/vorlauf_ist/temperature
+    topic_output_target: heizkreis/vorlauf_soll
+    topic_enable: heizkreis/mischer/automatik
+    topic_open: heizkreis/mischer/heiss
+    topic_close: heizkreis/mischer/kalt
+    cycle_period: 2 # Zykluszeit in [s]
+    P: 1 # Fehlergewichtung
+    D: 2.8 # Tendenzgewichtung
+    temperature_to_time: 3.3 # Umrechnungsfaktor in [s/°C] wandelt temperatur auf zeit um
+    hysteresis: 2.0 # Toleranzintervall bzgl. Temperatur für den Mischer
+
 buffers:
   - id: heizraum
   - id: heizkreis
     inputs:
-      sensors/heizraum/1:
+      sensors/heizraum/1/temperature:
         loss: 6 #°C
     max_temperatures: # disables loading
       "sensors/heizkreis/4/temperature": 77
@@ -58,7 +71,7 @@ buffers:
       "sensors/brauchwasser/1": 55
 
 mqtt:
-  broker: 192.168.178.40
+  broker: 192.168.1.4
   port: 1883
   # auth: 
   #   username: 'user2'

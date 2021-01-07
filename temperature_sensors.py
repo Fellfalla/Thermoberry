@@ -62,10 +62,11 @@ def measurement_loop(cfg):
     # Run the measurement and publishing loop 
     logger.info("Run measurement loop")
 
-    while True:
+    heartbeat_topic = machine + "/modules/sensors"
+    mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
+    mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
 
-        # Show that we are alive
-        mqtt_client.publish(os.path.join(machine, "modules/sensors"), payload=1, qos=0, retain=False)
+    while True:
 
         # Retrieve a new list of devices every iteration to allow plug and play
         device_ids = [os.path.basename(x) for x in glob.glob(os.path.join(sensor_dir, '28-*'))]
@@ -86,8 +87,8 @@ def measurement_loop(cfg):
 
             # 3. Handl reading errors
             if temp is not None:
-                _ = mqtt_client.publish(os.path.join(sensor_name, "temperature"), payload=temp, qos=qos, retain=True) 
-                _ = mqtt_client.publish(os.path.join(sensor_name, "id"), payload=device_id, qos=qos, retain=True) 
+                _ = mqtt_client.publish(sensor_name + "/temperature", payload=temp, qos=qos, retain=True) 
+                _ = mqtt_client.publish(sensor_name + "/id", payload=device_id, qos=qos, retain=True) 
                 
             else:
                 logger.error("Reading %s failed"%(device_id))
