@@ -14,7 +14,8 @@ import helpers
 from iot_entity import IotEntity
 
 # Global variables
-logger = logging.getLogger("Mixer")
+module_name = "Mixer"
+logger = logging.getLogger(module_name)
 machine = socket.gethostname()
 
 class Mixer(IotEntity):
@@ -141,7 +142,7 @@ def mixer_loop(cfg):
 
     # Connect to MQTT broker
     logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="TemperatureModule@%s"%(machine), **cfg.mqtt)
+    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), **cfg.mqtt)
     if mqtt_client:
         logger.info("Connection to MQTT broker: OK")
     else:
@@ -157,7 +158,7 @@ def mixer_loop(cfg):
 
         mixer.enable(**cfg.mqtt)
 
-    heartbeat_topic = machine + "/modules/mixer"
+    heartbeat_topic = machine + "/modules/" + module_name
     mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
     mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
 

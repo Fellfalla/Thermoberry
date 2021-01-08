@@ -16,9 +16,9 @@ from iot_entity import IotEntity
 
 
 # Global variables
-logger = logging.getLogger("Mixer")
-machine = socket.gethostname()
 module_name = "HeatingControl"
+logger = logging.getLogger(module_name)
+machine = socket.gethostname()
 main_mqtt_client = None
 
 class HeatingCircuit(IotEntity):

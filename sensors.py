@@ -18,7 +18,9 @@ from omegaconf import DictConfig
 import utils
 
 # Global variables
-logger = logging.getLogger("TemperatureSensors")
+module_name = "Sensors"
+logger = logging.getLogger(module_name)
+machine = socket.gethostname()
 
 def read_temp(sensor_dir, device_id):
     valid = False
@@ -41,7 +43,6 @@ def read_temp(sensor_dir, device_id):
 @hydra.main(config_path="conf/config.yaml")
 def measurement_loop(cfg):
     # Read the config
-    machine = cfg.get('machine', socket.gethostname()) # with default value
     sensor_dir = cfg.sensors.sensor_dir
     sensor_id_mapping = cfg.sensors.mapping
     qos = cfg.sensors.quality_of_service
@@ -53,7 +54,7 @@ def measurement_loop(cfg):
 
     # Connect to MQTT broker
     logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="TemperatureModule@%s"%(machine), **cfg.mqtt)
+    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), **cfg.mqtt)
     if mqtt_client:
         logger.info("Connection to MQTT broker: OK")
     else:
@@ -63,7 +64,7 @@ def measurement_loop(cfg):
     # Run the measurement and publishing loop 
     logger.info("Run measurement loop")
 
-    heartbeat_topic = machine + "/modules/sensors"
+    heartbeat_topic = machine + "/modules/" + module_name
     mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2, retain=True) # Show that we are alive
     mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
 
@@ -88,7 +89,8 @@ def measurement_loop(cfg):
 
             # 3. Handl reading errors
             if temp is not None:
-                _ = mqtt_client.publish(sensor_name + "/temperature", payload=temp, qos=qos, retain=True) 
+                # TODO: consider removing id and publish temperature directly to the sensor topic
+                _ = mqtt_client.publish(sensor_name + "/temperature", payload=temp, qos=qos, retain=False) 
                 _ = mqtt_client.publish(sensor_name + "/id", payload=device_id, qos=qos, retain=True) 
                 
             else:
