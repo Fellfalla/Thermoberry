@@ -84,9 +84,7 @@ class Mixer(IotEntity):
         topics = [
             self.topic_output_actual,
             self.topic_output_target,
-            self.topic_enable,
-            self.topic_open,
-            self.topic_close,
+            self.topic_enable
         ]
 
         self.mqtt_client = helpers.mqtt.callback_nonblocking(
