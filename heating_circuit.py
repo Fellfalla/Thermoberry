@@ -126,7 +126,8 @@ class HeatingCircuit(IotEntity):
                 enable_heating_circuit = False
  
             # Turn off if supplier is almost empty and charging
-            elif self.topic_states[self.topic_supplier_charging] and \
+            elif self.topic_supplier_charging in self.topic_states and \
+                self.topic_states[self.topic_supplier_charging] and \
                 self.topic_states[self.topic_supplier_temperature] < self.activation_rules.supplier_temperature_while_charging:
                
                 logger.debug("Turn off %s because supplier is charging and low"%self.id)                
