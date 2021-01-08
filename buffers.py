@@ -15,7 +15,8 @@ import helpers
 from iot_entity import IotEntity
 
 # Global variables
-logger = logging.getLogger()
+module_name = "Buffers"
+logger = logging.getLogger(module_name)
 machine = socket.gethostname()
 
 
@@ -100,8 +101,6 @@ class Buffer(IotEntity):
 @hydra.main(config_path="conf/config.yaml")
 def buffers_loop(cfg):
     # Prepare logging
-    global logger
-    logger = logging.getLogger("Buffer")
     new_log_level = cfg.logging.level
     logger.info("Setting loglevel to %s"%(str(new_log_level)))
     logger.setLevel(new_log_level)
@@ -117,14 +116,14 @@ def buffers_loop(cfg):
 
     # Connect to MQTT broker
     logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="TemperatureModule@%s"%(machine), **cfg.mqtt)
+    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), **cfg.mqtt)
     if mqtt_client:
         logger.info("Connection to MQTT broker: OK")
     else:
         logger.error("Connection to MQTT broker: FAILED")
         return
 
-    heartbeat_topic = machine + "/modules/buffers"
+    heartbeat_topic = machine + "/modules/" + module_name
     mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
     mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
     # TODO: add atexit and disconnect the mqtt client then. Looks as if otherwise the "will" will not be sent

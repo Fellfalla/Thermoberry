@@ -1,0 +1,14 @@
+[Unit]
+Description=Thermoberry Hot-Water Buffers Module
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/env python3 buffers.py logging.level=INFO
+WorkingDirectory=${working_dir}
+StandardInput=null
+StandardOutput=journal+console
+User=pi
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

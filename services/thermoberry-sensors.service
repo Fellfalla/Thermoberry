@@ -1,0 +1,14 @@
+[Unit]
+Description=Thermoberry Temperature Sensors Module
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/env python3 sensors.py logging.level=INFO
+WorkingDirectory=${working_dir}
+StandardInput=null
+StandardOutput=journal+console
+User=pi
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

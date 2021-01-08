@@ -3,7 +3,6 @@ import os
 import socket
 import logging
 import time 
-import threading
 import json
 
 # 3rd party libraries
@@ -15,7 +14,8 @@ import helpers
 from iot_entity import IotEntity
 
 # Global variables
-logger = logging.getLogger("Mixer")
+module_name = "Mixer"
+logger = logging.getLogger(module_name)
 machine = socket.gethostname()
 
 class Mixer(IotEntity):
@@ -70,20 +70,21 @@ class Mixer(IotEntity):
             if self.output_previous is None:
                 self.output_previous = self.output_actual
 
-        if message.topic == self.topic_output_target:
+        elif message.topic == self.topic_output_target:
             self.output_target = float(message.payload)
 
         elif message.topic == self.topic_enable:
             self.automatic_mode = json.loads(message.payload.decode())
+
+        else:
+            logger.warn("Unexpected topic %s"%message.topic)
 
     def enable(self, broker, port):
         client_id="%s@%s"%(self.id, machine)
         topics = [
             self.topic_output_actual,
             self.topic_output_target,
-            self.topic_enable,
-            self.topic_open,
-            self.topic_close,
+            self.topic_enable
         ]
 
         self.mqtt_client = helpers.mqtt.callback_nonblocking(
@@ -139,7 +140,7 @@ def mixer_loop(cfg):
 
     # Connect to MQTT broker
     logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="TemperatureModule@%s"%(machine), **cfg.mqtt)
+    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), **cfg.mqtt)
     if mqtt_client:
         logger.info("Connection to MQTT broker: OK")
     else:
@@ -155,7 +156,7 @@ def mixer_loop(cfg):
 
         mixer.enable(**cfg.mqtt)
 
-    heartbeat_topic = machine + "/modules/mixer"
+    heartbeat_topic = machine + "/modules/" + module_name
     mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
     mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
 

@@ -21,22 +21,31 @@ sensors:
     28-00044e75daff: sensors/brauchwasser/4
 
 heating_circuits:
-  - id: heizkoerper
-    TemperaturRaumSollTag: 22
-    TemperaturRaumSollNacht: 18
-    TagBeginn: 5:30
-    TagEnde: 23:00
-    Zyklenzeit: 30
-    TempZeitKoeff: 3.3               # s/°C -> 240s pro 60 °C
-    Tendenzgewichtung: 2.8           # Faktor um den die Tendenz mehr eingerechnet wird als das DeltaT
-    MinimalTemperaturHeizbetrieb: 27 # Minimaltemperatur, damit Heizbetrieb aktiviert wird
-    MinimalladungHeizbetriebWaehrendLadevorgang: 0.2 # Minimalladung während ladevorgang, damit Heizbetrieb aktiviert wird
-    DeltaTMinInnenAussen: 3          # Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet
-    MischerHysterese: 0.6            #verwendet in Mischer.Regeln()
-    HeizungVorlaufSollSteigung: 4.4
-    HeizungVorlaufParallelverschiebung: 2
-    HeizungVorlaufTemperaturSollNotfall: 50
-    HeizungswasserUeberRaumSollMin: 4 # °C die das Heizungswasser über der geforderden Raumtemperatur sein muss, sonst schaltet der Mischer ab
+  - id: heizkreis/steuerung
+    topic_requested_temperature: heizkreis/vorlauf_soll
+    topic_enable: heizkreis/steuerung/automatik
+
+    topic_outside_temperature: sensors/aussentemperatur/temperature
+    topic_supplier_temperature: sensors/heizkreis/1/temperature
+    topic_supplier_charging: heizkreis/load
+    topic_pump: heizkreis/pumpe
+    activation_rules: # bedingungen und abhängigkeiten zum aktivieren der pumpe
+      delta_input_over_room_temperature: 4 # °C die das Heizungswasser über der geforderden Raumtemperatur sein muss, damit Heizbetrieb aktiviert wird
+      delta_inside_outside: 3 # Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet
+      supplier_temperature_while_charging: 50 # Min Versorgungstemperatur in [°C], während ladevorgang
+
+    room_temperature:
+      day: 22
+      night: 18
+      day_start: "5:30"
+      night_start: "22:00"
+
+    requested_temperature_calculation:
+      slope: 4.4 # Steigung
+      offset: 2 # temperature offset
+      max: 60 # Max radiator temperature in [°C]
+      fallback: 50 # Backupwert
+
 
 mixers:
   - id: heizkreis/mischer
@@ -45,7 +54,7 @@ mixers:
     topic_enable: heizkreis/mischer/automatik
     topic_open: heizkreis/mischer/heiss
     topic_close: heizkreis/mischer/kalt
-    cycle_period: 2 # Zykluszeit in [s]
+    cycle_period: 25 # Zykluszeit in [s]
     P: 1 # Fehlergewichtung
     D: 2.8 # Tendenzgewichtung
     temperature_to_time: 3.3 # Umrechnungsfaktor in [s/°C] wandelt temperatur auf zeit um
@@ -60,7 +69,7 @@ buffers:
     max_temperatures: # disables loading
       "sensors/heizkreis/4/temperature": 77
     min_temperatures: # enables loading
-      "sensors/heizkreis/1/temperature": 30
+      "sensors/heizkreis/1/temperature": 40
   - id: brauchwasser
     inputs:
       sensors/heizkreis/1:
