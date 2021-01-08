@@ -38,13 +38,12 @@ class Buffer(IotEntity):
         is_cold = any([self.temperatures.get(key, val) < val for key, val in self.min_temperatures.items()])
 
         # Rule 3: check if we have some sufficient supplier
-        can_load = any([self.temperatures_supply.get(key,0) > min(self.temperatures.values()) + val.loss for key, val in self.inputs.items()])
+        can_load = any([self.temperatures_supply.get(supplier.sensor,0) > min(self.temperatures.values()) + supplier.loss for supplier in self.inputs])
 
         # Rule 4: Force loading if supplier is overheading
-        # TODO
-        supplier_overheating = False
+        supplier_overheating = any([self.temperatures_supply.get(supplier.overheating_sensor, 0) > supplier.overheating_temperature for supplier in self.inputs])
         
-        logger.debug("is_hot: %s | is_cold: %s | can_load: %s"%(is_hot, is_cold, can_load))
+        logger.debug("is_hot: %s | is_cold: %s | can_load: %s | overheat_protection: %s "%(is_hot, is_cold, can_load, supplier_overheating))
 
         if self.mqtt_client and self.mqtt_client.is_connected():
             if supplier_overheating:
@@ -84,7 +83,8 @@ class Buffer(IotEntity):
             port=port)
 
 
-        topics = [k for k in self.inputs.keys()]
+        topics = [supplier.sensor for supplier in self.inputs]
+        topics.extend([supplier.overheating_sensor for supplier in self.inputs])
         logger.debug("Subscribing to %s"%topics)
         self.input_client = helpers.mqtt.callback_nonblocking(
             callback=self.on_input_temperature_change, 

@@ -64,16 +64,20 @@ buffers:
   - id: heizraum
   - id: heizkreis
     inputs:
-      sensors/heizraum/1/temperature:
+      - sensor: sensors/heizraum/1/temperature
         loss: 6 #°C
+        overheating_sensor: sensors/heizraum/4/temperature
+        overheating_temperature: 71
     max_temperatures: # disables loading
       "sensors/heizkreis/4/temperature": 77
     min_temperatures: # enables loading
       "sensors/heizkreis/1/temperature": 40
   - id: brauchwasser
     inputs:
-      sensors/heizkreis/1:
+      - sensor: sensors/heizkreis/1
         loss: 2 #°C
+        overheating_sensor: sensors/heizkreis/4/temperature
+        overheating_temperature: 71
     max_temperatures: # disables loading
       "sensors/brauchwasser/3": 50
     min_temperatures: # enables loading
