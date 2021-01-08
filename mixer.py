@@ -3,7 +3,6 @@ import os
 import socket
 import logging
 import time 
-import threading
 import json
 
 # 3rd party libraries
@@ -70,11 +69,14 @@ class Mixer(IotEntity):
             if self.output_previous is None:
                 self.output_previous = self.output_actual
 
-        if message.topic == self.topic_output_target:
+        elif message.topic == self.topic_output_target:
             self.output_target = float(message.payload)
 
         elif message.topic == self.topic_enable:
             self.automatic_mode = json.loads(message.payload.decode())
+
+        else:
+            logger.warn("Unexpected topic %s"%message.topic)
 
     def enable(self, broker, port):
         client_id="%s@%s"%(self.id, machine)
