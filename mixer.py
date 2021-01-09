@@ -171,3 +171,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("##### Shutdown #####")
         pass
+    except Exception as e:
+        logger.exception(e)
+        raise e

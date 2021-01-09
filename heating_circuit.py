@@ -211,3 +211,6 @@ if __name__ == "__main__":
         print("##### Shutdown #####")
     except SystemExit:
         print("##### Shutdown #####")
+    except Exception as e:
+        logger.exception(e)
+        raise e

@@ -106,3 +106,4 @@ if __name__ == "__main__":
         logger.info("##### Shutdown by Keyboard Interrupt#####")
     except Exception as e:
         logger.exception(e)
+        raise e
