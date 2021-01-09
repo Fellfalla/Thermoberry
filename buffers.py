@@ -30,7 +30,8 @@ class Buffer(IotEntity):
         self.temperatures_supply = {}
         self.mqtt_client = None
         self._is_loading = None
-    
+        self._state = [None, None, None, None]
+
     @property
     def is_loading(self):
         return self._is_loading
@@ -75,8 +76,17 @@ class Buffer(IotEntity):
         else:
             new_loading_state = self.is_loading
 
-        if (self.is_loading != new_loading_state):
-            action_msg = "Start loading" if new_loading_state else "Stop loading"
+
+        # Logging
+        new_state = [is_hot, is_cold, can_load, supplier_overheating]
+        if self._state != new_state:
+            self._state = new_state
+
+            if (self.is_loading != new_loading_state):
+                action_msg = "Start loading" if new_loading_state else "Stop loading"
+            else:
+                action_msg = "Remain loading" if new_loading_state else "Remain idle"
+            
             reason_msg = "is_hot: %s | is_cold: %s | can_load: %s | overheat_protection: %s "%(is_hot, is_cold, can_load, supplier_overheating)
             logger.info("%s -> %s"%(reason_msg, action_msg))
 
