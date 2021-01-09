@@ -23,22 +23,24 @@ logger = logging.getLogger(module_name)
 machine = socket.gethostname()
 
 def read_temp(sensor_dir, device_id):
-    valid = False
+    """
+    Returns
+        <float> temperature in [°C]
+        <bool> valid_crc True if CRC check of reading is valid
+    """
+    valid_crc = False
     temp = 0
 
     measurement_path = os.path.join(sensor_dir, device_id, 'w1_slave')
     with open(measurement_path , 'r') as f:
         for line in f:
             if line.strip()[-3:] == 'YES':
-                valid = True
+                valid_crc = True
             temp_pos = line.find(' t=')
             if temp_pos != -1:
                 temp = float(line[temp_pos + 3:]) / 1000.0
 
-    if valid:
-        return temp
-    else:
-        return None
+    return temp, valid_crc
 
 @hydra.main(config_path="conf/config.yaml")
 def measurement_loop(cfg):
@@ -73,14 +75,23 @@ def measurement_loop(cfg):
 
         # Retrieve a new list of devices every iteration to allow plug and play
         device_ids = [os.path.basename(x) for x in glob.glob(os.path.join(sensor_dir, '28-*'))]
-        
 
         for device_id in device_ids:
 
             # 1. Read the Temperature
             logger.debug("Reading device %s"%(device_id))
-            temp = read_temp(sensor_dir, device_id)
-                
+            try:
+                temp, is_valid = read_temp(sensor_dir, device_id)
+
+                if not is_valid:
+                    logger.error("Invalid CRC check for sensor %s"%(device_id))
+                    continue
+
+            except FileNotFoundError as e:
+                # We lost the sensor
+                logger.error("Sensor %s: %s"%(device_id, e.msg))
+                continue
+
             # 2. Notify about missing information
             if device_id not in sensor_id_mapping:
                 logger.warning(("No mapping found for %s"%(device_id)))
@@ -88,15 +99,9 @@ def measurement_loop(cfg):
             else:
                 sensor_name = sensor_id_mapping[device_id]
 
-            # 3. Handl reading errors
-            if temp is not None:
-                # TODO: consider removing id and publish temperature directly to the sensor topic
-                _ = mqtt_client.publish(sensor_name, payload=temp, qos=qos, retain=False) 
-                # _ = mqtt_client.publish(sensor_name + "/id", payload=device_id, qos=qos, retain=True) 
+            # 3. Notify the world about our nice temperature
+            _ = mqtt_client.publish(sensor_name, payload=temp, qos=qos, retain=False) 
                 
-            else:
-                logger.error("Reading %s failed"%(device_id))
-
         time.sleep(1)
 
 
