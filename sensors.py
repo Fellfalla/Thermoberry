@@ -91,8 +91,8 @@ def measurement_loop(cfg):
             # 3. Handl reading errors
             if temp is not None:
                 # TODO: consider removing id and publish temperature directly to the sensor topic
-                _ = mqtt_client.publish(sensor_name + "/temperature", payload=temp, qos=qos, retain=False) 
-                _ = mqtt_client.publish(sensor_name + "/id", payload=device_id, qos=qos, retain=True) 
+                _ = mqtt_client.publish(sensor_name, payload=temp, qos=qos, retain=False) 
+                # _ = mqtt_client.publish(sensor_name + "/id", payload=device_id, qos=qos, retain=True) 
                 
             else:
                 logger.error("Reading %s failed"%(device_id))
@@ -107,3 +107,4 @@ if __name__ == "__main__":
         logger.info("##### Shutdown by Keyboard Interrupt#####")
     except Exception as e:
         logger.exception(e)
+        raise e

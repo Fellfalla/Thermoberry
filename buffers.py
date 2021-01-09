@@ -29,7 +29,20 @@ class Buffer(IotEntity):
         self.temperatures = {}
         self.temperatures_supply = {}
         self.mqtt_client = None
+        self._is_loading = None
+    
+    @property
+    def is_loading(self):
+        return self._is_loading
+
+    @is_loading.setter
+    def is_loading(self, value):
+        self._is_loading = value
         
+        # Inform the world about these happy news
+        if self.mqtt_client and self.mqtt_client.is_connected():
+            self.mqtt_client.publish(self.id + "/load", payload=json.dumps(value), retain=True)
+
     def update_loading_status(self):
         # Rule 1: temperature too high -> stop loading
         is_hot = any([self.temperatures.get(key,val) > val for key, val in self.max_temperatures.items()])
@@ -38,27 +51,36 @@ class Buffer(IotEntity):
         is_cold = any([self.temperatures.get(key, val) < val for key, val in self.min_temperatures.items()])
 
         # Rule 3: check if we have some sufficient supplier
-        can_load = any([self.temperatures_supply.get(key,0) > min(self.temperatures.values()) + val.loss for key, val in self.inputs.items()])
+        can_load = any([self.temperatures_supply.get(supplier.sensor,0) > min(self.temperatures.values()) + supplier.loss for supplier in self.inputs])
 
         # Rule 4: Force loading if supplier is overheading
-        # TODO
-        supplier_overheating = False
+        supplier_overheating = any([self.temperatures_supply.get(supplier.overheating_sensor, 0) > supplier.overheating_temperature for supplier in self.inputs])
         
-        logger.debug("is_hot: %s | is_cold: %s | can_load: %s"%(is_hot, is_cold, can_load))
+        if supplier_overheating:
+            # protect the supplier by taking the hot water
+            new_loading_state = True
 
-        if self.mqtt_client and self.mqtt_client.is_connected():
-            if supplier_overheating:
-                # protect the supplier by taking the hot water
-                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(True), retain=True)
-            elif is_hot:
-                # stop in case of overheating
-                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(False), retain=True)
-            elif is_cold and can_load:
-                # start loading as soon as we are getting too cold
-                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(True), retain=True)
-            elif not can_load:
-                # disable as soon as we cannot load anymore
-                self.mqtt_client.publish(self.id + "/load", payload=json.dumps(False), retain=True)
+        elif is_hot:
+            # stop because buffer is full
+            new_loading_state = False
+
+        elif is_cold and can_load:
+            # start loading as soon as we are getting too cold
+            new_loading_state = True
+
+        elif not can_load:
+            # disable as soon as we cannot load anymore
+            new_loading_state = False
+
+        else:
+            new_loading_state = self.is_loading
+
+        if (self.is_loading != new_loading_state):
+            action_msg = "Start loading" if new_loading_state else "Stop loading"
+            reason_msg = "is_hot: %s | is_cold: %s | can_load: %s | overheat_protection: %s "%(is_hot, is_cold, can_load, supplier_overheating)
+            logger.info("%s -> %s"%(reason_msg, action_msg))
+
+        self.is_loading = new_loading_state
 
     def on_temperature_change(self, client, userdata, message):
         self.temperatures[message.topic] = float(message.payload)
@@ -84,7 +106,8 @@ class Buffer(IotEntity):
             port=port)
 
 
-        topics = [k for k in self.inputs.keys()]
+        topics = [supplier.sensor for supplier in self.inputs]
+        topics.extend([supplier.overheating_sensor for supplier in self.inputs])
         logger.debug("Subscribing to %s"%topics)
         self.input_client = helpers.mqtt.callback_nonblocking(
             callback=self.on_input_temperature_change, 
@@ -138,3 +161,6 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("##### Shutdown #####")
         pass
+    except Exception as e:
+        logger.exception(e)
+        raise e
