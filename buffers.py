@@ -88,7 +88,7 @@ class Buffer(IotEntity):
                 action_msg = "Remain loading" if new_loading_state else "Remain idle"
             
             reason_msg = "is_hot: %s | is_cold: %s | can_load: %s | overheat_protection: %s "%(is_hot, is_cold, can_load, supplier_overheating)
-            logger.info("%s -> %s"%(reason_msg, action_msg))
+            logger.info("[%s] %s -> %s"%(self.id, reason_msg, action_msg))
 
         self.is_loading = new_loading_state
 
