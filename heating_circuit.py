@@ -19,7 +19,6 @@ from iot_entity import IotEntity
 module_name = "HeatingControl"
 logger = logging.getLogger(module_name)
 machine = socket.gethostname()
-main_mqtt_client = None
 
 class HeatingCircuit(IotEntity):
     def __init__(self):
@@ -142,7 +141,7 @@ class HeatingCircuit(IotEntity):
         except KeyError as e:
             logger.exception(e)
 
-        self.mqtt_client.publish(self.topic_pump, json.dumps(enable_heating_circuit), qos=2)
+        self.mqtt_client.publish(self.topic_pump, json.dumps(enable_heating_circuit), qos=2, retain=True)
 
     def update_target_output_temperature(self):
         """
@@ -164,7 +163,7 @@ class HeatingCircuit(IotEntity):
         requested_temperature = min(requested_temperature, self.requested_temperature_calculation.max)
         requested_temperature = round(requested_temperature, 3) # round for the visuals
 
-        self.mqtt_client.publish(self.topic_requested_temperature, json.dumps(requested_temperature), qos=2)
+        self.mqtt_client.publish(self.topic_requested_temperature, json.dumps(requested_temperature), qos=0, retain=False)
 
 @hydra.main(config_path="conf/config.yaml")
 def heating_circuit_loop(cfg):
@@ -174,9 +173,8 @@ def heating_circuit_loop(cfg):
     logger.setLevel(new_log_level)
 
     # Connect to MQTT broker
-    global main_mqtt_client
     logger.info("Connecting to MQTT broker...")
-    main_mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name,machine), **cfg.mqtt)
+    main_mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name,machine), clean_session=True, **cfg.mqtt)
     if main_mqtt_client:
         logger.info("Connection to MQTT broker: OK")
     else:

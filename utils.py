@@ -8,9 +8,11 @@ import time
 #     else:
 #         logger.info("Connection failed")
 
-def create_mqtt_client(client_id, broker, port, **kwargs):
+# TODO: Consider creating a wrapper class
+def create_mqtt_client(client_id, broker, port, clean_session=None, **kwargs):
     # Create the MQTT client
-    mqtt_client = paho.Client(client_id)
+    # TODO Try out clean_session=True
+    mqtt_client = paho.Client(client_id, clean_session=clean_session)
     # mqtt_client.on_connect = on_connect
     
     # Connect the MQTT client

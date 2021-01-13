@@ -92,7 +92,8 @@ class Mixer(IotEntity):
             topics=topics, 
             client_id=client_id, 
             hostname=broker, 
-            port=port)
+            port=port,
+            clean_session=True)
 
     def disable(self):
         self.mqtt_client.disconnect()
@@ -125,9 +126,9 @@ class Mixer(IotEntity):
             duty_time = min(max(self.temperature_to_time * abs(delta), 0), self.cycle_period)
             
             # Send commands via MQTT
-            self.mqtt_client.publish(topic, payload=json.dumps(True), qos=2)
+            self.mqtt_client.publish(topic, payload=json.dumps(True), qos=2, retain=True)
             time.sleep(duty_time)
-            self.mqtt_client.publish(topic, payload=json.dumps(False), qos=2)
+            self.mqtt_client.publish(topic, payload=json.dumps(False), qos=2, retain=True)
 
 
 
@@ -140,7 +141,7 @@ def mixer_loop(cfg):
 
     # Connect to MQTT broker
     logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), **cfg.mqtt)
+    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), clean_session=True, **cfg.mqtt)
     if mqtt_client:
         logger.info("Connection to MQTT broker: OK")
     else:

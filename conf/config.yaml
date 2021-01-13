@@ -3,7 +3,6 @@ logging:
   
 sensors:
   sensor_dir: /sys/bus/w1/devices
-  quality_of_service: 0 # MQTT quality of service
   mapping:
     28-0004633651ff: sensors/aussentemperatur
     28-00044a21bcff: sensors/heizkreis/vorlauf_ist

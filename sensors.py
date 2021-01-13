@@ -47,7 +47,6 @@ def measurement_loop(cfg):
     # Read the config
     sensor_dir = cfg.sensors.sensor_dir
     sensor_id_mapping = cfg.sensors.mapping
-    qos = cfg.sensors.quality_of_service
 
     # Prepare logging
     logger.info("Configure logging")
@@ -57,7 +56,8 @@ def measurement_loop(cfg):
 
     # Connect to MQTT broker
     logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), **cfg.mqtt)
+    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), clean_session=True, **cfg.mqtt)
+
     if mqtt_client:
         logger.info("Connection to MQTT broker: OK")
     else:
@@ -68,6 +68,7 @@ def measurement_loop(cfg):
     logger.info("Run measurement loop")
 
     heartbeat_topic = machine + "/modules/" + module_name
+    # TODO: move will_set before connect, otherwise it won't have any effect
     mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2, retain=True) # Show that we are alive
     mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
 
@@ -100,7 +101,7 @@ def measurement_loop(cfg):
                 sensor_name = sensor_id_mapping[device_id]
 
             # 3. Notify the world about our nice temperature
-            _ = mqtt_client.publish(sensor_name, payload=temp, qos=qos, retain=False) 
+            _ = mqtt_client.publish(sensor_name, payload=temp, qos=0, retain=False) 
                 
         time.sleep(1)
 
