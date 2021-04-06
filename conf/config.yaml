@@ -14,10 +14,10 @@ sensors:
     28-00046335f6ff: sensors/heizkreis/2
     28-00044e6b6dff: sensors/heizkreis/3
     28-00044c86c8ff: sensors/heizkreis/4
-    28-00044e6cc1ff: sensors/brauchwasser/1
+    28-00044e7edbff: sensors/brauchwasser/1
     28-00044e7371ff: sensors/brauchwasser/2
-    28-00044e7edbff: sensors/brauchwasser/3
-    28-00044e75daff: sensors/brauchwasser/4
+    28-00044e75daff: sensors/brauchwasser/3
+    28-0004633498ff: sensors/brauchwasser/4
 
 heating_circuits:
   - id: steuerung/heizkreis
