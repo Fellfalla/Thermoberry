@@ -1,5 +1,9 @@
 ## Setup
 
+1. Prepare 1-Wire Sensors
+    1. Run `echo "dtoverlay=w1-gpio,gpiopin=4" | sudo tee -a /boot/config.txt` if not already contained in `/boot/config.txt` ([source](https://www.kompf.de/weather/pionewiremini.html))
+    2. Reboot
+    3. Check via `lsmod | grep w1`. Output should contain `w1_therm` and `w1_pgio`
 1. [Install Node-Red](https://nodered.org/docs/getting-started/raspberrypi)
     1. `bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)`
     2. Open the node-red browser interface `<ip-address>/:1880/` and install following packages:
@@ -8,12 +12,12 @@
         * node-red-node-pi-gpio
         * node-red-node-pi-gpiod
     3.  Open the node-red browser interface `<ip-address>/:1880/` and import the [node red flow](node-red-flow.json)
-1. Prepare Python3
+2. Prepare Python3
     1. `sudo apt update && sudo apt install python3 python3-pip`
     2. `pip3 install -r requirements.txt`
-2. [Install MQTT](https://www.vultr.com/docs/how-to-install-mosquitto-mqtt-broker-server-on-ubuntu-16-04):
+3. [Install MQTT](https://www.vultr.com/docs/how-to-install-mosquitto-mqtt-broker-server-on-ubuntu-16-04):
     1. `sudo apt update && sudo apt install mosquitto mosquitto-clients`
-3. Install the gpiod daemon http://abyz.me.uk/rpi/pigpio/download.html or https://www.elektronik-kompendium.de/sites/raspberry-pi/2202121.htm
+4. Install the gpiod daemon http://abyz.me.uk/rpi/pigpio/download.html or https://www.elektronik-kompendium.de/sites/raspberry-pi/2202121.htm
     1. `sudo apt-get install pigpio`
     2. Modify the pigpiod service to trust the remote control
         1. Run `sudo nano /lib/systemd/system/pigpiod.service`
