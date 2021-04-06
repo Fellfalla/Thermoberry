@@ -42,7 +42,8 @@ class Buffer(IotEntity):
         
         # Inform the world about these happy news
         if self.mqtt_client and self.mqtt_client.is_connected():
-            self.mqtt_client.publish(self.id + "/load", payload=json.dumps(value), retain=True)
+            load_topic = os.path.join(self.id, "load")
+            self.mqtt_client.publish(load_topic, payload=json.dumps(value), retain=False)
 
     def update_loading_status(self):
         # Rule 1: temperature too high -> stop loading

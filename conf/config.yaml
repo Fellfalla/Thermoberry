@@ -20,14 +20,14 @@ sensors:
     28-00044e75daff: sensors/brauchwasser/4
 
 heating_circuits:
-  - id: heizkreis/steuerung
-    topic_requested_temperature: heizkreis/vorlauf_soll
-    topic_enable: heizkreis/steuerung/automatik
+  - id: steuerung/heizkreis
+    topic_requested_temperature: mischer/heizkreis/vorlauf_soll
+    topic_enable: steuerung/heizkreis/automatik
 
     topic_outside_temperature: sensors/aussentemperatur
     topic_supplier_temperature: sensors/heizkreis/1
-    topic_supplier_charging: heizkreis/load
-    topic_pump: heizkreis/pumpe
+    topic_supplier_charging: puffer/heizkreis/load
+    topic_pump: pumpen/heizkreis/an
     activation_rules: # bedingungen und abhängigkeiten zum aktivieren der pumpe
       delta_input_over_room_temperature: 4 # °C die das Heizungswasser über der geforderden Raumtemperatur sein muss, damit Heizbetrieb aktiviert wird
       delta_inside_outside: 3 # Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet
@@ -47,12 +47,12 @@ heating_circuits:
 
 
 mixers:
-  - id: heizkreis/mischer
+  - id: mischer/heizkreis
     topic_output_actual: sensors/heizkreis/vorlauf_ist
-    topic_output_target: heizkreis/vorlauf_soll
-    topic_enable: heizkreis/mischer/automatik
-    topic_open: heizkreis/mischer/heiss
-    topic_close: heizkreis/mischer/kalt
+    topic_output_target: mischer/heizkreis/vorlauf_soll
+    topic_enable: mischer/heizkreis/automatik
+    topic_open: mischer/heizkreis/heiss
+    topic_close: mischer/heizkreis/kalt
     cycle_period: 25 # Zykluszeit in [s]
     P: 1 # Fehlergewichtung
     D: 2.8 # Tendenzgewichtung
@@ -60,8 +60,8 @@ mixers:
     hysteresis: 2.0 # Toleranzintervall bzgl. Temperatur für den Mischer
 
 buffers:
-  - id: heizraum
-  - id: heizkreis
+  - id: puffer/heizraum
+  - id: puffer/heizkreis
     inputs:
       - sensor: sensors/heizraum/1
         loss: 6 #°C
@@ -71,7 +71,7 @@ buffers:
       "sensors/heizkreis/4": 77
     min_temperatures: # enables loading
       "sensors/heizkreis/1": 40
-  - id: brauchwasser
+  - id: puffer/brauchwasser
     inputs:
       - sensor: sensors/heizkreis/1
         loss: 2 #°C
