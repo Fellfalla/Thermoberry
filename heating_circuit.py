@@ -37,6 +37,7 @@ class HeatingCircuit(IotEntity):
         self.requested_temperature_calculation = None
 
         # property and private variables
+        self._requested_temperature = -1
         self._automatic_mode = False
         self._stop_events = {}
 
@@ -132,7 +133,7 @@ class HeatingCircuit(IotEntity):
                 logger.debug("Turn off %s because supplier is charging and low"%self.id)                
                 enable_heating_circuit = False
 
-            # Heizbetrieb abschalten, wenns draussen zu warm ist
+            # Turn off heating, if it get too warm outside
             elif self.target_room_temperature - self.topic_states[self.topic_outside_temperature] < self.activation_rules.delta_inside_outside:
                 
                 logger.debug("Turn off %s because outside is too warm"%self.id)                
@@ -153,17 +154,22 @@ class HeatingCircuit(IotEntity):
             slope = self.requested_temperature_calculation.slope
             offset = self.requested_temperature_calculation.offset
 
-            # Some ease-off function from delta_t to requested temperature
-            requested_temperature = slope * current_inside_outside_delta ** 0.5 + self.target_room_temperature + offset
+            if current_inside_outside_delta > 0:
+                # Some ease-off function from delta_t to requested temperature
+                self._requested_temperature = slope * current_inside_outside_delta ** 0.5 + self.target_room_temperature + offset
+            else:
+                # Calculation rule for negative delta is not defined
+                pass
+
         except KeyError as e:
             logger.exception(e)
             requested_temperature = self.requested_temperature_calculation.fallback
 
         # max temperature limit
-        requested_temperature = min(requested_temperature, self.requested_temperature_calculation.max)
-        requested_temperature = round(requested_temperature, 3) # round for the visuals
+        self._requested_temperature = min(self._requested_temperature, self.requested_temperature_calculation.max)
+        self._requested_temperature = round(self._requested_temperature, 3) # round for the visuals
 
-        self.mqtt_client.publish(self.topic_requested_temperature, json.dumps(requested_temperature), qos=0, retain=False)
+        self.mqtt_client.publish(self.topic_requested_temperature, json.dumps(self._requested_temperature), qos=0, retain=False)
 
 @hydra.main(config_path="conf/config.yaml")
 def heating_circuit_loop(cfg):
