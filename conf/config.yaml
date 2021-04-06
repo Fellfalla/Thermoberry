@@ -83,7 +83,8 @@ buffers:
       "sensors/brauchwasser/1": 55
 
 mqtt:
-  broker: 192.168.1.4
+  broker: "raspi2021-1"
+  # broker: 192.168.1.37
   port: 1883
   # auth: 
   #   username: 'user2'

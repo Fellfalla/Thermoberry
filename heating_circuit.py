@@ -90,6 +90,7 @@ class HeatingCircuit(IotEntity):
             self.topic_outside_temperature
         ]
 
+        broker = utils.resolve_mqtt_address(broker)
         self.mqtt_client = helpers.mqtt.callback_nonblocking(
             callback=self._on_message, 
             topics=topics, 

@@ -101,7 +101,8 @@ class Buffer(IotEntity):
 
     def enable(self, broker="localhost", port=1883):
         # Connect to MQTT broker
-        logger.info("Connecting %s to MQTT broker."%(self.id))
+        broker = utils.resolve_mqtt_address(broker)
+        logger.info("Connecting %s to MQTT broker %s."%(self.id, broker))
 
         client_id="%s@%s"%(self.id, machine)
         topics = []
