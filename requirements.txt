@@ -1,2 +1,3 @@
 paho-mqtt
 hydra-core==0.11 # last compatible version with python2 is 0.11 https://hydra.cc/docs/intro/
+omegaconf==1.4.1
