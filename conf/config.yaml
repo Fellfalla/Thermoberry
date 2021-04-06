@@ -27,7 +27,7 @@ heating_circuits:
     topic_outside_temperature: sensors/aussentemperatur
     topic_supplier_temperature: sensors/heizkreis/1
     topic_supplier_charging: puffer/heizkreis/load
-    topic_pump: pumpen/heizkreis/an
+    topic_pump: pumpe/heizkreis/ein
     activation_rules: # bedingungen und abhängigkeiten zum aktivieren der pumpe
       delta_input_over_room_temperature: 4 # °C die das Heizungswasser über der geforderden Raumtemperatur sein muss, damit Heizbetrieb aktiviert wird
       delta_inside_outside: 3 # Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet
