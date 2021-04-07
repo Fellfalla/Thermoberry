@@ -3,7 +3,6 @@
 import os
 import socket
 import logging
-import time 
 import json
 
 # 3rd party libraries
@@ -12,6 +11,7 @@ import hydra
 # Local Variables
 import utils
 import helpers
+from module import Module
 from iot_entity import IotEntity
 
 # Global variables
@@ -117,7 +117,6 @@ class Buffer(IotEntity):
             hostname=broker, 
             port=port)
 
-
         topics = [supplier.sensor for supplier in self.inputs]
         topics.extend([supplier.overheating_sensor for supplier in self.inputs])
         logger.debug("Subscribing to %s"%topics)
@@ -133,46 +132,50 @@ class Buffer(IotEntity):
             logger.info("Disconnecting %s from MQTT broker."%(self.id))
             self.mqtt_client.disconnect()
 
+
+class BufferModule(Module):
+    """
+    Source: https://www.netways.de/blog/2016/07/21/atexit-oder-wie-man-python-dienste-nicht-beenden-sollte/
+    """
+    def __init__(self, module_name):
+        super().__init__(module_name=module_name)
+        self.buffers = []
+
+    def _connect(self, cfg):
+        # Read the config
+        for buffer in cfg.buffers:
+            buffer = Buffer.from_dict(buffer)
+            self.buffers.append(buffer)
+            assert buffer.id
+
+            buffer.enable(**cfg.mqtt)
+
+    def _loop(self):
+        pass
+
+    def _disconnect(self):
+        # Simple cleanup
+        for buffer in self.buffers:
+            buffer.disable()
+
 @hydra.main(config_path="conf/config.yaml")
-def buffers_loop(cfg):
+def main(cfg):
     # Prepare logging
     new_log_level = cfg.logging.level
     logger.info("Setting loglevel to %s"%(str(new_log_level)))
     logger.setLevel(new_log_level)
 
-    # Read the config
-    buffers = []
-    for buffer in cfg.buffers:
-        buffer = Buffer.from_dict(buffer)
-        buffers.append(buffer)
-        assert buffer.id
-
-        buffer.enable(**cfg.mqtt)
-
-    # Connect to MQTT broker
-    logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), **cfg.mqtt)
-    if mqtt_client:
-        logger.info("Connection to MQTT broker: OK")
-    else:
-        logger.error("Connection to MQTT broker: FAILED")
-        return
-
-    heartbeat_topic = machine + "/modules/" + module_name
-    mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
-    mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
-    # TODO: add atexit and disconnect the mqtt client then. Looks as if otherwise the "will" will not be sent
-    while True:
-        time.sleep(1)
-
-
-if __name__ == "__main__":
     try: 
-        print("##### Start Measurement #####")
-        buffers_loop()
+        print("##### Start BufferModule #####")
+        bm = BufferModule(module_name)
+        bm.connect(cfg)
+        bm.loop()
     except KeyboardInterrupt:
         print("##### Shutdown #####")
         pass
     except Exception as e:
         logger.exception(e)
-        raise e
+
+
+if __name__ == "__main__":
+    main()

@@ -11,6 +11,7 @@ import hydra
 # Local Variables
 import utils
 import helpers
+from module import Module
 from iot_entity import IotEntity
 
 # Global variables
@@ -96,7 +97,9 @@ class Mixer(IotEntity):
             clean_session=True)
 
     def disable(self):
-        self.mqtt_client.disconnect()
+        if self.mqtt_client and self.mqtt_client.is_connected():
+            logger.info("Disconnecting %s from MQTT broker."%(self.id))
+            self.mqtt_client.disconnect()
 
     def control(self):
         """
@@ -131,47 +134,47 @@ class Mixer(IotEntity):
             self.mqtt_client.publish(topic, payload=json.dumps(False), qos=2, retain=True)
 
 
+class MixerModule(Module):
+    def __init__(self, module_name):
+        super().__init__(module_name=module_name)
+        self.mixers = []
+
+    def _connect(self, cfg):
+        # Read the config and create all the mixers
+        for mixer_cfg in cfg.mixers:
+            mixer = Mixer.from_dict(mixer_cfg)
+            self.mixers.append(mixer)
+            assert mixer.id
+            mixer.enable(**cfg.mqtt)
+
+    def _loop(self):
+        pass
+
+    def _disconnect(self):
+        # Simple cleanup
+        for mixer in self.mixers:
+            mixer.disable()
+
 
 @hydra.main(config_path="conf/config.yaml")
-def mixer_loop(cfg):
+def main(cfg):
     # Prepare logging
     new_log_level = cfg.logging.level
     logger.info("Setting loglevel to %s"%(str(new_log_level)))
     logger.setLevel(new_log_level)
 
-    # Connect to MQTT broker
-    logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), clean_session=True, **cfg.mqtt)
-    if mqtt_client:
-        logger.info("Connection to MQTT broker: OK")
-    else:
-        logger.error("Connection to MQTT broker: FAILED")
-        return
-
-    # Create all the mixers
-    mixers = []
-    for mixer_cfg in cfg.mixers:
-        mixer = Mixer.from_dict(mixer_cfg)
-        mixers.append(mixer)
-        assert mixer.id
-
-        mixer.enable(**cfg.mqtt)
-
-    heartbeat_topic = machine + "/modules/" + module_name
-    mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
-    mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
-
-    while True:
-        time.sleep(1)
-    # mqtt_client.loop_forever()
-
-if __name__ == "__main__":
     try: 
         print("##### Start Measurement #####")
-        mixer_loop()
+        mm = MixerModule(module_name)
+        mm.connect(cfg)
+        mm.loop()
     except KeyboardInterrupt:
         print("##### Shutdown #####")
         pass
     except Exception as e:
         logger.exception(e)
         raise e
+
+
+if __name__ == "__main__":
+    main()

@@ -2,7 +2,6 @@
 import os
 import socket
 import logging
-import time
 import json
 import datetime
 
@@ -12,8 +11,8 @@ import hydra
 # Local Variables
 import utils
 import helpers
+from module import Module
 from iot_entity import IotEntity
-
 
 # Global variables
 module_name = "HeatingControl"
@@ -172,46 +171,41 @@ class HeatingCircuit(IotEntity):
 
         self.mqtt_client.publish(self.topic_requested_temperature, json.dumps(self._requested_temperature), qos=0, retain=False)
 
+
+class HeatingCircuitModule(Module):
+    def __init__(self, module_name):
+        super().__init__(module_name=module_name)
+        self.heating_circuits = []
+
+    def _connect(self, cfg):
+        # Read the config and create all the mixers
+        for heating_circuit_cfg in cfg.heating_circuits:
+            heating_circuit = HeatingCircuit.from_dict(heating_circuit_cfg)
+            self.heating_circuits.append(heating_circuit)
+            assert heating_circuit.id
+
+            heating_circuit.enable(**cfg.mqtt)
+
+    def _loop(self):
+        pass
+
+    def _disconnect(self):
+        # Simple cleanup
+        for heating_circuit in self.heating_circuits:
+            heating_circuit.disable()
+
 @hydra.main(config_path="conf/config.yaml")
-def heating_circuit_loop(cfg):
+def main(cfg):
     # Prepare logging
     new_log_level = cfg.logging.level
     logger.info("Setting loglevel to %s"%(str(new_log_level)))
     logger.setLevel(new_log_level)
 
-    # Connect to MQTT broker
-    logger.info("Connecting to MQTT broker...")
-    main_mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name,machine), clean_session=True, **cfg.mqtt)
-    if main_mqtt_client:
-        logger.info("Connection to MQTT broker: OK")
-    else:
-        logger.error("Connection to MQTT broker: FAILED")
-        return
-
-    # Create all the mixers
-    heating_circuits = []
-    for heating_circuit_cfg in cfg.heating_circuits:
-        heating_circuit = HeatingCircuit.from_dict(heating_circuit_cfg)
-        heating_circuits.append(heating_circuit)
-        assert heating_circuit.id
-
-        heating_circuit.enable(**cfg.mqtt)
-
-    heartbeat_topic = machine + "/modules/" + module_name
-    main_mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2 ,retain=True) # Show that we are alive
-    
-    # TODO: move this before connect, otherwise is has no effect
-    main_mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
-
-    while True:
-        time.sleep(1)
-
-
-if __name__ == "__main__":
     try: 
-        # TODO: cleanup the introduction logmsgs
         print("##### Start Heating Circuit Module #####")
-        heating_circuit_loop()
+        hcm = HeatingCircuitModule(module_name)
+        hcm.connect(cfg)
+        hcm.loop()
     except KeyboardInterrupt:
         print("##### Shutdown #####")
     except SystemExit:
@@ -219,3 +213,7 @@ if __name__ == "__main__":
     except Exception as e:
         logger.exception(e)
         raise e
+
+
+if __name__ == "__main__":
+    main()

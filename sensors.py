@@ -15,6 +15,7 @@ import hydra
 from omegaconf import DictConfig
 
 # Local files
+from module import Module
 import utils
 
 # Global variables
@@ -42,40 +43,22 @@ def read_temp(sensor_dir, device_id):
 
     return temp, valid_crc
 
-@hydra.main(config_path="conf/config.yaml")
-def measurement_loop(cfg):
-    # Read the config
-    sensor_dir = cfg.sensors.sensor_dir
-    sensor_id_mapping = cfg.sensors.mapping
 
-    # Prepare logging
-    logger.info("Configure logging")
-    new_log_level = cfg.logging.level
-    logger.info("Setting loglevel to %s"%(str(new_log_level)))
-    logger.setLevel(new_log_level)
+class SensorModule(Module):
+    def __init__(self, module_name):
+        super().__init__(module_name=module_name)
+        self.mixers = []
 
-    # Connect to MQTT broker
-    logger.info("Connecting to MQTT broker...")
-    mqtt_client = utils.create_mqtt_client(client_id="%s@%s"%(module_name, machine), clean_session=True, **cfg.mqtt)
+    def _connect(self, cfg):
+        # Read the config
+        self.sensor_dir = cfg.sensors.sensor_dir
+        self.sensor_id_mapping = cfg.sensors.mapping
 
-    if mqtt_client:
-        logger.info("Connection to MQTT broker: OK")
-    else:
-        logger.error("Connection to MQTT broker: FAILED")
-        return
-
-    # Run the measurement and publishing loop 
-    logger.info("Run measurement loop")
-
-    heartbeat_topic = machine + "/modules/" + module_name
-    # TODO: move will_set before connect, otherwise it won't have any effect
-    mqtt_client.publish(heartbeat_topic, payload=json.dumps(True), qos=2, retain=True) # Show that we are alive
-    mqtt_client.will_set(heartbeat_topic, payload=json.dumps(False), qos=2, retain=True)
-
-    while True:
+   
+    def _loop(self):
 
         # Retrieve a new list of devices every iteration to allow plug and play
-        device_ids = [os.path.basename(x) for x in glob.glob(os.path.join(sensor_dir, '28-*'))]
+        device_ids = [os.path.basename(x) for x in glob.glob(os.path.join(self.sensor_dir, '28-*'))]
 
         for device_id in device_ids:
 
@@ -94,23 +77,40 @@ def measurement_loop(cfg):
                 continue
 
             # 2. Notify about missing information
-            if device_id not in sensor_id_mapping:
+            if device_id not in self.sensor_id_mapping:
                 logger.warning(("No mapping found for %s"%(device_id)))
                 sensor_name = device_id
             else:
-                sensor_name = sensor_id_mapping[device_id]
+                sensor_name = self.sensor_id_mapping[device_id]
 
             # 3. Notify the world about our nice temperature
-            _ = mqtt_client.publish(sensor_name, payload=temp, qos=0, retain=False) 
-                
-        time.sleep(1)
+            _ = self.mqtt_client.publish(sensor_name, payload=temp, qos=0, retain=False) 
+            
+    def _disconnect(self):
+        # Simple cleanup
+        pass
 
 
-if __name__ == "__main__":
+@hydra.main(config_path="conf/config.yaml")
+def main(cfg):
+    # Prepare logging
+    new_log_level = cfg.logging.level
+    logger.info("Setting loglevel to %s"%(str(new_log_level)))
+    logger.setLevel(new_log_level)
+
     try: 
-        measurement_loop()
+        print("##### Start Measurement #####")
+        sm = SensorModule(module_name)
+        sm.connect(cfg)
+        logger.info("Run measurement loop")
+        sm.loop() # Run the measurement and publishing loop 
     except KeyboardInterrupt:
-        logger.info("##### Shutdown by Keyboard Interrupt#####")
+        print("##### Shutdown #####")
+        pass
     except Exception as e:
         logger.exception(e)
         raise e
+
+
+if __name__ == "__main__":
+    main()
