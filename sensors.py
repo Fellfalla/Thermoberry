@@ -70,7 +70,7 @@ class SensorModule(Module):
             # 1. Read the Temperature
             logger.debug("Reading device %s"%(device_id))
             try:
-                temp, is_valid = read_temp(sensor_dir, device_id)
+                temp, is_valid = read_temp(self.sensor_dir, device_id)
 
                 if not is_valid:
                     logger.error("Invalid CRC check for sensor %s"%(device_id))
