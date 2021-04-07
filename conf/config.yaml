@@ -3,6 +3,8 @@ logging:
   
 sensors:
   sensor_dir: /sys/bus/w1/devices
+  loop_timeout: 1 # Seconds to wait before new measurement
+  reduction_factor: 10 # Factor of reduction for publishing into the reduced data topics
   mapping:
     28-0004633651ff: sensors/aussentemperatur
     28-00044a21bcff: sensors/heizkreis/vorlauf_ist

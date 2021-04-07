@@ -28,6 +28,7 @@ class Module(ABC):
         self.module_name = module_name
         self.module_client = paho.Client(client_id="%s@%s"%(self.module_name, machine), clean_session=True, userdata=None, protocol=paho.MQTTv311)
         self.heartbeat_topic = machine + "/modules/" + self.module_name
+        self.loop_timeout = 1
 
     def connect(self, cfg=None):
         # Register cleanup procedures
@@ -48,7 +49,7 @@ class Module(ABC):
         self.module_client.loop_start()
         while not self.module_client.is_connected(): # Wait for connection
             time.sleep(0.1)
-        
+
         # Implementation of template method pattern
         self._connect(cfg)
 
@@ -67,7 +68,7 @@ class Module(ABC):
         while True:
             self.module_client.publish(self.heartbeat_topic, payload=json.dumps(True), qos=2, retain=False) # Show that we are alive
             self._loop()
-            time.sleep(1)
+            time.sleep(self.loop_timeout)
 
     @abstractmethod
     def _connect(self, cfg=None):

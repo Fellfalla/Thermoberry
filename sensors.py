@@ -53,13 +53,18 @@ class SensorModule(Module):
         # Read the config
         self.sensor_dir = cfg.sensors.sensor_dir
         self.sensor_id_mapping = cfg.sensors.mapping
+        self.reduction_factor = cfg.sensors.reduction_factor
+        self.loop_timeout = cfg.sensors.loop_timeout
 
-   
+        # Initialize variables
+        self.reduction_counter = 0
+
     def _loop(self):
+        self.reduction_counter += 1
 
         # Retrieve a new list of devices every iteration to allow plug and play
         device_ids = [os.path.basename(x) for x in glob.glob(os.path.join(self.sensor_dir, '28-*'))]
-
+        
         for device_id in device_ids:
 
             # 1. Read the Temperature
@@ -84,7 +89,13 @@ class SensorModule(Module):
                 sensor_name = self.sensor_id_mapping[device_id]
 
             # 3. Notify the world about our nice temperature
-            _ = self.mqtt_client.publish(sensor_name, payload=temp, qos=0, retain=False) 
+            _ = self.mqtt_client.publish(sensor_name, payload=temp, qos=0, retain=False)
+
+            if self.reduction_counter > self.reduction_factor:
+                self.reduction_counter = 0
+                reduced_topic = os.path.join("reduced", sensor_name)
+                self.mqtt_client.publish(reduced_topic, payload=temp, qos=0, retain=False)
+
             
     def _disconnect(self):
         # Simple cleanup
