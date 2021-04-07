@@ -9,6 +9,7 @@ StandardInput=null
 StandardOutput=journal+console
 User=pi
 Restart=always
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target
