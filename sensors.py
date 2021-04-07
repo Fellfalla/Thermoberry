@@ -89,12 +89,12 @@ class SensorModule(Module):
                 sensor_name = self.sensor_id_mapping[device_id]
 
             # 3. Notify the world about our nice temperature
-            _ = self.mqtt_client.publish(sensor_name, payload=temp, qos=0, retain=False)
+            _ = self.module_client.publish(sensor_name, payload=temp, qos=0, retain=False)
 
             if self.reduction_counter > self.reduction_factor:
                 self.reduction_counter = 0
                 reduced_topic = os.path.join("reduced", sensor_name)
-                self.mqtt_client.publish(reduced_topic, payload=temp, qos=0, retain=False)
+                self.module_client.publish(reduced_topic, payload=temp, qos=0, retain=False)
 
             
     def _disconnect(self):
