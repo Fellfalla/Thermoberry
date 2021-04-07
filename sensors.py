@@ -92,11 +92,14 @@ class SensorModule(Module):
             _ = self.module_client.publish(sensor_name, payload=temp, qos=0, retain=False)
 
             if self.reduction_counter > self.reduction_factor:
-                self.reduction_counter = 0
                 reduced_topic = os.path.join("reduced", sensor_name)
                 self.module_client.publish(reduced_topic, payload=temp, qos=0, retain=False)
 
-            
+        # Finalize current loop
+        if self.reduction_counter > self.reduction_factor:
+            self.reduction_counter = 0
+
+
     def _disconnect(self):
         # Simple cleanup
         pass
