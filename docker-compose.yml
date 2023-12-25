@@ -8,19 +8,18 @@ version: "3.7"
 
 services:
 
-
-  # # GPIO daemon https://github.com/zinen/docker-alpine-pigpiod
-  # pigpiod:
-  #   image: zinen2/alpine-pigpiod:pigpio-v79
-  #   privileged: true # save some trouble with accessing GPIOs
-  #   restart: always # Restarts does happened when binding to GPIOs fails. Auto restarting fixes most problems with hardware access.
-  #   devices:
-  #       - /dev/gpiochip0 # Grant access to GPIO device
-  #   # If above device access keeps failing, try setting container to run privileged. 
-  #   # Running privileged is never recommended. But it does fix many problems when access to hardware is required.
-  #   #privileged: true
-  #   ports:
-  #     - "8888:8888" # pigpiod daemon access 
+  # GPIO daemon https://github.com/zinen/docker-alpine-pigpiod
+  pigpiod:
+    image: zinen2/alpine-pigpiod:pigpio-v79
+    # privileged: true # save some trouble with accessing GPIOs
+    restart: always # Restarts does happened when binding to GPIOs fails. Auto restarting fixes most problems with hardware access.
+    devices:
+        - /dev/gpiochip0 # Grant access to GPIO device
+    # If above device access keeps failing, try setting container to run privileged. 
+    # Running privileged is never recommended. But it does fix many problems when access to hardware is required.
+    privileged: true
+    ports:
+      - "8888:8888" # pigpiod daemon access 
 
   # MQTT Broker
   mqtt:
@@ -52,8 +51,8 @@ services:
       - seccomp:unconfined # Solution for https://github.com/node-red/node-red-docker/issues/319
     depends_on:
       - mqtt
-      # - pigpiod
+      - pigpiod
+    privileged: true
     volumes:
       - ./nodered:/data:rw # mount local repository
-      # - /dev:/dev:rw # we shouldnt need this due to pigpiod
     entrypoint: /data/entrypoint.sh

@@ -286,7 +286,8 @@
             "c46a6881b9402084",
             "0383fb6de2c5ffe8",
             "f7addac754e6966d",
-            "625d62981ced86a6"
+            "625d62981ced86a6",
+            "cbbe40ae3867fb2b"
         ],
         "x": 314,
         "y": 1579,
@@ -334,12 +335,15 @@
             "57decf77.8d07e",
             "9109af28.583e",
             "d867662.87a1298",
-            "9e048668.5369a8"
+            "9e048668.5369a8",
+            "9fc9a5143f534e97",
+            "2071c05983be31bd",
+            "b8c5eec3414e7231"
         ],
         "x": 64,
-        "y": 1519,
-        "w": 1232,
-        "h": 602
+        "y": 1479,
+        "w": 1442,
+        "h": 642
     },
     {
         "id": "e2e1a8f5.d9ce9",
@@ -1540,7 +1544,8 @@
         "y": 1760,
         "wires": [
             [
-                "0383fb6de2c5ffe8"
+                "0383fb6de2c5ffe8",
+                "cbbe40ae3867fb2b"
             ]
         ]
     },
@@ -2816,6 +2821,25 @@
         "wires": []
     },
     {
+        "id": "cbbe40ae3867fb2b",
+        "type": "pi-gpiod out",
+        "z": "84fc9f46c4b65c0e",
+        "g": "0dbbbbeba1311e07",
+        "name": "Pumpe Brauchwasser",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "22",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1280,
+        "y": 1700,
+        "wires": []
+    },
+    {
         "id": "6cd6394d.f6c2b8",
         "type": "http request",
         "z": "37d3dae1.129ff6",
@@ -3132,7 +3156,7 @@
         "type": "debug",
         "z": "37d3dae1.129ff6",
         "name": "",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -3333,7 +3357,8 @@
         "wires": [
             [
                 "b2c53d17.6e47f8",
-                "9e048668.5369a8"
+                "9e048668.5369a8",
+                "b8c5eec3414e7231"
             ]
         ]
     },
@@ -3484,8 +3509,8 @@
         "qos": "2",
         "retain": "true",
         "broker": "bcebf477.ab97e8",
-        "x": 1150,
-        "y": 1820,
+        "x": 1330,
+        "y": 1880,
         "wires": []
     },
     {
@@ -3498,8 +3523,8 @@
         "qos": "2",
         "retain": "true",
         "broker": "bcebf477.ab97e8",
-        "x": 1160,
-        "y": 1760,
+        "x": 1340,
+        "y": 1820,
         "wires": []
     },
     {
@@ -3667,7 +3692,8 @@
         "y": 1880,
         "wires": [
             [
-                "4b7b36e4.483aa8"
+                "4b7b36e4.483aa8",
+                "9fc9a5143f534e97"
             ]
         ]
     },
@@ -3686,7 +3712,8 @@
         "y": 1700,
         "wires": [
             [
-                "1056c756.42e681"
+                "1056c756.42e681",
+                "2071c05983be31bd"
             ]
         ]
     },
@@ -4629,8 +4656,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1040,
-        "y": 1560,
+        "x": 1050,
+        "y": 1520,
         "wires": []
     },
     {
@@ -4744,8 +4771,8 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 970,
-        "y": 1760,
+        "x": 1150,
+        "y": 1820,
         "wires": [
             [
                 "7650c94a.d6e7c"
@@ -4779,8 +4806,8 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 980,
-        "y": 1820,
+        "x": 1160,
+        "y": 1880,
         "wires": [
             [
                 "602cd7c6.77f1"
@@ -4868,8 +4895,8 @@
         "freq": "",
         "out": "out",
         "bcm": true,
-        "x": 1030,
-        "y": 1640,
+        "x": 1390,
+        "y": 1600,
         "wires": []
     },
     {
@@ -4900,8 +4927,65 @@
         "freq": "",
         "out": "out",
         "bcm": true,
-        "x": 1010,
-        "y": 1880,
+        "x": 1360,
+        "y": 2000,
+        "wires": []
+    },
+    {
+        "id": "9fc9a5143f534e97",
+        "type": "pi-gpiod out",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Mischer Kaelter",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "27",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1360,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "2071c05983be31bd",
+        "type": "pi-gpiod out",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Mischer Waermer",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "17",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1030,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "b8c5eec3414e7231",
+        "type": "pi-gpiod out",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Pumpe Heizkreis",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "2",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1370,
+        "y": 1660,
         "wires": []
     }
 ]
