@@ -71,3 +71,7 @@ target/
 settings.ini
 archive
 outputs
+
+mosquitto/data/**
+mosquitto/log/**
+!mosquitto/config/**
