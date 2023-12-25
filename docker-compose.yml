@@ -42,6 +42,9 @@ services:
     environment:
       - TZ=Europe/Berlin
       - FLOWS=flows.json
+    env_file:
+      - .env
+      - .env.secret
     ports:
       - "1881:1880" # node-red
       # - "1884:1883" # mqtt

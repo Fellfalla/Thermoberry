@@ -42,7 +42,7 @@ module.exports = {
      * lost.
      */
     //credentialSecret: "a-secret-key",
-    // credentialSecret: process.env.CREDENTIAL_FILE_KEY ?? (() => { throw new Error() })(),
+    credentialSecret: process.env.CREDENTIAL_FILE_KEY ?? (() => { throw new Error() })(),
 
     /** By default, the flow JSON will be formatted over multiple lines making
      * it easier to compare changes when using version control.

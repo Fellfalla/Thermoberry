@@ -9,8 +9,8 @@ function stop() {
 }
 
 # Install missing modules
+echo "Installing missing npm dependencies" 
 (cd /data && npm install)
-echo "helloworld" 
 
 /usr/local/bin/node $NODE_OPTIONS node_modules/node-red/red.js --userDir /data $FLOWS "${@}" &
 

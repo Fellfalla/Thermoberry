@@ -53,4 +53,4 @@ logs:
 .PHONY: secret
 secret: # create local secret
 secret:
-	echo "CREDENTIAL_FILE_KEY=$(shell gpg --gen-random --armor 1 18)" >> nodered/.env
+	echo "CREDENTIAL_FILE_KEY=$(shell gpg --gen-random --armor 1 18)" > .env.secret
