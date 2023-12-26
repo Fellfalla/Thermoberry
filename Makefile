@@ -10,9 +10,7 @@ test:
 
 .PHONY: docker_install
 docker_install:
-	curl -fsSL https://get.docker.com -o get-docker.sh
-	sudo sh get-docker.sh
-	rm get-docker.sh
+	sudo curl -sSL https://get.docker.com | sh
 
 .PHONY: docker_rootless
 docker_rootless:
@@ -48,7 +46,7 @@ stop:
 .PHONY: logs
 logs: ## show the log output of the containers
 logs:
-	docker compose logs
+	env UID=${UID} GID=${GID} docker compose logs
 
 .PHONY: secret
 secret: # create local secret
