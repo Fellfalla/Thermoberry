@@ -17,8 +17,16 @@
         "id": "9cca99e1.170d68",
         "type": "tab",
         "label": "Mischersteuerung",
-        "disabled": false,
+        "disabled": true,
         "info": ""
+    },
+    {
+        "id": "bcf4ea8afb5c8eb2",
+        "type": "tab",
+        "label": "Mischersteuerung II",
+        "disabled": false,
+        "info": "",
+        "env": []
     },
     {
         "id": "2abd751f.509ec2",
@@ -85,7 +93,7 @@
                 ]
             },
             {
-                "x": 820,
+                "x": 890,
                 "y": 780,
                 "wires": [
                     {
@@ -95,7 +103,7 @@
                 ]
             },
             {
-                "x": 820,
+                "x": 860,
                 "y": 920,
                 "wires": [
                     {
@@ -142,6 +150,7 @@
                 "value": "{\"suppliers\":[{\"sensor\":null,\"loss\":2,\"overheating_sensor\":null,\"overheating_temperature\":71}],\"max_temperatures\":{},\"min_temperatures\":{}}"
             }
         ],
+        "meta": {},
         "color": "#DDAA99",
         "outputLabels": [
             "Weiterleitung von Eingang",
@@ -160,6 +169,167 @@
         }
     },
     {
+        "id": "2ed4b2dbb1c85b90",
+        "type": "subflow",
+        "name": "Mixxer",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 180,
+                "y": 220,
+                "wires": []
+            }
+        ],
+        "out": [
+            {
+                "x": 400,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "2ed4b2dbb1c85b90",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1180,
+                "y": 1120,
+                "wires": [
+                    {
+                        "id": "50c51305725a9d57",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 1160,
+                "y": 900,
+                "wires": [
+                    {
+                        "id": "acae3a5540bc5b1b",
+                        "port": 1
+                    }
+                ]
+            },
+            {
+                "x": 1170,
+                "y": 980,
+                "wires": [
+                    {
+                        "id": "acae3a5540bc5b1b",
+                        "port": 2
+                    }
+                ]
+            },
+            {
+                "x": 950,
+                "y": 440,
+                "wires": [
+                    {
+                        "id": "36e8698e908ac3f6",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 950,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "45992725e08db4f7",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 960,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "18691274b3c9e8b5",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "output_measured",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "output_target",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "supply_sensor",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str",
+                            "env"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "automatic_topic",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "make_hot_topic",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "make_cold_topic",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99",
+        "outputLabels": [
+            "",
+            "automatic",
+            "hot",
+            "cold",
+            "temperature input",
+            "temperature output",
+            "temperature setpoint"
+        ],
+        "status": {
+            "x": 280,
+            "y": 320,
+            "wires": []
+        }
+    },
+    {
         "id": "8f1b21d8c0c0ebb9",
         "type": "group",
         "z": "84fc9f46c4b65c0e",
@@ -170,14 +340,8 @@
             "color": "#000000"
         },
         "nodes": [
-            "6055fb308b5951b4",
             "e45b9299ce02bc7a",
             "47e8196dc47f1de3",
-            "a8a6b47de708541d",
-            "c2bc38edfba70378",
-            "12ef5d32413be9f7",
-            "89b7e04bf76eccbb",
-            "90f61624ee599340",
             "86b3b67e4d05a8e4",
             "74a7af055ff0fa72",
             "f2fb8120f87c55a9",
@@ -185,7 +349,13 @@
             "df747313d19d292a",
             "2fe6700250a381bf",
             "8ee412ef1fb8487f",
-            "b5c3d2893586c57f"
+            "6055fb308b5951b4",
+            "a8a6b47de708541d",
+            "90f61624ee599340",
+            "b5c3d2893586c57f",
+            "c2bc38edfba70378",
+            "12ef5d32413be9f7",
+            "89b7e04bf76eccbb"
         ],
         "x": 334,
         "y": 99,
@@ -323,7 +493,6 @@
             "b8c2d750.b4bb88",
             "3f596c5a.6514fc",
             "602cd7c6.77f1",
-            "7650c94a.d6e7c",
             "f6204444.6fdf88",
             "2467d4c2.35bbac",
             "51cdc994.8243a8",
@@ -335,14 +504,15 @@
             "57decf77.8d07e",
             "9109af28.583e",
             "d867662.87a1298",
-            "9e048668.5369a8",
             "9fc9a5143f534e97",
             "2071c05983be31bd",
-            "b8c5eec3414e7231"
+            "b8c5eec3414e7231",
+            "5eac8958cdd0d239",
+            "9f2e24abb2b802b6"
         ],
         "x": 64,
         "y": 1479,
-        "w": 1442,
+        "w": 1462,
         "h": 642
     },
     {
@@ -358,23 +528,148 @@
             "f11dced2.19e3b",
             "72a573d2.dd954c",
             "18276e49.2da3b2",
-            "8fa2e60b.250c1",
-            "558041c8.14396",
             "c8b99fa7.5123a8",
             "e3db354.6766748",
             "13cec1ea.9dd3de",
-            "ac2a9b70.e42788",
             "7abc7777.db1b28",
             "1774f149.7eb5bf",
             "ef6d7064.443fa",
             "7550b289.066954",
             "b4fd1a95.932ca",
-            "29d07ec.404f402"
+            "29d07ec.404f402",
+            "8fa2e60b.250c1",
+            "558041c8.14396",
+            "ac2a9b70.e42788"
         ],
         "x": 34,
         "y": 39,
         "w": 812,
         "h": 422
+    },
+    {
+        "id": "a1732fa5.9289e",
+        "type": "group",
+        "z": "9cca99e1.170d68",
+        "name": "Mixer Control Loop",
+        "style": {
+            "fill": "#ffff7f",
+            "label": true
+        },
+        "nodes": [
+            "6d2a173c.0739f",
+            "9b8aabc0.eee198",
+            "898dd0ca.bc6d7",
+            "b60b551.18a5a28",
+            "e6103245.8a8e4",
+            "41d03b1b.5912e4",
+            "af0adec0.f89ae",
+            "6e04e254.c7553c",
+            "595ff2c6.a751cc",
+            "3635caabbe8767e7"
+        ],
+        "x": 54,
+        "y": 599,
+        "w": 1252,
+        "h": 242
+    },
+    {
+        "id": "cca3451153b255cd",
+        "type": "group",
+        "z": "84fc9f46c4b65c0e",
+        "name": "Mqtt to Global Context",
+        "style": {
+            "fill": "#777777",
+            "label": true,
+            "color": "#ffff00"
+        },
+        "nodes": [
+            "d6cf5083.fdc6f",
+            "d6eb86c4.7145a8",
+            "4b599587.13412c",
+            "4ea58aef.f585f4"
+        ],
+        "x": 1444,
+        "y": 539,
+        "w": 762,
+        "h": 122
+    },
+    {
+        "id": "bcaefe72cd9ac3e9",
+        "type": "group",
+        "z": "2ed4b2dbb1c85b90",
+        "name": "Status",
+        "style": {
+            "fill": "#d1d1d1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "acae3a5540bc5b1b",
+            "b452a22706988b50",
+            "50c51305725a9d57",
+            "d857e36abc2bf69c",
+            "51599fb0066284e6",
+            "dd76d24d838cc0ae",
+            "11024ab6f5bbff18",
+            "41e4eb4641e5d4cc",
+            "7b6e104f505b40f6",
+            "0b2b0e053a7f00ab"
+        ],
+        "x": 284,
+        "y": 799,
+        "w": 742,
+        "h": 342
+    },
+    {
+        "id": "f796f3379427dba9",
+        "type": "group",
+        "z": "2ed4b2dbb1c85b90",
+        "name": "Set context variables",
+        "style": {
+            "fill": "#d1d1d1",
+            "label": true
+        },
+        "nodes": [
+            "cd9a7a9bbc58830b",
+            "4a763479684e069e",
+            "36e8698e908ac3f6",
+            "88d40e66ef59aae1",
+            "45992725e08db4f7",
+            "18691274b3c9e8b5",
+            "8841bec5ec176b15",
+            "071f99285de89265",
+            "a3042849082f1225"
+        ],
+        "x": 574,
+        "y": 79,
+        "w": 812,
+        "h": 322
+    },
+    {
+        "id": "f0ec171ef5a5fd8b",
+        "type": "group",
+        "z": "2ed4b2dbb1c85b90",
+        "name": "Mixer Control Loop",
+        "style": {
+            "fill": "#ffff7f",
+            "label": true
+        },
+        "nodes": [
+            "bf131396ba4c061b",
+            "57b81ae322d4c12d",
+            "a610066891d5835f",
+            "a44ab1755a50bf2c",
+            "3fc4fbe4029b61a4",
+            "ad2ac0433b0d5008",
+            "d4ba7456a4d04338",
+            "3e50a35033ee40b1",
+            "f527743745fe4bae",
+            "b94ea4bb2c639c82"
+        ],
+        "x": 274,
+        "y": 499,
+        "w": 1352,
+        "h": 242
     },
     {
         "id": "9c9be609.56ef8",
@@ -427,28 +722,126 @@
         "h": 202
     },
     {
-        "id": "a1732fa5.9289e",
+        "id": "d08139ad083ea05b",
         "type": "group",
-        "z": "9cca99e1.170d68",
-        "name": "Mixer Control Loop",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Vorlauf Calculation",
         "style": {
-            "fill": "#ffff7f",
+            "stroke": "#000000",
+            "fill": "#7fb7df",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "c1880e368e36dd8a",
+            "b6aba58e6210753f",
+            "780d1e8acd2e6c0a",
+            "c36e4f1dc768a082",
+            "e89ba47fb36c3a48",
+            "7c185bf1602e2d27",
+            "04609ebeab4d39a8",
+            "5795aa3f649b8b78"
+        ],
+        "x": 144,
+        "y": 479,
+        "w": 1422,
+        "h": 162
+    },
+    {
+        "id": "ac063a6d4f95a802",
+        "type": "group",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Heating Status",
+        "style": {
+            "stroke": "#000000",
+            "fill": "#ffbfbf",
             "label": true
         },
         "nodes": [
-            "6d2a173c.0739f",
-            "9b8aabc0.eee198",
-            "898dd0ca.bc6d7",
-            "b60b551.18a5a28",
-            "e6103245.8a8e4",
-            "41d03b1b.5912e4",
-            "af0adec0.f89ae",
-            "6e04e254.c7553c"
+            "804da586e8a4f6ac",
+            "abb40c138cf850fd",
+            "2fb4b4053119dfb2",
+            "1e3af57b6b647749",
+            "dc311f7ef7f47222",
+            "5be9043040195f15",
+            "afb94a02623b7cd5"
         ],
-        "x": 74,
-        "y": 679,
-        "w": 1302,
+        "x": 154,
+        "y": 739,
+        "w": 1092,
         "h": 202
+    },
+    {
+        "id": "16567b6b7a76e555",
+        "type": "group",
+        "z": "9cca99e1.170d68",
+        "name": "Dashboard",
+        "style": {
+            "fill": "#d1d1d1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "8f6be58099f466d3",
+            "f0b91d32cba4179f",
+            "95df837d12910a84",
+            "86facc676e211734",
+            "eb8a0b4a6450951c",
+            "dd84a6d4375b8b42",
+            "86c168d23922f4ea"
+        ],
+        "x": 974,
+        "y": 139,
+        "w": 952,
+        "h": 222
+    },
+    {
+        "id": "a5f79067a5e0cea9",
+        "type": "group",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Dashboard",
+        "style": {
+            "fill": "#d1d1d1",
+            "label": true,
+            "color": "#000000"
+        },
+        "nodes": [
+            "7dffad1725ca3466",
+            "a00a72cf0f51822f",
+            "b31111b82f26914e",
+            "605b17ac466f699d",
+            "df60dc2b334dbabb"
+        ],
+        "x": 454,
+        "y": 1919,
+        "w": 952,
+        "h": 202
+    },
+    {
+        "id": "f4fcba44fd5ad925",
+        "type": "junction",
+        "z": "bcf4ea8afb5c8eb2",
+        "x": 720,
+        "y": 1580,
+        "wires": [
+            [
+                "811c5d93544205d4",
+                "a281b427ecabf0e6"
+            ]
+        ]
+    },
+    {
+        "id": "b5c18e69c781feae",
+        "type": "junction",
+        "z": "bcf4ea8afb5c8eb2",
+        "x": 700,
+        "y": 1660,
+        "wires": [
+            [
+                "158d1ce354078761",
+                "ad47356d428b9cbc"
+            ]
+        ]
     },
     {
         "id": "bcebf477.ab97e8",
@@ -731,6 +1124,8 @@
         "qos": "1",
         "datatype": "json",
         "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
         "inputs": 0,
         "x": 220,
         "y": 540,
@@ -749,6 +1144,8 @@
         "qos": "1",
         "datatype": "json",
         "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
         "inputs": 0,
         "x": 220,
         "y": 580,
@@ -855,11 +1252,13 @@
         "type": "function",
         "z": "2abd751f.509ec2",
         "name": "SetEnabledContext",
-        "func": "flow.set('is_enabled', msg.payload);\nreturn msg;",
+        "func": "flow.set('is_automatic', msg.payload);\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\nflow.set('is_enabled', true);",
         "finalize": "",
+        "libs": [],
         "x": 670,
         "y": 920,
         "wires": [
@@ -934,8 +1333,7 @@
         "y": 1060,
         "wires": [
             [
-                "3a510198.16496e",
-                "7fffdbf7.4c377c"
+                "3a510198.16496e"
             ]
         ]
     },
@@ -979,7 +1377,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "str",
-        "x": 230,
+        "x": 170,
         "y": 780,
         "wires": [
             [
@@ -992,12 +1390,14 @@
         "type": "function",
         "z": "2abd751f.509ec2",
         "name": "calculate loading status",
-        "func": "// parameters\n\n// initialize \nlocals = {}\nlocals.logs = []\n\nlocals.is_hot = 0\nlocals.is_cold = 0\nlocals.can_load = 0\nlocals.supplier_overheating = 0\nlocals.new_loading_state = 0\n\n// read msg\nis_loading = msg.args.is_loading\nis_enabled = msg.args.is_enabled\nold_state = msg.args.old_state\ntemperatures = msg.args.temperatures\nglobal_temperatures = msg.args.global_temperatures\nmax_temperatures = msg.parameters.max_temperatures\nmin_temperatures = msg.parameters.min_temperatures\nsuppliers = msg.parameters.suppliers\n\n\n// precalculations\nlocals.lowest_temp = Math.min(...Object.values(temperatures));\n\n\n// Rule 1: temperature too high -> stop loading\nfor (var sensor_topic in max_temperatures){\n    locals.is_hot |= temperatures[sensor_topic] > max_temperatures[sensor_topic]\n}\n\n// Rule 2: temperature too low -> start loading\nfor (var sensor_topic in min_temperatures){\n    locals.is_cold |= temperatures[sensor_topic] < min_temperatures[sensor_topic]\n}\n\n// Rule 3: check if we have some sufficient supplier\nfor (var idx in suppliers){\n    supplier = suppliers[idx]\n    locals.supplier_temp = global_temperatures[supplier.sensor]\n    locals.can_load |= (locals.supplier_temp > locals.lowest_temp + supplier.loss)\n}\n\n\n// Rule 4: Force loading if supplier is overheading\nfor (var idx in suppliers){\n    supplier = suppliers[idx]\n    locals.overheat_temp = global_temperatures[supplier.overheating_sensor]\n    locals.supplier_overheating |= (locals.overheat_temp > supplier.overheating_temperature)\n}\n\n/*\n// Apply rules\nif (!is_enabled) {\n    // manual mode -> do nothing automatically\n    locals.new_loading_state = is_loading;\n}\n*/\nif (locals.supplier_overheating) {\n    // protect the supplier by taking the hot water\n    locals.new_loading_state = true;\n    \n    } else if (locals.is_hot) {\n    // stop because buffer is full\n    locals.new_loading_state = false;\n    \n    } else if (!locals.can_load) {\n    // disable as soon as we cannot load anymore\n    locals.new_loading_state = false;\n    \n    } else if (locals.is_cold && locals.can_load) {\n    // start loading as soon as we are getting too cold\n    locals.new_loading_state = true;\n    \n    } else {\n    locals.new_loading_state = is_loading\n}\n\nif (is_loading != locals.new_loading_state) {\n    locals.logs.push(locals.new_loading_state ? \"Start loading\" : \"Stop loading\");\n    }\n    else {\n        locals.logs.push(locals.new_loading_state ? \"Remain loading\" : \"Remain idle\");\n    }\n    \n// Logging\nlocals.new_state = {\n    \"is_loading\": locals.new_loading_state,\n    \"is_hot\": locals.is_hot, \n    \"is_cold\": locals.is_cold, \n    \"can_load\": locals.can_load, \n    \"supplier_overheating\": locals.supplier_overheating\n}\n\n\nif (old_state != locals.new_state) {\n    flow.set('state', locals.new_state);\n}\n\n\n// initialize msg\nmsg = {\n    \"topic\": msg.topic,\n    \"payload\": locals.new_loading_state\n}\n\nreturn [msg, locals]",
+        "func": "// parameters\n\n// initialize \nlocals = {\n    logs: [],\n    is_hot: 0,\n    is_cold: 0,\n    can_load: 0,\n    supplier_overheating: 0,\n    new_loading_state: 0,\n    lowest_temp: NaN,\n    supplier_temp: NaN,\n    overheat_temp: NaN,\n}\n\n// read msg\nlet is_loading = msg.args.is_loading\nlet is_automatic = msg.args.is_automatic\nlet old_state = msg.args.old_state\nlet temperatures = msg.args.temperatures\nlet global_temperatures = msg.args.global_temperatures\nlet max_temperatures = msg.parameters.max_temperatures;\nlet min_temperatures = msg.parameters.min_temperatures\nlet suppliers = msg.parameters.suppliers\n\n\n// precalculations\nlocals.lowest_temp = Math.min(...Object.values(temperatures));\n\n\n// Rule 1: temperature too high -> stop loading\nfor (var sensor_topic in max_temperatures){\n    locals.is_hot |= temperatures[sensor_topic] > max_temperatures[sensor_topic];\n}\n\n// Rule 2: temperature too low -> start loading\nfor (var sensor_topic in min_temperatures){\n    locals.is_cold |= temperatures[sensor_topic] < min_temperatures[sensor_topic];\n}\n\n// Rule 3: check if we have some sufficient supplier\nfor (var idx in suppliers){\n    let supplier = suppliers[idx];\n    locals.supplier_temp = global_temperatures[supplier.sensor];\n    locals.can_load |= (locals.supplier_temp > locals.lowest_temp + supplier.loss);\n}\n\n\n// Rule 4: Force loading if supplier is overheading\nfor (var idx in suppliers){\n    let supplier = suppliers[idx];\n    locals.overheat_temp = global_temperatures[supplier.overheating_sensor];\n    locals.supplier_overheating |= (locals.overheat_temp > supplier.overheating_temperature);\n}\n\n\n// Apply rules\nif (!is_automatic) {\n    // manual mode -> do nothing automatically\n    locals.new_loading_state = is_loading;\n} else if (locals.supplier_overheating) {\n    // protect the supplier by taking the hot water\n    locals.new_loading_state = true;\n} else if (locals.is_hot) {\n    // stop because buffer is full\n    locals.new_loading_state = false;\n} else if (!locals.can_load) {\n    // disable as soon as we cannot load anymore\n    locals.new_loading_state = false;\n} else if (locals.is_cold && locals.can_load) {\n    // start loading as soon as we are getting too cold\n    locals.new_loading_state = true;\n} else {\n    locals.new_loading_state = is_loading;\n}\n\nif (is_loading != locals.new_loading_state) {\n    locals.logs.push(locals.new_loading_state ? \"Start loading\" : \"Stop loading\");\n    }\n    else {\n        locals.logs.push(locals.new_loading_state ? \"Remain loading\" : \"Remain idle\");\n    }\n    \n// Logging\nlocals.new_state = {\n    \"is_loading\": locals.new_loading_state,\n    \"is_hot\": locals.is_hot, \n    \"is_cold\": locals.is_cold, \n    \"can_load\": locals.can_load, \n    \"supplier_overheating\": locals.supplier_overheating\n}\n\n\nif (old_state != locals.new_state) {\n    flow.set('state', locals.new_state);\n}\n\n\n// initialize msg\nmsg = {\n    \"topic\": msg.topic,\n    \"payload\": locals.new_loading_state\n}\n\nreturn [msg, locals]",
         "outputs": 2,
-        "noerr": 0,
+        "timeout": "",
+        "noerr": 4,
         "initialize": "",
         "finalize": "",
-        "x": 580,
+        "libs": [],
+        "x": 590,
         "y": 780,
         "wires": [
             [
@@ -1067,7 +1467,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 390,
+        "x": 330,
         "y": 780,
         "wires": [
             []
@@ -1083,29 +1483,11 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 470,
-        "y": 1160,
+        "x": 1070,
+        "y": 940,
         "wires": [
             []
         ]
-    },
-    {
-        "id": "7fffdbf7.4c377c",
-        "type": "debug",
-        "z": "2abd751f.509ec2",
-        "d": true,
-        "name": "pufferbug",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 800,
-        "y": 720,
-        "wires": []
     },
     {
         "id": "9fa8465f.6fdd5",
@@ -1143,9 +1525,9 @@
             },
             {
                 "t": "set",
-                "p": "args.is_enabled",
+                "p": "args.is_automatic",
                 "pt": "msg",
-                "to": "is_enabled",
+                "to": "is_automatic",
                 "tot": "flow"
             },
             {
@@ -1161,7 +1543,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 390,
+        "x": 330,
         "y": 720,
         "wires": [
             [
@@ -1182,29 +1564,713 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
+        "x": 900,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "acae3a5540bc5b1b",
+        "type": "function",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "MutualExclusive",
+        "func": "\nmsg1 = {\"payload\": false};\nmsg2 = {\"payload\": false};\nmsg3 = {\"payload\": false};\n\n\nif (msg.topic == \"mischer/automatik\")\n    msg1.payload = msg.payload;\nif (msg.topic == \"mischer/heizkreis/heiss\")\n    msg2.payload = msg.payload;\nif (msg.topic == \"mischer/heizkreis/kalt\")\n    msg3.payload = msg.payload;\n\n\n\nreturn [msg1, msg2, msg3];",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 870,
+        "y": 920,
+        "wires": [
+            [],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b452a22706988b50",
+        "type": "mqtt in",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "",
+        "topic": "${automatic_topic}",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 400,
+        "y": 1100,
+        "wires": [
+            [
+                "50c51305725a9d57"
+            ]
+        ]
+    },
+    {
+        "id": "50c51305725a9d57",
+        "type": "change",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "String2Boolean",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "true",
+                "fromt": "str",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "false",
+                "fromt": "str",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 1100,
+        "wires": [
+            [
+                "0b2b0e053a7f00ab"
+            ]
+        ]
+    },
+    {
+        "id": "d857e36abc2bf69c",
+        "type": "mqtt in",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "",
+        "topic": "${make_hot_topic}",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 400,
+        "y": 880,
+        "wires": [
+            [
+                "dd76d24d838cc0ae",
+                "41e4eb4641e5d4cc"
+            ]
+        ]
+    },
+    {
+        "id": "51599fb0066284e6",
+        "type": "mqtt in",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "",
+        "topic": "${make_cold_topic}",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 400,
+        "y": 940,
+        "wires": [
+            [
+                "11024ab6f5bbff18",
+                "7b6e104f505b40f6"
+            ]
+        ]
+    },
+    {
+        "id": "dd76d24d838cc0ae",
+        "type": "change",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "String2Boolean",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "true",
+                "fromt": "str",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "false",
+                "fromt": "str",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 880,
+        "wires": [
+            [
+                "acae3a5540bc5b1b"
+            ]
+        ]
+    },
+    {
+        "id": "11024ab6f5bbff18",
+        "type": "change",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "String2Boolean",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "true",
+                "fromt": "str",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "false",
+                "fromt": "str",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 940,
+        "wires": [
+            [
+                "acae3a5540bc5b1b"
+            ]
+        ]
+    },
+    {
+        "id": "41e4eb4641e5d4cc",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "heiss",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "7b6e104f505b40f6",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "kalt",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "0b2b0e053a7f00ab",
+        "type": "function",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "bcaefe72cd9ac3e9",
+        "name": "SetEnabledContext",
+        "func": "flow.set('is_automatic', msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\nflow.set('is_enabled', true);",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cd9a7a9bbc58830b",
+        "type": "function",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f796f3379427dba9",
+        "name": "set actual_output_temperature",
+        "func": "flow.set(\"actual_output_temperature\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"process_variable\", NaN);",
+        "finalize": "",
+        "x": 970,
+        "y": 120,
+        "wires": [
+            [
+                "8841bec5ec176b15"
+            ]
+        ]
+    },
+    {
+        "id": "4a763479684e069e",
+        "type": "function",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f796f3379427dba9",
+        "name": "set setpoint",
+        "func": "flow.set(\"setpoint\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\n\nflow.set(\"setpoint\", 50);",
+        "finalize": "",
+        "libs": [],
+        "x": 910,
+        "y": 200,
+        "wires": [
+            [
+                "071f99285de89265"
+            ]
+        ]
+    },
+    {
+        "id": "36e8698e908ac3f6",
+        "type": "mqtt in",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f796f3379427dba9",
+        "name": "",
+        "topic": "${supply_sensor}",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 680,
+        "y": 360,
+        "wires": [
+            [
+                "88d40e66ef59aae1"
+            ]
+        ]
+    },
+    {
+        "id": "88d40e66ef59aae1",
+        "type": "function",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f796f3379427dba9",
+        "name": "set supply_temperature",
+        "func": "flow.set(\"supply_temperature\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
+        "finalize": "",
+        "x": 950,
+        "y": 360,
+        "wires": [
+            [
+                "a3042849082f1225"
+            ]
+        ]
+    },
+    {
+        "id": "bf131396ba4c061b",
+        "type": "function",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "Control",
+        "func": "\n\n\n// parameters\nlet Kp = msg.parameters.Kp;\nlet Ki = msg.parameters.Ki;\nlet Kd = msg.parameters.Kd;\nlet hysteresis = msg.parameters.hysteresis;\nlet make_hot_topic = msg.parameters.make_hot_topic;\nlet make_cold_topic = msg.parameters.make_cold_topic;\n\n// arguments\nlet is_automatic = msg.args.is_automatic;\nlet setpoint = msg.args.setpoint;\nlet process_variable = msg.args.actual_output_temperature;\n\n// state variables\nlet previous_error = context.get(\"previous_error\");\nlet previous_process_variable = context.get(\"previous_process_variable\");\nlet integral = context.get(\"integral\");\n\n\n\n/*\nCalling this method will start a periodic loop\n\nThe feedback controller is based on a simple PD controller\n*/\n\nif (!is_automatic) {\n    msg.warn = \"Manual Mode\"\n    return msg\n}\n\nif (setpoint == undefined) {\n    msg.warn = \"No target temperature set\"\n    return msg\n}\n\nif (process_variable == undefined) {\n    msg.warn =\"Unknown output temperature\"\n    return msg\n}\n\n// Calculate the targeted temperature change for this period\nlet dt = parseFloat(msg.period);\nlet error = setpoint - process_variable;\nlet derivative = (previous_process_variable - process_variable) / dt;\nintegral = integral + error * dt;\nlet delta = (Kp * error + Kd * derivative + Ki * integral);\n\n\n// store for the next iteration\ncontext.set(\"previous_process_variable\", process_variable);\ncontext.set(\"previous_error\", error);\ncontext.set(\"integral\", integral);\n\n\nmsg.topic = delta > 0 ? make_hot_topic : make_cold_topic;\nmsg.payload = false;\nmsg.delay = 0;\nmsg.proportional_error = error;\nmsg.derivative_error = derivative;\nmsg.integral_error = integral;\n\n\n\nmsg.target_temperature_delta = delta;\n\nif (Math.abs(delta) > hysteresis) {\n    \n    let cycle_period = msg.period;\n    let temperature_to_time = 3.3 // seconds per degree\n    \n    // Topic depends on if we need to open or close the mixer\n    msg.payload = true;\n\n    // Calc the duty cycle\n    let desired_time = temperature_to_time * Math.abs(delta);\n    let duty_time = Math.min(desired_time, dt);\n    msg.delay = duty_time;\n    \n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\ncontext.set(\"integral\", 0);\ncontext.set(\"previous_process_variable\", 0); // TODO: initialize correctly\ncontext.set(\"previous_error\", 0);",
+        "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nflow.set(\"integral\", 0);",
+        "libs": [],
+        "x": 740,
+        "y": 620,
+        "wires": [
+            [
+                "b94ea4bb2c639c82",
+                "3fc4fbe4029b61a4"
+            ]
+        ]
+    },
+    {
+        "id": "57b81ae322d4c12d",
+        "type": "inject",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "Cycle",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "period",
+                "v": "25",
+                "vt": "num"
+            },
+            {
+                "p": "args.actual_output_temperature",
+                "v": "actual_output_temperature",
+                "vt": "flow"
+            },
+            {
+                "p": "args.setpoint",
+                "v": "setpoint",
+                "vt": "flow"
+            }
+        ],
+        "repeat": "25",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 370,
+        "y": 600,
+        "wires": [
+            [
+                "3e50a35033ee40b1"
+            ]
+        ]
+    },
+    {
+        "id": "a610066891d5835f",
+        "type": "delay-topic-message",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "delay": "1",
+        "x": 1120,
+        "y": 680,
+        "wires": [
+            [
+                "a44ab1755a50bf2c"
+            ]
+        ]
+    },
+    {
+        "id": "a44ab1755a50bf2c",
+        "type": "change",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "Set Idle",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1340,
+        "y": 680,
+        "wires": [
+            [
+                "ad2ac0433b0d5008"
+            ]
+        ]
+    },
+    {
+        "id": "3fc4fbe4029b61a4",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
         "y": 700,
         "wires": []
     },
     {
-        "id": "6055fb308b5951b4",
-        "type": "mqtt in",
-        "z": "84fc9f46c4b65c0e",
-        "g": "8f1b21d8c0c0ebb9",
-        "name": "",
-        "topic": "sensors/heizkreis/vorlauf_ist",
-        "qos": "0",
-        "datatype": "auto",
+        "id": "ad2ac0433b0d5008",
+        "type": "mqtt out",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "Duty Cycle Off",
+        "topic": "",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
         "broker": "bcebf477.ab97e8",
-        "inputs": 0,
-        "x": 480,
-        "y": 460,
+        "x": 1520,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "d4ba7456a4d04338",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "control",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1130,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "3e50a35033ee40b1",
+        "type": "change",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "set msg parameters",
+        "rules": [
+            {
+                "t": "set",
+                "p": "parameters.Kp",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.Ki",
+                "pt": "msg",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.Kd",
+                "pt": "msg",
+                "to": "70",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.hysteresis",
+                "pt": "msg",
+                "to": "2",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "args.is_automatic",
+                "pt": "msg",
+                "to": "is_automatic",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "parameters.make_hot_topic",
+                "pt": "msg",
+                "to": "make_hot_topic",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "parameters.make_cold_topic",
+                "pt": "msg",
+                "to": "make_cold_topic",
+                "tot": "env"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 540,
+        "y": 680,
         "wires": [
             [
-                "12ef5d32413be9f7",
-                "90f61624ee599340"
+                "bf131396ba4c061b"
             ]
         ]
+    },
+    {
+        "id": "f527743745fe4bae",
+        "type": "mqtt out",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "Pub Mischer Command",
+        "topic": "",
+        "qos": "2",
+        "retain": "true",
+        "broker": "bcebf477.ab97e8",
+        "x": 1250,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "b94ea4bb2c639c82",
+        "type": "switch",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "If topic",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 910,
+        "y": 620,
+        "wires": [
+            [
+                "f527743745fe4bae",
+                "d4ba7456a4d04338",
+                "a610066891d5835f"
+            ]
+        ]
+    },
+    {
+        "id": "45992725e08db4f7",
+        "type": "mqtt in",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f796f3379427dba9",
+        "name": "",
+        "topic": "${output_measured}",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 690,
+        "y": 120,
+        "wires": [
+            [
+                "cd9a7a9bbc58830b"
+            ]
+        ]
+    },
+    {
+        "id": "18691274b3c9e8b5",
+        "type": "mqtt in",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f796f3379427dba9",
+        "name": "",
+        "topic": "${output_target}",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 680,
+        "y": 200,
+        "wires": [
+            [
+                "4a763479684e069e"
+            ]
+        ]
+    },
+    {
+        "id": "8841bec5ec176b15",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "d": true,
+        "g": "f796f3379427dba9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "071f99285de89265",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "d": true,
+        "g": "f796f3379427dba9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "a3042849082f1225",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "d": true,
+        "g": "f796f3379427dba9",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1290,
+        "y": 360,
+        "wires": []
     },
     {
         "id": "e45b9299ce02bc7a",
@@ -1225,27 +2291,6 @@
             [
                 "47e8196dc47f1de3",
                 "90f61624ee599340"
-            ]
-        ]
-    },
-    {
-        "id": "a8a6b47de708541d",
-        "type": "mqtt in",
-        "z": "84fc9f46c4b65c0e",
-        "g": "8f1b21d8c0c0ebb9",
-        "name": "",
-        "topic": "mischer/heizkreis/vorlauf_soll",
-        "qos": "0",
-        "datatype": "auto",
-        "broker": "bcebf477.ab97e8",
-        "inputs": 0,
-        "x": 480,
-        "y": 360,
-        "wires": [
-            [
-                "c2bc38edfba70378",
-                "90f61624ee599340",
-                "b5c3d2893586c57f"
             ]
         ]
     },
@@ -1523,7 +2568,7 @@
         "qos": "",
         "retain": "false",
         "broker": "bcebf477.ab97e8",
-        "x": 1180,
+        "x": 1040,
         "y": 1360,
         "wires": []
     },
@@ -1589,7 +2634,7 @@
         "broker": "bcebf477.ab97e8",
         "inputs": 0,
         "x": 470,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
                 "df747313d19d292a"
@@ -1792,37 +2837,12 @@
         ]
     },
     {
-        "id": "90f61624ee599340",
-        "type": "delay",
-        "z": "84fc9f46c4b65c0e",
-        "g": "8f1b21d8c0c0ebb9",
-        "name": "",
-        "pauseType": "timed",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "2",
-        "rateUnits": "minute",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": true,
-        "outputs": 1,
-        "x": 840,
-        "y": 180,
-        "wires": [
-            [
-                "89b7e04bf76eccbb"
-            ]
-        ]
-    },
-    {
         "id": "165f89a8be14a3fe",
         "type": "debug",
         "z": "84fc9f46c4b65c0e",
         "g": "bc95ad173c5ea766",
         "name": "Puffer",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -1830,26 +2850,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 570,
+        "x": 630,
         "y": 1480,
-        "wires": []
-    },
-    {
-        "id": "b5c3d2893586c57f",
-        "type": "debug",
-        "z": "84fc9f46c4b65c0e",
-        "g": "8f1b21d8c0c0ebb9",
-        "name": "Dash",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 820,
-        "y": 420,
         "wires": []
     },
     {
@@ -1967,8 +2969,8 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 950,
-        "y": 1320,
+        "x": 790,
+        "y": 1360,
         "wires": [
             [
                 "3e74c0b350cebdb2"
@@ -2475,96 +3477,6 @@
         ]
     },
     {
-        "id": "c2bc38edfba70378",
-        "type": "ui_chart",
-        "z": "84fc9f46c4b65c0e",
-        "g": "8f1b21d8c0c0ebb9",
-        "name": "",
-        "group": "526921e2.2519f",
-        "order": 2,
-        "width": 0,
-        "height": 0,
-        "label": "Vorlauftemperatur Soll",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "Keine Daten",
-        "dot": false,
-        "ymin": "20",
-        "ymax": "60",
-        "removeOlder": "1",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 840,
-        "y": 360,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "12ef5d32413be9f7",
-        "type": "ui_chart",
-        "z": "84fc9f46c4b65c0e",
-        "g": "8f1b21d8c0c0ebb9",
-        "name": "",
-        "group": "526921e2.2519f",
-        "order": 3,
-        "width": 0,
-        "height": 0,
-        "label": "Vorlauftemperatur Ist",
-        "chartType": "line",
-        "legend": "false",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "Keine Daten",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": "1",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 840,
-        "y": 460,
-        "wires": [
-            []
-        ]
-    },
-    {
         "id": "a1d159e0022a2a63",
         "type": "ui_chart",
         "z": "84fc9f46c4b65c0e",
@@ -2650,51 +3562,6 @@
         "className": "",
         "x": 1000,
         "y": 960,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "89b7e04bf76eccbb",
-        "type": "ui_chart",
-        "z": "84fc9f46c4b65c0e",
-        "g": "8f1b21d8c0c0ebb9",
-        "name": "",
-        "group": "8ac8701e.7362d",
-        "order": 4,
-        "width": "15",
-        "height": "5",
-        "label": "Vorlauftemperaturen Langzeit",
-        "chartType": "line",
-        "legend": "true",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": "20",
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#00ff00",
-            "#0000ff",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 1130,
-        "y": 180,
         "wires": [
             []
         ]
@@ -2808,6 +3675,7 @@
         "id": "0383fb6de2c5ffe8",
         "type": "rpi-gpio out",
         "z": "84fc9f46c4b65c0e",
+        "d": true,
         "g": "0dbbbbeba1311e07",
         "name": "Pumpe Brauchwasser",
         "pin": "22",
@@ -2840,6 +3708,299 @@
         "wires": []
     },
     {
+        "id": "d6cf5083.fdc6f",
+        "type": "debug",
+        "z": "84fc9f46c4b65c0e",
+        "g": "cca3451153b255cd",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2110,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "d6eb86c4.7145a8",
+        "type": "mqtt in",
+        "z": "84fc9f46c4b65c0e",
+        "g": "cca3451153b255cd",
+        "name": "",
+        "topic": "sensors/#",
+        "qos": "2",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 1530,
+        "y": 620,
+        "wires": [
+            [
+                "4b599587.13412c"
+            ]
+        ]
+    },
+    {
+        "id": "4b599587.13412c",
+        "type": "function",
+        "z": "84fc9f46c4b65c0e",
+        "g": "cca3451153b255cd",
+        "name": "Store Temperatures Globally",
+        "func": "\ntemp_map = global.get('temperatures');\n\nif (typeof msg.topic !== 'undefined'){\n    temp_map[msg.topic] = msg.payload;\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nglobal.set('temperatures', {});",
+        "finalize": "",
+        "x": 1820,
+        "y": 620,
+        "wires": [
+            [
+                "d6cf5083.fdc6f"
+            ]
+        ]
+    },
+    {
+        "id": "4ea58aef.f585f4",
+        "type": "comment",
+        "z": "84fc9f46c4b65c0e",
+        "g": "cca3451153b255cd",
+        "name": "Adds temperatures to the global context",
+        "info": "",
+        "x": 1730,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "6055fb308b5951b4",
+        "type": "mqtt in",
+        "z": "84fc9f46c4b65c0e",
+        "d": true,
+        "g": "8f1b21d8c0c0ebb9",
+        "name": "",
+        "topic": "sensors/heizkreis/vorlauf_ist",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 480,
+        "y": 460,
+        "wires": [
+            [
+                "12ef5d32413be9f7",
+                "90f61624ee599340"
+            ]
+        ]
+    },
+    {
+        "id": "a8a6b47de708541d",
+        "type": "mqtt in",
+        "z": "84fc9f46c4b65c0e",
+        "d": true,
+        "g": "8f1b21d8c0c0ebb9",
+        "name": "",
+        "topic": "mischer/heizkreis/vorlauf_soll",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 480,
+        "y": 360,
+        "wires": [
+            [
+                "c2bc38edfba70378",
+                "90f61624ee599340",
+                "b5c3d2893586c57f"
+            ]
+        ]
+    },
+    {
+        "id": "90f61624ee599340",
+        "type": "delay",
+        "z": "84fc9f46c4b65c0e",
+        "d": true,
+        "g": "8f1b21d8c0c0ebb9",
+        "name": "",
+        "pauseType": "timed",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "2",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "outputs": 1,
+        "x": 860,
+        "y": 320,
+        "wires": [
+            [
+                "89b7e04bf76eccbb"
+            ]
+        ]
+    },
+    {
+        "id": "b5c3d2893586c57f",
+        "type": "debug",
+        "z": "84fc9f46c4b65c0e",
+        "d": true,
+        "g": "8f1b21d8c0c0ebb9",
+        "name": "Dash",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "c2bc38edfba70378",
+        "type": "ui_chart",
+        "z": "84fc9f46c4b65c0e",
+        "d": true,
+        "g": "8f1b21d8c0c0ebb9",
+        "name": "",
+        "group": "526921e2.2519f",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Vorlauftemperatur Soll",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Keine Daten",
+        "dot": false,
+        "ymin": "20",
+        "ymax": "60",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 840,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "12ef5d32413be9f7",
+        "type": "ui_chart",
+        "z": "84fc9f46c4b65c0e",
+        "d": true,
+        "g": "8f1b21d8c0c0ebb9",
+        "name": "",
+        "group": "526921e2.2519f",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Vorlauftemperatur Ist",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Keine Daten",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 840,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "89b7e04bf76eccbb",
+        "type": "ui_chart",
+        "z": "84fc9f46c4b65c0e",
+        "d": true,
+        "g": "8f1b21d8c0c0ebb9",
+        "name": "",
+        "group": "8ac8701e.7362d",
+        "order": 4,
+        "width": "15",
+        "height": "5",
+        "label": "Vorlauftemperaturen Langzeit",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "20",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00ff00",
+            "#0000ff",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1130,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
         "id": "6cd6394d.f6c2b8",
         "type": "http request",
         "z": "37d3dae1.129ff6",
@@ -2847,11 +4008,14 @@
         "method": "GET",
         "ret": "obj",
         "paytoqs": "ignore",
-        "url": "http://127.0.0.1:1880/sensors/1wire/",
+        "url": "http://127.0.0.1:1881/sensors/1wire/",
         "tls": "",
         "persist": false,
         "proxy": "",
+        "insecureHTTPParser": false,
         "authType": "",
+        "senderr": false,
+        "headers": [],
         "x": 390,
         "y": 720,
         "wires": [
@@ -3023,7 +4187,7 @@
         "qos": "2",
         "retain": "false",
         "broker": "bcebf477.ab97e8",
-        "x": 1310,
+        "x": 1270,
         "y": 200,
         "wires": []
     },
@@ -3051,23 +4215,6 @@
         ]
     },
     {
-        "id": "d6cf5083.fdc6f",
-        "type": "debug",
-        "z": "37d3dae1.129ff6",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 930,
-        "y": 480,
-        "wires": []
-    },
-    {
         "id": "3655d9dc.712db6",
         "type": "comment",
         "z": "37d3dae1.129ff6",
@@ -3078,53 +4225,6 @@
         "wires": []
     },
     {
-        "id": "d6eb86c4.7145a8",
-        "type": "mqtt in",
-        "z": "37d3dae1.129ff6",
-        "name": "",
-        "topic": "sensors/#",
-        "qos": "2",
-        "datatype": "json",
-        "broker": "bcebf477.ab97e8",
-        "inputs": 0,
-        "x": 350,
-        "y": 480,
-        "wires": [
-            [
-                "4b599587.13412c",
-                "2420c171.e89226"
-            ]
-        ]
-    },
-    {
-        "id": "4b599587.13412c",
-        "type": "function",
-        "z": "37d3dae1.129ff6",
-        "name": "Store Temperatures Globally",
-        "func": "\ntemp_map = global.get('temperatures');\n\nif (typeof msg.topic !== 'undefined'){\n    temp_map[msg.topic] = msg.payload;\n}\n\nreturn msg;\n",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nglobal.set('temperatures', {});",
-        "finalize": "",
-        "x": 640,
-        "y": 480,
-        "wires": [
-            [
-                "d6cf5083.fdc6f"
-            ]
-        ]
-    },
-    {
-        "id": "4ea58aef.f585f4",
-        "type": "comment",
-        "z": "37d3dae1.129ff6",
-        "name": "Adds temperatures to the global context",
-        "info": "",
-        "x": 550,
-        "y": 440,
-        "wires": []
-    },
-    {
         "id": "c2d440.efd89bc",
         "type": "comment",
         "z": "37d3dae1.129ff6",
@@ -3132,23 +4232,6 @@
         "info": "Using this dynamic ds18b20 reading node can be used to inject dynamic strings later on. These strings can be set in an UI.",
         "x": 900,
         "y": 160,
-        "wires": []
-    },
-    {
-        "id": "2420c171.e89226",
-        "type": "debug",
-        "z": "37d3dae1.129ff6",
-        "name": "aufteilen",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1020,
-        "y": 600,
         "wires": []
     },
     {
@@ -3163,8 +4246,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1240,
-        "y": 320,
+        "x": 450,
+        "y": 60,
         "wires": []
     },
     {
@@ -3176,7 +4259,7 @@
             {
                 "p": "sensor_mapping",
                 "pt": "global",
-                "to": "{\"28-01193a1a5b9e\":\"sensors/aussentemperatur\",\"28-00044a21bcff\":\"sensors/heizkreis/vorlauf_ist\",\"28-0004633827ff\":\"sensors/heizkreis/1\",\"28-00046335f6ff\":\"sensors/heizkreis/2\",\"28-00044e6b6dff\":\"sensors/heizkreis/3\",\"28-00044c86c8ff\":\"sensors/heizkreis/4\",\"28-00044e7edbff\":\"sensors/brauchwasser/1\",\"28-00044e7371ff\":\"sensors/brauchwasser/2\",\"28-00044e75daff\":\"sensors/brauchwasser/3\",\"28-0004633498ff\":\"sensors/brauchwasser/4\"}",
+                "to": "{\"28-01193a1a5b9e\":\"sensors/aussentemperatur\",\"28-00044a21bcff\":\"sensors/heizkreis/vorlauf_ist\",\"28-0004633827ff\":\"sensors/heizkreis/1\",\"28-00046335f6ff\":\"sensors/heizkreis/2\",\"28-00044e6b6dff\":\"sensors/heizkreis/3\",\"28-00044c86c8ff\":\"sensors/heizkreis/4\",\"28-00044e7edbff\":\"sensors/brauchwasser/1\",\"28-00044e7371ff\":\"sensors/brauchwasser/2\",\"28-00044e75daff\":\"sensors/brauchwasser/3\",\"28-0004633498ff\":\"sensors/brauchwasser/4\",\"missing-sensor\":\"sensors/missing_sensor\"}",
                 "tot": "json"
             }
         ],
@@ -3184,20 +4267,6 @@
         "x": 460,
         "y": 120,
         "wires": []
-    },
-    {
-        "id": "1a40e9ae.9bcfd6",
-        "type": "ds18b20",
-        "z": "37d3dae1.129ff6",
-        "d": true,
-        "name": "",
-        "sensorid": "28-01193a1a5b9e",
-        "timer": "1",
-        "x": 220,
-        "y": 380,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "29b7af68.1e6d2",
@@ -3297,8 +4366,8 @@
         "qos": "2",
         "retain": "true",
         "broker": "bcebf477.ab97e8",
-        "x": 1160,
-        "y": 1580,
+        "x": 1120,
+        "y": 1520,
         "wires": []
     },
     {
@@ -3357,7 +4426,6 @@
         "wires": [
             [
                 "b2c53d17.6e47f8",
-                "9e048668.5369a8",
                 "b8c5eec3414e7231"
             ]
         ]
@@ -3455,7 +4523,8 @@
         "y": 1960,
         "wires": [
             [
-                "6d1e4684.73134"
+                "6d1e4684.73134",
+                "5eac8958cdd0d239"
             ]
         ]
     },
@@ -3489,6 +4558,8 @@
         "qos": "2",
         "datatype": "auto",
         "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
         "inputs": 0,
         "x": 190,
         "y": 1800,
@@ -3505,25 +4576,16 @@
         "z": "9cca99e1.170d68",
         "g": "8a3bb4a6.0dfde8",
         "name": "",
-        "topic": "mischer/heizkreis/kalt",
-        "qos": "2",
-        "retain": "true",
-        "broker": "bcebf477.ab97e8",
-        "x": 1330,
-        "y": 1880,
-        "wires": []
-    },
-    {
-        "id": "7650c94a.d6e7c",
-        "type": "mqtt out",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "",
         "topic": "mischer/heizkreis/heiss",
         "qos": "2",
         "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
         "broker": "bcebf477.ab97e8",
-        "x": 1340,
+        "x": 1390,
         "y": 1820,
         "wires": []
     },
@@ -3731,8 +4793,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 630,
-        "y": 1680,
+        "x": 430,
+        "y": 1700,
         "wires": []
     },
     {
@@ -3749,8 +4811,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
-        "y": 1880,
+        "x": 430,
+        "y": 1840,
         "wires": []
     },
     {
@@ -3810,44 +4872,6 @@
         "wires": []
     },
     {
-        "id": "8fa2e60b.250c1",
-        "type": "mqtt in",
-        "z": "9cca99e1.170d68",
-        "g": "e2e1a8f5.d9ce9",
-        "name": "",
-        "topic": "sensors/aussentemperatur",
-        "qos": "0",
-        "datatype": "json",
-        "broker": "bcebf477.ab97e8",
-        "inputs": 0,
-        "x": 190,
-        "y": 260,
-        "wires": [
-            [
-                "558041c8.14396"
-            ]
-        ]
-    },
-    {
-        "id": "558041c8.14396",
-        "type": "function",
-        "z": "9cca99e1.170d68",
-        "g": "e2e1a8f5.d9ce9",
-        "name": "set outdoor_temperature",
-        "func": "flow.set(\"outdoor_temperature\", msg.payload);\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
-        "finalize": "",
-        "x": 490,
-        "y": 260,
-        "wires": [
-            [
-                "ac2a9b70.e42788"
-            ]
-        ]
-    },
-    {
         "id": "c8b99fa7.5123a8",
         "type": "mqtt in",
         "z": "9cca99e1.170d68",
@@ -3902,24 +4926,6 @@
                 "e3db354.6766748"
             ]
         ]
-    },
-    {
-        "id": "ac2a9b70.e42788",
-        "type": "debug",
-        "z": "9cca99e1.170d68",
-        "g": "e2e1a8f5.d9ce9",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 690,
-        "y": 260,
-        "wires": []
     },
     {
         "id": "7abc7777.db1b28",
@@ -4037,13 +5043,666 @@
         "id": "595ff2c6.a751cc",
         "type": "mqtt out",
         "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
         "name": "Pub Mischer Command",
         "topic": "",
         "qos": "2",
         "retain": "true",
         "broker": "bcebf477.ab97e8",
-        "x": 580,
+        "x": 930,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "6d2a173c.0739f",
+        "type": "function",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "Control",
+        "func": "\n\n\n// parameters\nlet Kp = msg.parameters.Kp;\nlet Ki = msg.parameters.Ki;\nlet Kd = msg.parameters.Kd;\nlet hysteresis = msg.parameters.hysteresis;\n\n// arguments\nlet is_automatic = msg.args.is_automatic;\nlet setpoint = msg.args.setpoint;\nlet process_variable = msg.args.actual_output_temperature;\n\n// state variables\nlet previous_error = context.get(\"previous_error\");\nlet previous_process_variable = context.get(\"previous_process_variable\");\nlet integral = context.get(\"integral\");\n\n\n\n/*\nCalling this method will start a periodic loop\n\nThe feedback controller is based on a simple PD controller\n*/\n\nif (!is_automatic) {\n    msg.warn = \"Manual Mode\"\n    return msg\n}\n\nif (setpoint == undefined) {\n    msg.warn = \"No target temperature set\"\n    return msg\n}\n\nif (process_variable == undefined) {\n    msg.warn =\"Unknown output temperature\"\n    return msg\n}\n\n// Calculate the targeted temperature change for this period\nlet dt = parseFloat(msg.period);\nlet error = setpoint - process_variable;\nlet derivative = (previous_process_variable - process_variable) / dt;\nintegral = integral + error * dt;\nlet delta = (Kp * error + Kd * derivative + Ki * integral);\n\n\n// store for the next iteration\ncontext.set(\"previous_process_variable\", process_variable);\ncontext.set(\"previous_error\", error);\ncontext.set(\"integral\", integral);\n\n\nmsg.topic = delta > 0 ? \"mischer/heizkreis/heiss\" : \"mischer/heizkreis/kalt\";\nmsg.payload = false;\nmsg.delay = 0;\nmsg.proportional_error = error;\nmsg.derivative_error = derivative;\nmsg.integral_error = integral;\n\n\n\nmsg.target_temperature_delta = delta;\n\nif (Math.abs(delta) > hysteresis) {\n    \n    let cycle_period = msg.period;\n    let temperature_to_time = 3.3 // seconds per degree\n    \n    // Topic depends on if we need to open or close the mixer\n    msg.payload = true;\n\n    // Calc the duty cycle\n    let desired_time = temperature_to_time * Math.abs(delta);\n    let duty_time = Math.min(desired_time, dt);\n    msg.delay = duty_time;\n    \n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\ncontext.set(\"integral\", 0);\ncontext.set(\"previous_process_variable\", 0); // TODO: initialize correctly\ncontext.set(\"previous_error\", 0);",
+        "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nflow.set(\"integral\", 0);",
+        "libs": [],
+        "x": 420,
+        "y": 720,
+        "wires": [
+            [
+                "3635caabbe8767e7",
+                "e6103245.8a8e4"
+            ]
+        ]
+    },
+    {
+        "id": "9b8aabc0.eee198",
+        "type": "inject",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "Cycle",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "period",
+                "v": "25",
+                "vt": "num"
+            },
+            {
+                "p": "args.actual_output_temperature",
+                "v": "actual_output_temperature",
+                "vt": "flow"
+            },
+            {
+                "p": "args.setpoint",
+                "v": "setpoint",
+                "vt": "flow"
+            }
+        ],
+        "repeat": "25",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 150,
         "y": 680,
+        "wires": [
+            [
+                "6e04e254.c7553c"
+            ]
+        ]
+    },
+    {
+        "id": "b60b551.18a5a28",
+        "type": "change",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "Set Idle",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1020,
+        "y": 780,
+        "wires": [
+            [
+                "41d03b1b.5912e4"
+            ]
+        ]
+    },
+    {
+        "id": "e6103245.8a8e4",
+        "type": "debug",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 590,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "41d03b1b.5912e4",
+        "type": "mqtt out",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "Duty Cycle Off",
+        "topic": "",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bcebf477.ab97e8",
+        "x": 1200,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "af0adec0.f89ae",
+        "type": "debug",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "control",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 810,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "6e04e254.c7553c",
+        "type": "change",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "set msg parameters",
+        "rules": [
+            {
+                "t": "set",
+                "p": "parameters.Kp",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.Ki",
+                "pt": "msg",
+                "to": "0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.Kd",
+                "pt": "msg",
+                "to": "70",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.hysteresis",
+                "pt": "msg",
+                "to": "2",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "args.is_automatic",
+                "pt": "msg",
+                "to": "is_automatic",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 220,
+        "y": 780,
+        "wires": [
+            [
+                "6d2a173c.0739f"
+            ]
+        ]
+    },
+    {
+        "id": "898dd0ca.bc6d7",
+        "type": "delay-topic-message",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "delay": "1",
+        "x": 800,
+        "y": 780,
+        "wires": [
+            [
+                "b60b551.18a5a28"
+            ]
+        ]
+    },
+    {
+        "id": "f71679d.aea5508",
+        "type": "ui_switch",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "",
+        "label": "Heizbetrieb",
+        "tooltip": "Schaltet die Heizungspumpe an oder aus",
+        "group": "28bde750.d2c1f8",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 870,
+        "y": 1580,
+        "wires": [
+            [
+                "138de99b.b0f726"
+            ]
+        ]
+    },
+    {
+        "id": "6d1e4684.73134",
+        "type": "ui_switch",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "",
+        "label": "Automatik",
+        "tooltip": "Aktiviert die automatische Regelung des Mischers",
+        "group": "526921e2.2519f",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 670,
+        "y": 1960,
+        "wires": [
+            [
+                "fb2feaac.bff7d"
+            ]
+        ]
+    },
+    {
+        "id": "c4a1847f.56f95",
+        "type": "ui_switch",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "",
+        "label": "Heiss",
+        "tooltip": "Stellt Manuell auf Heiss",
+        "group": "526921e2.2519f",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 1150,
+        "y": 1820,
+        "wires": [
+            [
+                "602cd7c6.77f1"
+            ]
+        ]
+    },
+    {
+        "id": "96fb6626.f6a998",
+        "type": "ui_switch",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "",
+        "label": "Kalt",
+        "tooltip": "Stellt manuell auf kalt",
+        "group": "526921e2.2519f",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 1160,
+        "y": 1880,
+        "wires": [
+            [
+                "9f2e24abb2b802b6"
+            ]
+        ]
+    },
+    {
+        "id": "51cdc994.8243a8",
+        "type": "ui_switch",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "",
+        "label": "Automatik",
+        "tooltip": "Schaltet die Automatik der Heizungspumpe an oder aus",
+        "group": "28bde750.d2c1f8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 670,
+        "y": 2020,
+        "wires": [
+            [
+                "956c2937.881b1"
+            ]
+        ]
+    },
+    {
+        "id": "d867662.87a1298",
+        "type": "ui_switch",
+        "z": "9cca99e1.170d68",
+        "d": true,
+        "g": "8a3bb4a6.0dfde8",
+        "name": "",
+        "label": "Automatik",
+        "tooltip": "Schaltet die Automatik der Heizungspumpe an oder aus",
+        "group": "28bde750.d2c1f8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "heizbetrieb",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 680,
+        "y": 2080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b2c53d17.6e47f8",
+        "type": "rpi-gpio out",
+        "z": "9cca99e1.170d68",
+        "d": true,
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Pumpe Heizkreis",
+        "pin": "2",
+        "set": false,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 1130,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "1056c756.42e681",
+        "type": "rpi-gpio out",
+        "z": "9cca99e1.170d68",
+        "d": true,
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Mischer Waermer",
+        "pin": "17",
+        "set": false,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 1130,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "4b7b36e4.483aa8",
+        "type": "rpi-gpio out",
+        "z": "9cca99e1.170d68",
+        "d": true,
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Mischer Kaelter",
+        "pin": "27",
+        "set": false,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 1360,
+        "y": 2000,
+        "wires": []
+    },
+    {
+        "id": "9fc9a5143f534e97",
+        "type": "pi-gpiod out",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Mischer Kaelter",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "27",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1360,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "2071c05983be31bd",
+        "type": "pi-gpiod out",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Mischer Waermer",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "17",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1130,
+        "y": 1740,
+        "wires": []
+    },
+    {
+        "id": "b8c5eec3414e7231",
+        "type": "pi-gpiod out",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "Pumpe Heizkreis",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "2",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1130,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "3635caabbe8767e7",
+        "type": "switch",
+        "z": "9cca99e1.170d68",
+        "g": "a1732fa5.9289e",
+        "name": "If topic",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 590,
+        "y": 720,
+        "wires": [
+            [
+                "595ff2c6.a751cc",
+                "af0adec0.f89ae",
+                "898dd0ca.bc6d7"
+            ]
+        ]
+    },
+    {
+        "id": "5eac8958cdd0d239",
+        "type": "function",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "SetEnabledContext",
+        "func": "flow.set('is_automatic', msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\nflow.set('is_enabled', true);",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1920,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9f2e24abb2b802b6",
+        "type": "mqtt out",
+        "z": "9cca99e1.170d68",
+        "g": "8a3bb4a6.0dfde8",
+        "name": "",
+        "topic": "mischer/heizkreis/kalt",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bcebf477.ab97e8",
+        "x": 1380,
+        "y": 1880,
+        "wires": []
+    },
+    {
+        "id": "8fa2e60b.250c1",
+        "type": "mqtt in",
+        "z": "9cca99e1.170d68",
+        "g": "e2e1a8f5.d9ce9",
+        "name": "",
+        "topic": "sensors/aussentemperatur",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 190,
+        "y": 260,
+        "wires": [
+            [
+                "558041c8.14396"
+            ]
+        ]
+    },
+    {
+        "id": "558041c8.14396",
+        "type": "function",
+        "z": "9cca99e1.170d68",
+        "g": "e2e1a8f5.d9ce9",
+        "name": "set outdoor_temperature",
+        "func": "flow.set(\"outdoor_temperature\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
+        "finalize": "",
+        "x": 490,
+        "y": 260,
+        "wires": [
+            [
+                "ac2a9b70.e42788"
+            ]
+        ]
+    },
+    {
+        "id": "ac2a9b70.e42788",
+        "type": "debug",
+        "z": "9cca99e1.170d68",
+        "g": "e2e1a8f5.d9ce9",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 690,
+        "y": 260,
         "wires": []
     },
     {
@@ -4449,37 +6108,277 @@
         "topic": "",
         "qos": "2",
         "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
         "broker": "bcebf477.ab97e8",
         "x": 1030,
         "y": 1320,
         "wires": []
     },
     {
-        "id": "6d2a173c.0739f",
-        "type": "function",
+        "id": "f0b91d32cba4179f",
+        "type": "mqtt in",
         "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
-        "name": "Control",
-        "func": "\n\n\n// parameters\nKp = msg.parameters.Kp;\nKi = msg.parameters.Ki;\nKd = msg.parameters.Kd;\nhysteresis = msg.parameters.hysteresis;\n\n// arguments\nsetpoint = msg.args.setpoint;\nprocess_variable = msg.args.actual_output_temperature;\n\n// state variables\nprevious_error = context.get(\"previous_error\");\nprevious_process_variable = context.get(\"previous_process_variable\");\nintegral = context.get(\"integral\");\n\n\n\n/*\nCalling this method will start a periodic loop\n\nThe feedback controller is based on a simple PD controller\n*/\n\nif (setpoint == undefined) {\n    msg.warn = \"No target temperature set\"\n    return msg\n}\n\nif (process_variable == undefined) {\n    msg.warn =\"Unknown output temperature\"\n    return msg\n}\n\n// Calculate the targeted temperature change for this period\ndt = parseFloat(msg.period);\nerror = setpoint - process_variable;\nderivative = (previous_process_variable - process_variable) / dt;\nintegral = integral + error * dt;\ndelta = (Kp * error + Kd * derivative + Ki * integral);\n\n\n// store for the next iteration\ncontext.set(\"previous_process_variable\", process_variable);\ncontext.set(\"previous_error\", error);\ncontext.set(\"integral\", integral);\n\n\nmsg.topic = delta > 0 ? \"mischer/heizkreis/heiss\" : \"mischer/heizkreis/kalt\";\nmsg.payload = false;\nmsg.delay = 0;\nmsg.proportional_error = error;\nmsg.derivative_error = derivative;\nmsg.integral_error = integral;\n\n\n\nmsg.target_temperature_delta = delta;\n\nif (Math.abs(delta) > hysteresis) {\n    \n    cycle_period = msg.period;\n    temperature_to_time = 3.3 // seconds per degree\n    \n    // Topic depends on if we need to open or close the mixer\n    msg.payload = true;\n\n    // Calc the duty cycle\n    desired_time = temperature_to_time * Math.abs(delta);\n    duty_time = Math.min(desired_time, dt);\n    msg.delay = duty_time;\n    \n}\n\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\ncontext.set(\"integral\", 0);\ncontext.set(\"previous_process_variable\", 0); // TODO: initialize correctly\ncontext.set(\"previous_error\", 0);",
-        "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nflow.set(\"integral\", 0);",
-        "x": 460,
-        "y": 800,
+        "g": "16567b6b7a76e555",
+        "name": "",
+        "topic": "sensors/heizkreis/vorlauf_ist",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 1120,
+        "y": 320,
         "wires": [
             [
-                "898dd0ca.bc6d7",
-                "595ff2c6.a751cc",
-                "af0adec0.f89ae"
+                "95df837d12910a84",
+                "dd84a6d4375b8b42"
             ]
         ]
     },
     {
-        "id": "9b8aabc0.eee198",
-        "type": "inject",
+        "id": "95df837d12910a84",
+        "type": "ui_chart",
         "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
+        "g": "16567b6b7a76e555",
+        "name": "",
+        "group": "526921e2.2519f",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Vorlauftemperatur Ist",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Keine Daten",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1480,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8f6be58099f466d3",
+        "type": "mqtt in",
+        "z": "9cca99e1.170d68",
+        "g": "16567b6b7a76e555",
+        "name": "",
+        "topic": "mischer/heizkreis/vorlauf_soll",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 1120,
+        "y": 220,
+        "wires": [
+            [
+                "eb8a0b4a6450951c",
+                "dd84a6d4375b8b42",
+                "86facc676e211734"
+            ]
+        ]
+    },
+    {
+        "id": "86facc676e211734",
+        "type": "debug",
+        "z": "9cca99e1.170d68",
+        "g": "16567b6b7a76e555",
+        "name": "Dash",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1460,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "eb8a0b4a6450951c",
+        "type": "ui_chart",
+        "z": "9cca99e1.170d68",
+        "g": "16567b6b7a76e555",
+        "name": "",
+        "group": "526921e2.2519f",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Vorlauftemperatur Soll",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Keine Daten",
+        "dot": false,
+        "ymin": "20",
+        "ymax": "60",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1480,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dd84a6d4375b8b42",
+        "type": "delay",
+        "z": "9cca99e1.170d68",
+        "g": "16567b6b7a76e555",
+        "name": "",
+        "pauseType": "timed",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "2",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "outputs": 1,
+        "x": 1500,
+        "y": 180,
+        "wires": [
+            [
+                "86c168d23922f4ea"
+            ]
+        ]
+    },
+    {
+        "id": "86c168d23922f4ea",
+        "type": "ui_chart",
+        "z": "9cca99e1.170d68",
+        "g": "16567b6b7a76e555",
+        "name": "",
+        "group": "8ac8701e.7362d",
+        "order": 4,
+        "width": "15",
+        "height": "5",
+        "label": "Vorlauftemperaturen Langzeit",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "20",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00ff00",
+            "#0000ff",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1770,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c1880e368e36dd8a",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "calculate target room temp",
+        "func": "room_temperature_night = msg.parameters.room_temperature_night;\nroom_temperature_day = msg.parameters.room_temperature_day;\n\n\nclock = new Date();\n\n\n// clock = datetime.datetime.now().time()\n// day_start = datetime.datetime.strptime(self.room_temperature.day_start, '%H:%M').time()\n// night_start = datetime.datetime.strptime(self.room_temperature.night_start, '%H:%M').time()\n//is_day = helpers.datetime.in_between(clock, day_start, night_start)\n\nis_day = true;\n\nmsg.topic = \"heizkreis/room_temperature\";\nmsg.args.target_room_temperature = is_day ? room_temperature_day : room_temperature_night;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 720,
+        "y": 520,
+        "wires": [
+            [
+                "7c185bf1602e2d27"
+            ]
+        ]
+    },
+    {
+        "id": "b6aba58e6210753f",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "calc",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1430,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "780d1e8acd2e6c0a",
+        "type": "inject",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
         "name": "Cycle",
         "props": [
             {
@@ -4487,45 +6386,567 @@
                 "vt": "str"
             },
             {
-                "p": "period",
-                "v": "25",
-                "vt": "num"
+                "p": "args",
+                "v": "{}",
+                "vt": "json"
             },
             {
-                "p": "args.actual_output_temperature",
-                "v": "actual_output_temperature",
-                "vt": "flow"
+                "p": "parameters",
+                "v": "{}",
+                "vt": "json"
             },
             {
-                "p": "args.setpoint",
-                "v": "setpoint",
+                "p": "args.outdoor_temperature",
+                "v": "outdoor_temperature",
                 "vt": "flow"
             }
         ],
-        "repeat": "25",
+        "repeat": "10",
         "crontab": "",
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 170,
-        "y": 720,
+        "x": 240,
+        "y": 520,
         "wires": [
             [
-                "6e04e254.c7553c"
+                "e89ba47fb36c3a48"
             ]
         ]
     },
     {
-        "id": "b60b551.18a5a28",
+        "id": "c36e4f1dc768a082",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "calculate vorlauf",
+        "func": "// parameters\nslope = msg.parameters.slope // Steigung\noffset = msg.parameters.offset // temperature offset\nmax_temperature = msg.parameters.max_temperature // Max radiator temperature in [°C]\nfallback = msg.parameters.fallback // Backupwert\ndelta_exponent = msg.parameters.delta_exponent\n\n// args\ntarget_room_temperature = msg.args.target_room_temperature;\noutdoor_temperature = msg.args.outdoor_temperature;\n\n\n// initialization\nmsg = {}\nmsg.topic = \"mischer/heizkreis/vorlauf_soll\"\nmsg.payload = undefined\nmsg.logs = []\n\n// calculation\nin_out_delta = target_room_temperature - outdoor_temperature\n\nif (in_out_delta > 0) {\n    // Some ease-off function from delta_t to requested temperature\n    msg.payload = slope * in_out_delta ** delta_exponent + target_room_temperature + offset\n} else {\n    msg.logs.push(\"Calculation rule for negative delta is not defined\");\n    msg.payload = undefined\n}\n\nif (msg.payload == undefined) {\n    msg.logs.push(\"Fallback value used\");\n    msg.payload = fallback;\n}\n\n// max temperature limit\nmsg.payload = Math.min(msg.payload, max_temperature);\nmsg.payload = Math.round(msg.payload * 100) / 100; // round for the visuals\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
+        "finalize": "",
+        "x": 1200,
+        "y": 520,
+        "wires": [
+            [
+                "b6aba58e6210753f",
+                "5795aa3f649b8b78"
+            ]
+        ]
+    },
+    {
+        "id": "e89ba47fb36c3a48",
         "type": "change",
-        "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
-        "name": "Set Idle",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "set msg parameters",
         "rules": [
             {
                 "t": "set",
+                "p": "parameters.room_temperature_night",
+                "pt": "msg",
+                "to": "16",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.room_temperature_day",
+                "pt": "msg",
+                "to": "21",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 440,
+        "y": 520,
+        "wires": [
+            [
+                "c1880e368e36dd8a"
+            ]
+        ]
+    },
+    {
+        "id": "7c185bf1602e2d27",
+        "type": "change",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "set msg parameters",
+        "rules": [
+            {
+                "t": "set",
+                "p": "parameters.slope",
+                "pt": "msg",
+                "to": "5.0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.offset",
+                "pt": "msg",
+                "to": "-2",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.max_temperature",
+                "pt": "msg",
+                "to": "60.0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.fallback",
+                "pt": "msg",
+                "to": "50.0",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "parameters.delta_exponent",
+                "pt": "msg",
+                "to": "0.50",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 960,
+        "y": 520,
+        "wires": [
+            [
+                "c36e4f1dc768a082",
+                "04609ebeab4d39a8"
+            ]
+        ]
+    },
+    {
+        "id": "04609ebeab4d39a8",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1170,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "5795aa3f649b8b78",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "Pub Mischer Command",
+        "topic": "",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bcebf477.ab97e8",
+        "x": 1430,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "804da586e8a4f6ac",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "ac063a6d4f95a802",
+        "name": "calculate heating state",
+        "func": "// parameters\nmin_delta_supply_over_room_temperature = 4 // °C die das Heizungswasser über der geforderten Raumtemperatur sein muss, damit Heizbetrieb aktiviert wird\nmin_delta_indoor_outdoor = 3 // Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet\nsupply_temperature_while_charging = 50 // Min Versorgungstemperatur in [°C], während ladevorgang\n\n\n// initialize variables\ndebug = {}\ndebug.logs = []\ntarget_room_temperature = msg.args.target_room_temperature\noutdoor_temperature = msg.args.outdoor_temperature\nsupply_temperature = msg.args.supply_temperature\nsupply_is_charing = msg.args.supply_is_charing\n\non_off = true;\n\n// sanity checks\ntarget_room_temperature == undefined ? debug.logs.push(\"target_room_temperature is undefined\") : {};\noutdoor_temperature == undefined ? debug.logs.push(\"outdoor_temperature is undefined\") : {};\nsupply_temperature == undefined ? debug.logs.push(\"supply_temperature is undefined\") : {};\nsupply_is_charing == undefined ? debug.logs.push(\"supply_is_charing is undefined\") : {};\n\n// Turn off if the supply temperature is too low\nif (supply_temperature < target_room_temperature + min_delta_supply_over_room_temperature) {\n    debug.logs.push(\"Turn off because temperature is too low\");          \n    on_off = false;\n}\n\n\n// Turn off if supplier is almost empty and charging\nelse if (supply_is_charing && supply_temperature < supply_temperature_while_charging) {\n    debug.logs.push(\"Turn off because supplier is charging and low\");      \n    on_off = false;\n    \n}\n\n// Turn off heating, if it get too warm outside\nelse if (target_room_temperature - outdoor_temperature < min_delta_indoor_outdoor) {\n    debug.logs.push(\"Turn off because outside is too warm\");                \n    on_off = false;\n}\n\n\n\n// build message\nmsg = {\n    \"topic\": \"pumpe/heizkreis/ein\",\n    \"payload\": on_off\n}\n\nreturn [msg, debug];",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 670,
+        "y": 800,
+        "wires": [
+            [
+                "2fb4b4053119dfb2"
+            ],
+            [
+                "5be9043040195f15",
+                "afb94a02623b7cd5"
+            ]
+        ]
+    },
+    {
+        "id": "abb40c138cf850fd",
+        "type": "inject",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "ac063a6d4f95a802",
+        "name": "Cycle",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            },
+            {
+                "p": "args.target_room_temperature",
+                "v": "target_room_temperature",
+                "vt": "flow"
+            },
+            {
+                "p": "args.outdoor_temperature",
+                "v": "outdoor_temperature",
+                "vt": "flow"
+            },
+            {
+                "p": "args.supply_temperature",
+                "v": "supply_temperature",
+                "vt": "flow"
+            },
+            {
+                "p": "args.supply_is_charing",
+                "v": "supply_is_charing",
+                "vt": "flow"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 250,
+        "y": 800,
+        "wires": [
+            [
+                "804da586e8a4f6ac",
+                "dc311f7ef7f47222"
+            ]
+        ]
+    },
+    {
+        "id": "2fb4b4053119dfb2",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "ac063a6d4f95a802",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "1e3af57b6b647749",
+        "type": "change",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "ac063a6d4f95a802",
+        "name": "set msg args",
+        "rules": [
+            {
+                "t": "set",
+                "p": "args.target_room_temperature",
+                "pt": "msg",
+                "to": "target_room_temperature",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "args.outdoor_temperature",
+                "pt": "msg",
+                "to": "outdoor_temperature",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "args.supply_temperature",
+                "pt": "msg",
+                "to": "supply_temperature",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "args.supply_is_charing",
+                "pt": "msg",
+                "to": "supply_is_charing",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 390,
+        "y": 900,
+        "wires": [
+            [
+                "804da586e8a4f6ac",
+                "dc311f7ef7f47222"
+            ]
+        ]
+    },
+    {
+        "id": "dc311f7ef7f47222",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "ac063a6d4f95a802",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "5be9043040195f15",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "ac063a6d4f95a802",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "afb94a02623b7cd5",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "ac063a6d4f95a802",
+        "name": "Pub Mischer Command",
+        "topic": "",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bcebf477.ab97e8",
+        "x": 1110,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "72e8cee36df17cac",
+        "type": "mqtt in",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "sensors/aussentemperatur",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 330,
+        "y": 200,
+        "wires": [
+            [
+                "8994e490bbfaad5d"
+            ]
+        ]
+    },
+    {
+        "id": "8994e490bbfaad5d",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "set outdoor_temperature",
+        "func": "flow.set(\"outdoor_temperature\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
+        "finalize": "",
+        "x": 630,
+        "y": 200,
+        "wires": [
+            [
+                "c7a730b21e4f632c"
+            ]
+        ]
+    },
+    {
+        "id": "c7a730b21e4f632c",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f7b68a192ff97fd7",
+        "type": "mqtt in",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "puffer/heizkreis/load",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 310,
+        "y": 300,
+        "wires": [
+            [
+                "b65333f49ce85a0c"
+            ]
+        ]
+    },
+    {
+        "id": "b65333f49ce85a0c",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "set supply_is_charing",
+        "func": "flow.set(\"supply_is_charing\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
+        "finalize": "",
+        "x": 600,
+        "y": 300,
+        "wires": [
+            [
+                "6c520fd9fa076262"
+            ]
+        ]
+    },
+    {
+        "id": "6c520fd9fa076262",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "38da93796fbd4580",
+        "type": "ui_switch",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "label": "Automatik",
+        "tooltip": "Schaltet die Automatik der Heizungspumpe an oder aus",
+        "group": "28bde750.d2c1f8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "true",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 760,
+        "y": 380,
+        "wires": [
+            [
+                "2ce4d28a57de20ad"
+            ]
+        ]
+    },
+    {
+        "id": "ca7b5cc9f2fb548b",
+        "type": "mqtt in",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "steuerung/heizkreis/automatik",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 330,
+        "y": 380,
+        "wires": [
+            [
+                "f70b55f744fb4332"
+            ]
+        ]
+    },
+    {
+        "id": "2ce4d28a57de20ad",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "steuerung/heizkreis/automatik",
+        "qos": "2",
+        "retain": "true",
+        "broker": "bcebf477.ab97e8",
+        "x": 990,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "f70b55f744fb4332",
+        "type": "change",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "String2Boolean",
+        "rules": [
+            {
+                "t": "change",
                 "p": "payload",
                 "pt": "msg",
+                "from": "true",
+                "fromt": "str",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "false",
+                "fromt": "str",
                 "to": "false",
                 "tot": "bool"
             }
@@ -4535,150 +6956,18 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 970,
-        "y": 820,
+        "x": 570,
+        "y": 380,
         "wires": [
             [
-                "41d03b1b.5912e4"
+                "38da93796fbd4580"
             ]
         ]
     },
     {
-        "id": "e6103245.8a8e4",
-        "type": "debug",
-        "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 470,
-        "y": 840,
-        "wires": []
-    },
-    {
-        "id": "41d03b1b.5912e4",
-        "type": "mqtt out",
-        "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
-        "name": "Pub Mischer Command",
-        "topic": "",
-        "qos": "2",
-        "retain": "true",
-        "broker": "bcebf477.ab97e8",
-        "x": 1240,
-        "y": 820,
-        "wires": []
-    },
-    {
-        "id": "af0adec0.f89ae",
-        "type": "debug",
-        "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
-        "name": "control",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 790,
-        "y": 720,
-        "wires": []
-    },
-    {
-        "id": "6e04e254.c7553c",
-        "type": "change",
-        "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
-        "name": "set msg parameters",
-        "rules": [
-            {
-                "t": "set",
-                "p": "parameters.Kp",
-                "pt": "msg",
-                "to": "1",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "parameters.Ki",
-                "pt": "msg",
-                "to": "0",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "parameters.Kd",
-                "pt": "msg",
-                "to": "70",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "parameters.hysteresis",
-                "pt": "msg",
-                "to": "2",
-                "tot": "num"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 240,
-        "y": 820,
-        "wires": [
-            [
-                "6d2a173c.0739f",
-                "e6103245.8a8e4"
-            ]
-        ]
-    },
-    {
-        "id": "9e048668.5369a8",
-        "type": "debug",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1050,
-        "y": 1520,
-        "wires": []
-    },
-    {
-        "id": "898dd0ca.bc6d7",
-        "type": "delay-topic-message",
-        "z": "9cca99e1.170d68",
-        "g": "a1732fa5.9289e",
-        "delay": "1",
-        "x": 750,
-        "y": 820,
-        "wires": [
-            [
-                "b60b551.18a5a28"
-            ]
-        ]
-    },
-    {
-        "id": "f71679d.aea5508",
+        "id": "4f159e75aa0db253",
         "type": "ui_switch",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
+        "z": "bcf4ea8afb5c8eb2",
         "name": "",
         "label": "Heizbetrieb",
         "tooltip": "Schaltet die Heizungspumpe an oder aus",
@@ -4701,19 +6990,202 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 870,
-        "y": 1580,
+        "x": 970,
+        "y": 1060,
         "wires": [
             [
-                "138de99b.b0f726"
+                "58d3c1bdf9049258"
             ]
         ]
     },
     {
-        "id": "6d1e4684.73134",
+        "id": "a671444214ade2b9",
+        "type": "mqtt in",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "pumpe/heizkreis/ein",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "inputs": 0,
+        "x": 290,
+        "y": 1120,
+        "wires": [
+            [
+                "e524a55ea50194f7"
+            ]
+        ]
+    },
+    {
+        "id": "58d3c1bdf9049258",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "pumpe/heizkreis/ein",
+        "qos": "2",
+        "retain": "true",
+        "broker": "bcebf477.ab97e8",
+        "x": 1260,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "92ab0276a66f53f9",
+        "type": "rpi-gpio out",
+        "z": "bcf4ea8afb5c8eb2",
+        "d": true,
+        "name": "Pumpe Heizkreis",
+        "pin": "2",
+        "set": false,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 1490,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "e524a55ea50194f7",
+        "type": "change",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "String2Boolean",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "true",
+                "fromt": "str",
+                "to": "true",
+                "tot": "bool"
+            },
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "false",
+                "fromt": "str",
+                "to": "false",
+                "tot": "bool"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 540,
+        "y": 1120,
+        "wires": [
+            [
+                "4f159e75aa0db253",
+                "54be1de16b74c0a0"
+            ]
+        ]
+    },
+    {
+        "id": "54be1de16b74c0a0",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Invert",
+        "func": "msg.payload = !msg.payload\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 950,
+        "y": 1120,
+        "wires": [
+            [
+                "92ab0276a66f53f9",
+                "fde13332be1e6989"
+            ]
+        ]
+    },
+    {
+        "id": "fde13332be1e6989",
+        "type": "pi-gpiod out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Pumpe Heizkreis",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "2",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1470,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "dd871a9062ac2f53",
+        "type": "subflow:2ed4b2dbb1c85b90",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Mischer Heizkreis 1",
+        "env": [
+            {
+                "name": "output_measured",
+                "value": "sensors/heizkreis/vorlauf_ist",
+                "type": "str"
+            },
+            {
+                "name": "output_target",
+                "value": "mischer/heizkreis/vorlauf_soll",
+                "type": "str"
+            },
+            {
+                "name": "supply_sensor",
+                "value": "sensors/heizkreis/1",
+                "type": "str"
+            },
+            {
+                "name": "automatic_topic",
+                "value": "mischer/heizkreis/automatik",
+                "type": "str"
+            },
+            {
+                "name": "make_hot_topic",
+                "value": "mischer/heizkreis/heiss",
+                "type": "str"
+            },
+            {
+                "name": "make_cold_topic",
+                "value": "mischer/heizkreis/kalt",
+                "type": "str"
+            }
+        ],
+        "x": 350,
+        "y": 1660,
+        "wires": [
+            [],
+            [
+                "002e9e1495d1a391"
+            ],
+            [
+                "f4fcba44fd5ad925"
+            ],
+            [
+                "b5c18e69c781feae"
+            ],
+            [],
+            [
+                "605b17ac466f699d",
+                "b31111b82f26914e"
+            ],
+            [
+                "b31111b82f26914e",
+                "7dffad1725ca3466"
+            ]
+        ]
+    },
+    {
+        "id": "002e9e1495d1a391",
         "type": "ui_switch",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
+        "z": "bcf4ea8afb5c8eb2",
         "name": "",
         "label": "Automatik",
         "tooltip": "Aktiviert die automatische Regelung des Mischers",
@@ -4736,19 +7208,18 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 670,
-        "y": 1960,
+        "x": 920,
+        "y": 1380,
         "wires": [
             [
-                "fb2feaac.bff7d"
+                "de3a373a7cf8a8d5"
             ]
         ]
     },
     {
-        "id": "c4a1847f.56f95",
+        "id": "a281b427ecabf0e6",
         "type": "ui_switch",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
+        "z": "bcf4ea8afb5c8eb2",
         "name": "",
         "label": "Heiss",
         "tooltip": "Stellt Manuell auf Heiss",
@@ -4771,19 +7242,18 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 1150,
-        "y": 1820,
+        "x": 910,
+        "y": 1580,
         "wires": [
             [
-                "7650c94a.d6e7c"
+                "98af917c9ac869cf"
             ]
         ]
     },
     {
-        "id": "96fb6626.f6a998",
+        "id": "158d1ce354078761",
         "type": "ui_switch",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
+        "z": "bcf4ea8afb5c8eb2",
         "name": "",
         "label": "Kalt",
         "tooltip": "Stellt manuell auf kalt",
@@ -4806,186 +7276,348 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 1160,
-        "y": 1880,
+        "x": 910,
+        "y": 1660,
         "wires": [
             [
-                "602cd7c6.77f1"
+                "22b06303a8eac49a"
             ]
         ]
     },
     {
-        "id": "51cdc994.8243a8",
-        "type": "ui_switch",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "",
-        "label": "Automatik",
-        "tooltip": "Schaltet die Automatik der Heizungspumpe an oder aus",
-        "group": "28bde750.d2c1f8",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "passthru": false,
-        "decouple": "true",
-        "topic": "",
-        "topicType": "str",
-        "style": "",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "animate": true,
-        "className": "",
-        "x": 670,
-        "y": 2020,
-        "wires": [
-            [
-                "956c2937.881b1"
-            ]
-        ]
-    },
-    {
-        "id": "d867662.87a1298",
-        "type": "ui_switch",
-        "z": "9cca99e1.170d68",
+        "id": "03bc931f5dd10133",
+        "type": "rpi-gpio out",
+        "z": "bcf4ea8afb5c8eb2",
         "d": true,
-        "g": "8a3bb4a6.0dfde8",
+        "name": "Mischer Waermer",
+        "pin": "17",
+        "set": false,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 1210,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "de3a373a7cf8a8d5",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
         "name": "",
-        "label": "Automatik",
-        "tooltip": "Schaltet die Automatik der Heizungspumpe an oder aus",
-        "group": "28bde750.d2c1f8",
-        "order": 1,
+        "topic": "mischer/heizkreis/automatik",
+        "qos": "2",
+        "retain": "true",
+        "broker": "bcebf477.ab97e8",
+        "x": 1180,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "e40e02891455d38c",
+        "type": "rpi-gpio out",
+        "z": "bcf4ea8afb5c8eb2",
+        "d": true,
+        "name": "Mischer Kaelter",
+        "pin": "27",
+        "set": false,
+        "level": "0",
+        "freq": "",
+        "out": "out",
+        "bcm": true,
+        "x": 1200,
+        "y": 1720,
+        "wires": []
+    },
+    {
+        "id": "ad47356d428b9cbc",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Invert",
+        "func": "msg.payload = !msg.payload\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 910,
+        "y": 1740,
+        "wires": [
+            [
+                "e40e02891455d38c",
+                "bb383267a665f441"
+            ]
+        ]
+    },
+    {
+        "id": "811c5d93544205d4",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Invert",
+        "func": "msg.payload = !msg.payload\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 900,
+        "y": 1520,
+        "wires": [
+            [
+                "03bc931f5dd10133",
+                "046f996e69d8045f"
+            ]
+        ]
+    },
+    {
+        "id": "bb383267a665f441",
+        "type": "pi-gpiod out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Mischer Kaelter",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "27",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1200,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "046f996e69d8045f",
+        "type": "pi-gpiod out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "Mischer Waermer",
+        "host": "pigpiod",
+        "port": 8888,
+        "pin": "17",
+        "set": "",
+        "level": "0",
+        "out": "out",
+        "sermin": "1000",
+        "sermax": "2000",
+        "freq": "800",
+        "x": 1210,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "98af917c9ac869cf",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "mischer/heizkreis/heiss",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bcebf477.ab97e8",
+        "x": 1230,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "22b06303a8eac49a",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "mischer/heizkreis/kalt",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bcebf477.ab97e8",
+        "x": 1220,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "a00a72cf0f51822f",
+        "type": "mqtt in",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "a5f79067a5e0cea9",
+        "name": "",
+        "topic": "sensors/aussentemperatur",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 590,
+        "y": 2080,
+        "wires": [
+            [
+                "b31111b82f26914e"
+            ]
+        ]
+    },
+    {
+        "id": "b31111b82f26914e",
+        "type": "delay",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "a5f79067a5e0cea9",
+        "name": "",
+        "pauseType": "timed",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "2",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "outputs": 1,
+        "x": 940,
+        "y": 2080,
+        "wires": [
+            [
+                "df60dc2b334dbabb"
+            ]
+        ]
+    },
+    {
+        "id": "7dffad1725ca3466",
+        "type": "ui_chart",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "a5f79067a5e0cea9",
+        "name": "",
+        "group": "526921e2.2519f",
+        "order": 2,
         "width": 0,
         "height": 0,
-        "passthru": false,
-        "decouple": "true",
-        "topic": "heizbetrieb",
-        "topicType": "str",
-        "style": "",
-        "onvalue": "true",
-        "onvalueType": "bool",
-        "onicon": "",
-        "oncolor": "",
-        "offvalue": "false",
-        "offvalueType": "bool",
-        "officon": "",
-        "offcolor": "",
-        "animate": true,
+        "label": "Vorlauftemperatur Soll",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Keine Daten",
+        "dot": false,
+        "ymin": "20",
+        "ymax": "60",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
         "className": "",
-        "x": 680,
-        "y": 2080,
+        "x": 920,
+        "y": 2000,
         "wires": [
             []
         ]
     },
     {
-        "id": "b2c53d17.6e47f8",
-        "type": "rpi-gpio out",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "Pumpe Heizkreis",
-        "pin": "2",
-        "set": false,
-        "level": "0",
-        "freq": "",
-        "out": "out",
-        "bcm": true,
-        "x": 1390,
-        "y": 1600,
-        "wires": []
+        "id": "605b17ac466f699d",
+        "type": "ui_chart",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "a5f79067a5e0cea9",
+        "name": "",
+        "group": "526921e2.2519f",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Vorlauftemperatur Ist",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Keine Daten",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 920,
+        "y": 1960,
+        "wires": [
+            []
+        ]
     },
     {
-        "id": "1056c756.42e681",
-        "type": "rpi-gpio out",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "Mischer Waermer",
-        "pin": "17",
-        "set": false,
-        "level": "0",
-        "freq": "",
-        "out": "out",
-        "bcm": true,
-        "x": 1020,
-        "y": 1700,
-        "wires": []
-    },
-    {
-        "id": "4b7b36e4.483aa8",
-        "type": "rpi-gpio out",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "Mischer Kaelter",
-        "pin": "27",
-        "set": false,
-        "level": "0",
-        "freq": "",
-        "out": "out",
-        "bcm": true,
-        "x": 1360,
-        "y": 2000,
-        "wires": []
-    },
-    {
-        "id": "9fc9a5143f534e97",
-        "type": "pi-gpiod out",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "Mischer Kaelter",
-        "host": "pigpiod",
-        "port": 8888,
-        "pin": "27",
-        "set": "",
-        "level": "0",
-        "out": "out",
-        "sermin": "1000",
-        "sermax": "2000",
-        "freq": "800",
-        "x": 1360,
-        "y": 2040,
-        "wires": []
-    },
-    {
-        "id": "2071c05983be31bd",
-        "type": "pi-gpiod out",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "Mischer Waermer",
-        "host": "pigpiod",
-        "port": 8888,
-        "pin": "17",
-        "set": "",
-        "level": "0",
-        "out": "out",
-        "sermin": "1000",
-        "sermax": "2000",
-        "freq": "800",
-        "x": 1030,
-        "y": 1760,
-        "wires": []
-    },
-    {
-        "id": "b8c5eec3414e7231",
-        "type": "pi-gpiod out",
-        "z": "9cca99e1.170d68",
-        "g": "8a3bb4a6.0dfde8",
-        "name": "Pumpe Heizkreis",
-        "host": "pigpiod",
-        "port": 8888,
-        "pin": "2",
-        "set": "",
-        "level": "0",
-        "out": "out",
-        "sermin": "1000",
-        "sermax": "2000",
-        "freq": "800",
-        "x": 1370,
-        "y": 1660,
-        "wires": []
+        "id": "df60dc2b334dbabb",
+        "type": "ui_chart",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "a5f79067a5e0cea9",
+        "name": "",
+        "group": "8ac8701e.7362d",
+        "order": 4,
+        "width": "15",
+        "height": "5",
+        "label": "Vorlauftemperaturen Langzeit",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "20",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#00ff00",
+            "#0000ff",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1250,
+        "y": 2080,
+        "wires": [
+            []
+        ]
     }
 ]
