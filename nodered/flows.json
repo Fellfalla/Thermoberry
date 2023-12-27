@@ -303,6 +303,11 @@
                 "name": "make_cold_topic",
                 "type": "str",
                 "value": ""
+            },
+            {
+                "name": "parameters",
+                "type": "json",
+                "value": "{\"Kp\":1,\"Ki\":0,\"Kd\":70,\"hysteresis\":2,\"make_cold_topic\":\"\",\"make_hot_topic\":\"\"}"
             }
         ],
         "meta": {},
@@ -547,13 +552,13 @@
             "3fc4fbe4029b61a4",
             "ad2ac0433b0d5008",
             "d4ba7456a4d04338",
-            "3e50a35033ee40b1",
             "f527743745fe4bae",
-            "b94ea4bb2c639c82"
+            "b94ea4bb2c639c82",
+            "156d5ffbe6576d13"
         ],
-        "x": 274,
+        "x": 374,
         "y": 499,
-        "w": 1352,
+        "w": 1252,
         "h": 242
     },
     {
@@ -572,15 +577,15 @@
             "b6aba58e6210753f",
             "780d1e8acd2e6c0a",
             "c36e4f1dc768a082",
-            "e89ba47fb36c3a48",
             "7c185bf1602e2d27",
             "04609ebeab4d39a8",
             "5795aa3f649b8b78",
-            "977b1122449c88d2"
+            "977b1122449c88d2",
+            "8cd99883d3f57956"
         ],
         "x": 144,
         "y": 479,
-        "w": 1422,
+        "w": 1502,
         "h": 162
     },
     {
@@ -597,7 +602,6 @@
             "804da586e8a4f6ac",
             "abb40c138cf850fd",
             "2fb4b4053119dfb2",
-            "1e3af57b6b647749",
             "dc311f7ef7f47222",
             "5be9043040195f15",
             "afb94a02623b7cd5"
@@ -605,7 +609,7 @@
         "x": 154,
         "y": 739,
         "w": 1092,
-        "h": 202
+        "h": 182
     },
     {
         "id": "a5f79067a5e0cea9",
@@ -624,8 +628,8 @@
             "605b17ac466f699d",
             "df60dc2b334dbabb"
         ],
-        "x": 454,
-        "y": 1919,
+        "x": 834,
+        "y": 1959,
         "w": 952,
         "h": 202
     },
@@ -633,8 +637,8 @@
         "id": "f4fcba44fd5ad925",
         "type": "junction",
         "z": "bcf4ea8afb5c8eb2",
-        "x": 720,
-        "y": 1580,
+        "x": 1100,
+        "y": 1620,
         "wires": [
             [
                 "811c5d93544205d4",
@@ -646,8 +650,8 @@
         "id": "b5c18e69c781feae",
         "type": "junction",
         "z": "bcf4ea8afb5c8eb2",
-        "x": 700,
-        "y": 1660,
+        "x": 1080,
+        "y": 1700,
         "wires": [
             [
                 "158d1ce354078761",
@@ -810,7 +814,7 @@
     {
         "id": "10788b43.59cf15",
         "type": "ui_group",
-        "name": "Para",
+        "name": "Parameters",
         "tab": "970798f9.ff53c8",
         "order": 1,
         "disp": true,
@@ -1722,14 +1726,14 @@
         "z": "2ed4b2dbb1c85b90",
         "g": "f0ec171ef5a5fd8b",
         "name": "Control",
-        "func": "\n\n\n// parameters\nlet Kp = msg.parameters.Kp;\nlet Ki = msg.parameters.Ki;\nlet Kd = msg.parameters.Kd;\nlet hysteresis = msg.parameters.hysteresis;\nlet make_hot_topic = msg.parameters.make_hot_topic;\nlet make_cold_topic = msg.parameters.make_cold_topic;\n\n// arguments\nlet is_automatic = msg.args.is_automatic;\nlet setpoint = msg.args.setpoint;\nlet process_variable = msg.args.actual_output_temperature;\n\n// state variables\nlet previous_error = context.get(\"previous_error\");\nlet previous_process_variable = context.get(\"previous_process_variable\");\nlet integral = context.get(\"integral\");\n\n\n\n/*\nCalling this method will start a periodic loop\n\nThe feedback controller is based on a simple PD controller\n*/\n\nif (!is_automatic) {\n    msg.warn = \"Manual Mode\"\n    return msg\n}\n\nif (setpoint == undefined) {\n    msg.warn = \"No target temperature set\"\n    return msg\n}\n\nif (process_variable == undefined) {\n    msg.warn =\"Unknown output temperature\"\n    return msg\n}\n\n// Calculate the targeted temperature change for this period\nlet dt = parseFloat(msg.period);\nlet error = setpoint - process_variable;\nlet derivative = (previous_process_variable - process_variable) / dt;\nintegral = integral + error * dt;\nlet delta = (Kp * error + Kd * derivative + Ki * integral);\n\n\n// store for the next iteration\ncontext.set(\"previous_process_variable\", process_variable);\ncontext.set(\"previous_error\", error);\ncontext.set(\"integral\", integral);\n\n\nmsg.topic = delta > 0 ? make_hot_topic : make_cold_topic;\nmsg.payload = false;\nmsg.delay = 0;\nmsg.proportional_error = error;\nmsg.derivative_error = derivative;\nmsg.integral_error = integral;\n\n\n\nmsg.target_temperature_delta = delta;\n\nif (Math.abs(delta) > hysteresis) {\n    \n    let cycle_period = msg.period;\n    let temperature_to_time = 3.3 // seconds per degree\n    \n    // Topic depends on if we need to open or close the mixer\n    msg.payload = true;\n\n    // Calc the duty cycle\n    let desired_time = temperature_to_time * Math.abs(delta);\n    let duty_time = Math.min(desired_time, dt);\n    msg.delay = duty_time;\n    \n}\n\nreturn msg;",
+        "func": "\n\n\n// parameters\nlet Kp = msg.parameters.Kp;\nlet Ki = msg.parameters.Ki;\nlet Kd = msg.parameters.Kd;\nlet hysteresis = msg.parameters.hysteresis;\nlet make_hot_topic = msg.topics.make_hot_topic;\nlet make_cold_topic = msg.topics.make_cold_topic;\n\n// arguments\nlet is_automatic = msg.args.is_automatic;\nlet setpoint = msg.args.setpoint;\nlet process_variable = msg.args.actual_output_temperature;\n\n// state variables\nlet previous_error = context.get(\"previous_error\");\nlet previous_process_variable = context.get(\"previous_process_variable\");\nlet integral = context.get(\"integral\");\n\n\n\n/*\nCalling this method will start a periodic loop\n\nThe feedback controller is based on a simple PD controller\n*/\n\nif (!is_automatic) {\n    msg.warn = \"Manual Mode\"\n    return msg\n}\n\nif (setpoint == undefined) {\n    msg.warn = \"No target temperature set\"\n    return msg\n}\n\nif (process_variable == undefined) {\n    msg.warn =\"Unknown output temperature\"\n    return msg\n}\n\n// Calculate the targeted temperature change for this period\nlet dt = parseFloat(msg.period);\nlet error = setpoint - process_variable;\nlet derivative = (previous_process_variable - process_variable) / dt;\nintegral = integral + error * dt;\nlet delta = (Kp * error + Kd * derivative + Ki * integral);\n\n\n// store for the next iteration\ncontext.set(\"previous_process_variable\", process_variable);\ncontext.set(\"previous_error\", error);\ncontext.set(\"integral\", integral);\n\n\nmsg.topic = delta > 0 ? make_hot_topic : make_cold_topic;\nmsg.payload = false;\nmsg.delay = 0;\nmsg.proportional_error = error;\nmsg.derivative_error = derivative;\nmsg.integral_error = integral;\n\n\n\nmsg.target_temperature_delta = delta;\n\nif (Math.abs(delta) > hysteresis) {\n    \n    let cycle_period = msg.period;\n    let temperature_to_time = 3.3 // seconds per degree\n    \n    // Topic depends on if we need to open or close the mixer\n    msg.payload = true;\n\n    // Calc the duty cycle\n    let desired_time = temperature_to_time * Math.abs(delta);\n    let duty_time = Math.min(desired_time, dt);\n    msg.delay = duty_time;\n    \n}\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\ncontext.set(\"integral\", 0);\ncontext.set(\"previous_process_variable\", 0); // TODO: initialize correctly\ncontext.set(\"previous_error\", 0);",
         "finalize": "// Code added here will be run when the\n// node is being stopped or re-deployed.\nflow.set(\"integral\", 0);",
         "libs": [],
-        "x": 740,
+        "x": 680,
         "y": 620,
         "wires": [
             [
@@ -1763,6 +1767,26 @@
                 "p": "args.setpoint",
                 "v": "setpoint",
                 "vt": "flow"
+            },
+            {
+                "p": "args.is_automatic",
+                "v": "is_automatic",
+                "vt": "flow"
+            },
+            {
+                "p": "parameters",
+                "v": "parameters",
+                "vt": "env"
+            },
+            {
+                "p": "topics.make_hot",
+                "v": "make_hot_topic",
+                "vt": "env"
+            },
+            {
+                "p": "topics.make_cold_topic",
+                "v": "make_cold_topic",
+                "vt": "env"
             }
         ],
         "repeat": "25",
@@ -1770,11 +1794,12 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 370,
-        "y": 600,
+        "x": 470,
+        "y": 620,
         "wires": [
             [
-                "3e50a35033ee40b1"
+                "bf131396ba4c061b",
+                "156d5ffbe6576d13"
             ]
         ]
     },
@@ -1877,86 +1902,21 @@
         "wires": []
     },
     {
-        "id": "3e50a35033ee40b1",
-        "type": "change",
-        "z": "2ed4b2dbb1c85b90",
-        "g": "f0ec171ef5a5fd8b",
-        "name": "set msg parameters",
-        "rules": [
-            {
-                "t": "set",
-                "p": "parameters.Kp",
-                "pt": "msg",
-                "to": "1",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "parameters.Ki",
-                "pt": "msg",
-                "to": "0",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "parameters.Kd",
-                "pt": "msg",
-                "to": "70",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "parameters.hysteresis",
-                "pt": "msg",
-                "to": "2",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "args.is_automatic",
-                "pt": "msg",
-                "to": "is_automatic",
-                "tot": "flow"
-            },
-            {
-                "t": "set",
-                "p": "parameters.make_hot_topic",
-                "pt": "msg",
-                "to": "make_hot_topic",
-                "tot": "env"
-            },
-            {
-                "t": "set",
-                "p": "parameters.make_cold_topic",
-                "pt": "msg",
-                "to": "make_cold_topic",
-                "tot": "env"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 540,
-        "y": 680,
-        "wires": [
-            [
-                "bf131396ba4c061b"
-            ]
-        ]
-    },
-    {
         "id": "f527743745fe4bae",
         "type": "mqtt out",
         "z": "2ed4b2dbb1c85b90",
         "g": "f0ec171ef5a5fd8b",
-        "name": "Pub Mischer Command",
+        "name": "Duty Cycle On",
         "topic": "",
         "qos": "2",
         "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
         "broker": "bcebf477.ab97e8",
-        "x": 1250,
+        "x": 1220,
         "y": 540,
         "wires": []
     },
@@ -2083,6 +2043,24 @@
         "statusType": "auto",
         "x": 1290,
         "y": 360,
+        "wires": []
+    },
+    {
+        "id": "156d5ffbe6576d13",
+        "type": "debug",
+        "z": "2ed4b2dbb1c85b90",
+        "g": "f0ec171ef5a5fd8b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 540,
         "wires": []
     },
     {
@@ -4158,14 +4136,14 @@
         "z": "bcf4ea8afb5c8eb2",
         "g": "d08139ad083ea05b",
         "name": "calculate target room temp",
-        "func": "let room_temperature_night = msg.parameters.room_temperature_night;\nlet room_temperature_day = msg.parameters.room_temperature_day;\n\n\n// clock = new Date();\n// clock = datetime.datetime.now().time()\n// day_start = datetime.datetime.strptime(self.room_temperature.day_start, '%H:%M').time()\n// night_start = datetime.datetime.strptime(self.room_temperature.night_start, '%H:%M').time()\n//is_day = helpers.datetime.in_between(clock, day_start, night_start)\n\nlet is_day = true;\n\nmsg.topic = \"heizkreis/room_temperature\";\nmsg.args.target_room_temperature = is_day ? room_temperature_day : room_temperature_night;\n\nreturn [\n    msg, \n    {\n        topic: \"heizkreis/room_temperature\",\n        payload: msg.args.target_room_temperature\n    }\n];",
+        "func": "let room_temperature_night = msg.parameters.room_temperature_night;\nlet room_temperature_day = msg.parameters.room_temperature_day;\nlet room_temperature_topic = msg.topic.room_temperature_topic;\n\n\n// clock = new Date();\n// clock = datetime.datetime.now().time()\n// day_start = datetime.datetime.strptime(self.room_temperature.day_start, '%H:%M').time()\n// night_start = datetime.datetime.strptime(self.room_temperature.night_start, '%H:%M').time()\n//is_day = helpers.datetime.in_between(clock, day_start, night_start)\n\nlet is_day = true;\n\nmsg.topic = room_temperature_topic;\nmsg.args.target_room_temperature = is_day ? room_temperature_day : room_temperature_night;\n\nreturn [\n    msg, \n    {\n        topic: room_temperature_topic,\n        payload: msg.args.target_room_temperature\n    }\n];",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
+        "x": 600,
         "y": 520,
         "wires": [
             [
@@ -4182,7 +4160,7 @@
         "z": "bcf4ea8afb5c8eb2",
         "g": "d08139ad083ea05b",
         "name": "calc",
-        "active": false,
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -4190,8 +4168,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1430,
-        "y": 520,
+        "x": 1450,
+        "y": 600,
         "wires": []
     },
     {
@@ -4212,13 +4190,18 @@
             },
             {
                 "p": "parameters",
-                "v": "{}",
+                "v": "{\"room_temperature_night\":16,\"room_temperature_day\":21}",
                 "vt": "json"
             },
             {
-                "p": "args.outdoor_temperature",
-                "v": "outdoor_temperature",
-                "vt": "flow"
+                "p": "topics.setpoint_topic",
+                "v": "mischer/heizkreis/vorlauf_soll",
+                "vt": "str"
+            },
+            {
+                "p": "topics.room_temperature_topic",
+                "v": "heizkreis/room_temperature",
+                "vt": "str"
             }
         ],
         "repeat": "10",
@@ -4230,7 +4213,8 @@
         "y": 520,
         "wires": [
             [
-                "e89ba47fb36c3a48"
+                "c1880e368e36dd8a",
+                "8cd99883d3f57956"
             ]
         ]
     },
@@ -4240,7 +4224,7 @@
         "z": "bcf4ea8afb5c8eb2",
         "g": "d08139ad083ea05b",
         "name": "calculate vorlauf",
-        "func": "// parameters\nlet slope = msg.parameters.slope // Steigung\nlet offset = msg.parameters.offset // temperature offset\nlet max_temperature = msg.parameters.max_temperature // Max radiator temperature in [°C]\nlet fallback = msg.parameters.fallback // Backupwert\nlet delta_exponent = msg.parameters.delta_exponent\n\n// args\nlet target_room_temperature = msg.args.target_room_temperature;\nlet outdoor_temperature = msg.args.outdoor_temperature;\n\n\n// initialization\nmsg = {\n    topic: \"mischer/heizkreis/vorlauf_soll\",\n    payload: undefined,\n    logs: [],\n}\n\n\n// calculation\nlet in_out_delta = target_room_temperature - outdoor_temperature\n\nif (in_out_delta > 0) {\n    // Some ease-off function from delta_t to requested temperature\n    msg.payload = slope * in_out_delta ** delta_exponent + target_room_temperature + offset\n} else {\n    msg.logs.push(\"Calculation rule for negative delta is not defined\");\n    msg.payload = undefined\n}\n\nif (msg.payload == undefined) {\n    msg.logs.push(\"Fallback value used\");\n    msg.payload = fallback;\n}\n\n// max temperature limit\nmsg.payload = Math.min(msg.payload, max_temperature);\nmsg.payload = Math.round(msg.payload * 100) / 100; // round for the visuals\n\nreturn msg;",
+        "func": "// parameters\nlet slope = msg.parameters.slope // Steigung\nlet offset = msg.parameters.offset // temperature offset\nlet max_temperature = msg.parameters.max_temperature // Max radiator temperature in [°C]\nlet fallback = msg.parameters.fallback // Backupwert\nlet delta_exponent = msg.parameters.delta_exponent\nlet setpoint_topic = msg.topics.setpoint_topic\n\n// args\nlet target_room_temperature = msg.args.target_room_temperature;\nlet outdoor_temperature = msg.args.outdoor_temperature;\n\n\n// initialization\nmsg = {\n    topic: setpoint_topic,\n    payload: undefined,\n    logs: [],\n}\n\n\n// calculation\nlet in_out_delta = target_room_temperature - outdoor_temperature\n\nif (in_out_delta > 0) {\n    // Some ease-off function from delta_t to requested temperature\n    msg.payload = slope * in_out_delta ** delta_exponent + target_room_temperature + offset\n} else {\n    msg.logs.push(\"Calculation rule for negative delta is not defined\");\n    msg.payload = undefined\n}\n\nif (msg.payload == undefined) {\n    msg.logs.push(\"Fallback value used\");\n    msg.payload = fallback;\n}\n\n// max temperature limit\nmsg.payload = Math.min(msg.payload, max_temperature);\nmsg.payload = Math.round(msg.payload * 100) / 100; // round for the visuals\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -4253,41 +4237,6 @@
             [
                 "b6aba58e6210753f",
                 "5795aa3f649b8b78"
-            ]
-        ]
-    },
-    {
-        "id": "e89ba47fb36c3a48",
-        "type": "change",
-        "z": "bcf4ea8afb5c8eb2",
-        "g": "d08139ad083ea05b",
-        "name": "set msg parameters",
-        "rules": [
-            {
-                "t": "set",
-                "p": "parameters.room_temperature_night",
-                "pt": "msg",
-                "to": "16",
-                "tot": "num"
-            },
-            {
-                "t": "set",
-                "p": "parameters.room_temperature_day",
-                "pt": "msg",
-                "to": "21",
-                "tot": "num"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 440,
-        "y": 520,
-        "wires": [
-            [
-                "c1880e368e36dd8a"
             ]
         ]
     },
@@ -4339,7 +4288,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 960,
+        "x": 900,
         "y": 520,
         "wires": [
             [
@@ -4363,7 +4312,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1170,
-        "y": 580,
+        "y": 600,
         "wires": []
     },
     {
@@ -4381,8 +4330,8 @@
         "correl": "",
         "expiry": "",
         "broker": "bcebf477.ab97e8",
-        "x": 1430,
-        "y": 600,
+        "x": 1510,
+        "y": 520,
         "wires": []
     },
     {
@@ -4473,56 +4422,6 @@
         "x": 1040,
         "y": 780,
         "wires": []
-    },
-    {
-        "id": "1e3af57b6b647749",
-        "type": "change",
-        "z": "bcf4ea8afb5c8eb2",
-        "g": "ac063a6d4f95a802",
-        "name": "set msg args",
-        "rules": [
-            {
-                "t": "set",
-                "p": "args.target_room_temperature",
-                "pt": "msg",
-                "to": "target_room_temperature",
-                "tot": "flow"
-            },
-            {
-                "t": "set",
-                "p": "args.outdoor_temperature",
-                "pt": "msg",
-                "to": "outdoor_temperature",
-                "tot": "flow"
-            },
-            {
-                "t": "set",
-                "p": "args.supply_temperature",
-                "pt": "msg",
-                "to": "supply_temperature",
-                "tot": "flow"
-            },
-            {
-                "t": "set",
-                "p": "args.supply_is_charing",
-                "pt": "msg",
-                "to": "supply_is_charing",
-                "tot": "flow"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 390,
-        "y": 900,
-        "wires": [
-            [
-                "804da586e8a4f6ac",
-                "dc311f7ef7f47222"
-            ]
-        ]
     },
     {
         "id": "dc311f7ef7f47222",
@@ -4980,10 +4879,15 @@
                 "name": "make_cold_topic",
                 "value": "mischer/heizkreis/kalt",
                 "type": "str"
+            },
+            {
+                "name": "parameters",
+                "value": "{\"Kp\":1,\"Ki\":0,\"Kd\":70,\"hysteresis\":2}",
+                "type": "json"
             }
         ],
-        "x": 350,
-        "y": 1660,
+        "x": 790,
+        "y": 1680,
         "wires": [
             [],
             [
@@ -5032,8 +4936,8 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 920,
-        "y": 1380,
+        "x": 1300,
+        "y": 1420,
         "wires": [
             [
                 "de3a373a7cf8a8d5"
@@ -5066,8 +4970,8 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 910,
-        "y": 1580,
+        "x": 1290,
+        "y": 1620,
         "wires": [
             [
                 "98af917c9ac869cf"
@@ -5100,8 +5004,8 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 910,
-        "y": 1660,
+        "x": 1290,
+        "y": 1700,
         "wires": [
             [
                 "22b06303a8eac49a"
@@ -5120,8 +5024,8 @@
         "freq": "",
         "out": "out",
         "bcm": true,
-        "x": 1210,
-        "y": 1460,
+        "x": 1590,
+        "y": 1500,
         "wires": []
     },
     {
@@ -5133,8 +5037,8 @@
         "qos": "2",
         "retain": "true",
         "broker": "bcebf477.ab97e8",
-        "x": 1180,
-        "y": 1380,
+        "x": 1560,
+        "y": 1420,
         "wires": []
     },
     {
@@ -5149,8 +5053,8 @@
         "freq": "",
         "out": "out",
         "bcm": true,
-        "x": 1200,
-        "y": 1720,
+        "x": 1580,
+        "y": 1760,
         "wires": []
     },
     {
@@ -5163,8 +5067,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 910,
-        "y": 1740,
+        "x": 1290,
+        "y": 1780,
         "wires": [
             [
                 "e40e02891455d38c",
@@ -5182,8 +5086,8 @@
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 900,
-        "y": 1520,
+        "x": 1280,
+        "y": 1560,
         "wires": [
             [
                 "03bc931f5dd10133",
@@ -5205,8 +5109,8 @@
         "sermin": "1000",
         "sermax": "2000",
         "freq": "800",
-        "x": 1200,
-        "y": 1760,
+        "x": 1580,
+        "y": 1800,
         "wires": []
     },
     {
@@ -5223,8 +5127,8 @@
         "sermin": "1000",
         "sermax": "2000",
         "freq": "800",
-        "x": 1210,
-        "y": 1520,
+        "x": 1590,
+        "y": 1560,
         "wires": []
     },
     {
@@ -5241,8 +5145,8 @@
         "correl": "",
         "expiry": "",
         "broker": "bcebf477.ab97e8",
-        "x": 1230,
-        "y": 1580,
+        "x": 1610,
+        "y": 1620,
         "wires": []
     },
     {
@@ -5259,8 +5163,8 @@
         "correl": "",
         "expiry": "",
         "broker": "bcebf477.ab97e8",
-        "x": 1220,
-        "y": 1660,
+        "x": 1600,
+        "y": 1700,
         "wires": []
     },
     {
@@ -5276,8 +5180,8 @@
         "nl": false,
         "rap": false,
         "inputs": 0,
-        "x": 590,
-        "y": 2080,
+        "x": 970,
+        "y": 2120,
         "wires": [
             [
                 "b31111b82f26914e"
@@ -5301,8 +5205,8 @@
         "randomUnits": "seconds",
         "drop": true,
         "outputs": 1,
-        "x": 940,
-        "y": 2080,
+        "x": 1320,
+        "y": 2120,
         "wires": [
             [
                 "df60dc2b334dbabb"
@@ -5348,8 +5252,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 920,
-        "y": 2000,
+        "x": 1300,
+        "y": 2040,
         "wires": [
             []
         ]
@@ -5393,8 +5297,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 920,
-        "y": 1960,
+        "x": 1300,
+        "y": 2000,
         "wires": [
             []
         ]
@@ -5438,8 +5342,8 @@
         "outputs": 1,
         "useDifferentColor": false,
         "className": "",
-        "x": 1250,
-        "y": 2080,
+        "x": 1630,
+        "y": 2120,
         "wires": [
             []
         ]
@@ -5518,6 +5422,96 @@
         "statusType": "auto",
         "x": 830,
         "y": 380,
+        "wires": []
+    },
+    {
+        "id": "c9b0c56dc4decbce",
+        "type": "ui_numeric",
+        "z": "bcf4ea8afb5c8eb2",
+        "d": true,
+        "name": "",
+        "label": "mischer/heizkreis/parameter/kp",
+        "tooltip": "",
+        "group": "10788b43.59cf15",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "str",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "9999",
+        "step": 1,
+        "className": "",
+        "x": 350,
+        "y": 1540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dfceb93fbfc9bac0",
+        "type": "mqtt out",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "mischer/heizkreis/parameter/kp",
+        "qos": "2",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "bcebf477.ab97e8",
+        "x": 510,
+        "y": 1620,
+        "wires": []
+    },
+    {
+        "id": "9c7689d1ba42d063",
+        "type": "ui_slider",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "label": "Kp",
+        "tooltip": "",
+        "group": "10788b43.59cf15",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "mischer/heizkreis/parameter/kp",
+        "topicType": "str",
+        "min": 0,
+        "max": "99",
+        "step": "0.1",
+        "className": "",
+        "x": 250,
+        "y": 1620,
+        "wires": [
+            [
+                "dfceb93fbfc9bac0"
+            ]
+        ]
+    },
+    {
+        "id": "8cd99883d3f57956",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 510,
+        "y": 600,
         "wires": []
     }
 ]
