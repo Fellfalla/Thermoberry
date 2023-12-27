@@ -740,7 +740,8 @@
             "e89ba47fb36c3a48",
             "7c185bf1602e2d27",
             "04609ebeab4d39a8",
-            "5795aa3f649b8b78"
+            "5795aa3f649b8b78",
+            "977b1122449c88d2"
         ],
         "x": 144,
         "y": 479,
@@ -6343,16 +6344,21 @@
         "z": "bcf4ea8afb5c8eb2",
         "g": "d08139ad083ea05b",
         "name": "calculate target room temp",
-        "func": "room_temperature_night = msg.parameters.room_temperature_night;\nroom_temperature_day = msg.parameters.room_temperature_day;\n\n\nclock = new Date();\n\n\n// clock = datetime.datetime.now().time()\n// day_start = datetime.datetime.strptime(self.room_temperature.day_start, '%H:%M').time()\n// night_start = datetime.datetime.strptime(self.room_temperature.night_start, '%H:%M').time()\n//is_day = helpers.datetime.in_between(clock, day_start, night_start)\n\nis_day = true;\n\nmsg.topic = \"heizkreis/room_temperature\";\nmsg.args.target_room_temperature = is_day ? room_temperature_day : room_temperature_night;\nreturn msg;",
-        "outputs": 1,
+        "func": "let room_temperature_night = msg.parameters.room_temperature_night;\nlet room_temperature_day = msg.parameters.room_temperature_day;\n\n\n// clock = new Date();\n// clock = datetime.datetime.now().time()\n// day_start = datetime.datetime.strptime(self.room_temperature.day_start, '%H:%M').time()\n// night_start = datetime.datetime.strptime(self.room_temperature.night_start, '%H:%M').time()\n//is_day = helpers.datetime.in_between(clock, day_start, night_start)\n\nlet is_day = true;\n\nmsg.topic = \"heizkreis/room_temperature\";\nmsg.args.target_room_temperature = is_day ? room_temperature_day : room_temperature_night;\n\nreturn [\n    msg, \n    {\n        topic: \"heizkreis/room_temperature\",\n        payload: msg.args.target_room_temperature\n    }\n];",
+        "outputs": 2,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 720,
+        "libs": [],
+        "x": 700,
         "y": 520,
         "wires": [
             [
                 "7c185bf1602e2d27"
+            ],
+            [
+                "977b1122449c88d2"
             ]
         ]
     },
@@ -6569,20 +6575,22 @@
         "z": "bcf4ea8afb5c8eb2",
         "g": "ac063a6d4f95a802",
         "name": "calculate heating state",
-        "func": "// parameters\nmin_delta_supply_over_room_temperature = 4 // °C die das Heizungswasser über der geforderten Raumtemperatur sein muss, damit Heizbetrieb aktiviert wird\nmin_delta_indoor_outdoor = 3 // Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet\nsupply_temperature_while_charging = 50 // Min Versorgungstemperatur in [°C], während ladevorgang\n\n\n// initialize variables\ndebug = {}\ndebug.logs = []\ntarget_room_temperature = msg.args.target_room_temperature\noutdoor_temperature = msg.args.outdoor_temperature\nsupply_temperature = msg.args.supply_temperature\nsupply_is_charing = msg.args.supply_is_charing\n\non_off = true;\n\n// sanity checks\ntarget_room_temperature == undefined ? debug.logs.push(\"target_room_temperature is undefined\") : {};\noutdoor_temperature == undefined ? debug.logs.push(\"outdoor_temperature is undefined\") : {};\nsupply_temperature == undefined ? debug.logs.push(\"supply_temperature is undefined\") : {};\nsupply_is_charing == undefined ? debug.logs.push(\"supply_is_charing is undefined\") : {};\n\n// Turn off if the supply temperature is too low\nif (supply_temperature < target_room_temperature + min_delta_supply_over_room_temperature) {\n    debug.logs.push(\"Turn off because temperature is too low\");          \n    on_off = false;\n}\n\n\n// Turn off if supplier is almost empty and charging\nelse if (supply_is_charing && supply_temperature < supply_temperature_while_charging) {\n    debug.logs.push(\"Turn off because supplier is charging and low\");      \n    on_off = false;\n    \n}\n\n// Turn off heating, if it get too warm outside\nelse if (target_room_temperature - outdoor_temperature < min_delta_indoor_outdoor) {\n    debug.logs.push(\"Turn off because outside is too warm\");                \n    on_off = false;\n}\n\n\n\n// build message\nmsg = {\n    \"topic\": \"pumpe/heizkreis/ein\",\n    \"payload\": on_off\n}\n\nreturn [msg, debug];",
+        "func": "// parameters\nlet min_delta_supply_over_room_temperature = 4 // °C die das Heizungswasser über der geforderten Raumtemperatur sein muss, damit Heizbetrieb aktiviert wird\nlet min_delta_indoor_outdoor = 3 // Mindestunterschied zwischen Raumsoll und Aussen bis Heizung einschaltet\nlet supply_temperature_while_charging = 50 // Min Versorgungstemperatur in [°C], während ladevorgang\n\n\n// initialize variables\nlet debug = {\n    logs: []\n}\n\nlet target_room_temperature = msg.args.target_room_temperature\nlet outdoor_temperature = msg.args.outdoor_temperature\nlet supply_temperature = msg.args.supply_temperature\nlet supply_is_charing = msg.args.supply_is_charing\n\nlet on_off = true;\n\n// sanity checks\ntarget_room_temperature == undefined ? debug.logs.push(\"target_room_temperature is undefined\") : {};\noutdoor_temperature == undefined ? debug.logs.push(\"outdoor_temperature is undefined\") : {};\nsupply_temperature == undefined ? debug.logs.push(\"supply_temperature is undefined\") : {};\nsupply_is_charing == undefined ? debug.logs.push(\"supply_is_charing is undefined\") : {};\n\n// Turn off if the supply temperature is too low\nif (supply_temperature < target_room_temperature + min_delta_supply_over_room_temperature) {\n    debug.logs.push(\"Turn off because temperature is too low\");          \n    on_off = false;\n}\n\n\n// Turn off if supplier is almost empty and charging\nelse if (supply_is_charing && supply_temperature < supply_temperature_while_charging) {\n    debug.logs.push(\"Turn off because supplier is charging and low\");      \n    on_off = false;\n    \n}\n\n// Turn off heating, if it get too warm outside\nelse if (target_room_temperature - outdoor_temperature < min_delta_indoor_outdoor) {\n    debug.logs.push(\"Turn off because outside is too warm\");                \n    on_off = false;\n}\n\n\n\n// build message\nmsg = {\n    \"topic\": \"pumpe/heizkreis/ein\",\n    \"payload\": on_off\n}\n\nreturn [msg, debug];",
         "outputs": 2,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
+        "libs": [],
         "x": 670,
         "y": 800,
         "wires": [
             [
-                "2fb4b4053119dfb2"
+                "2fb4b4053119dfb2",
+                "afb94a02623b7cd5"
             ],
             [
-                "5be9043040195f15",
-                "afb94a02623b7cd5"
+                "5be9043040195f15"
             ]
         ]
     },
@@ -6765,8 +6773,8 @@
         "datatype": "json",
         "broker": "bcebf477.ab97e8",
         "inputs": 0,
-        "x": 330,
-        "y": 200,
+        "x": 310,
+        "y": 100,
         "wires": [
             [
                 "8994e490bbfaad5d"
@@ -6783,8 +6791,8 @@
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
         "finalize": "",
-        "x": 630,
-        "y": 200,
+        "x": 610,
+        "y": 100,
         "wires": [
             [
                 "c7a730b21e4f632c"
@@ -6804,8 +6812,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 830,
-        "y": 200,
+        "x": 810,
+        "y": 100,
         "wires": []
     },
     {
@@ -6818,8 +6826,8 @@
         "datatype": "json",
         "broker": "bcebf477.ab97e8",
         "inputs": 0,
-        "x": 310,
-        "y": 300,
+        "x": 290,
+        "y": 200,
         "wires": [
             [
                 "b65333f49ce85a0c"
@@ -6836,8 +6844,8 @@
         "noerr": 0,
         "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
         "finalize": "",
-        "x": 600,
-        "y": 300,
+        "x": 580,
+        "y": 200,
         "wires": [
             [
                 "6c520fd9fa076262"
@@ -6857,8 +6865,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 870,
-        "y": 300,
+        "x": 850,
+        "y": 200,
         "wires": []
     },
     {
@@ -6887,8 +6895,8 @@
         "offcolor": "",
         "animate": true,
         "className": "",
-        "x": 760,
-        "y": 380,
+        "x": 740,
+        "y": 280,
         "wires": [
             [
                 "2ce4d28a57de20ad"
@@ -6905,8 +6913,8 @@
         "datatype": "auto",
         "broker": "bcebf477.ab97e8",
         "inputs": 0,
-        "x": 330,
-        "y": 380,
+        "x": 310,
+        "y": 280,
         "wires": [
             [
                 "f70b55f744fb4332"
@@ -6922,8 +6930,8 @@
         "qos": "2",
         "retain": "true",
         "broker": "bcebf477.ab97e8",
-        "x": 990,
-        "y": 380,
+        "x": 970,
+        "y": 280,
         "wires": []
     },
     {
@@ -6956,8 +6964,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 570,
-        "y": 380,
+        "x": 550,
+        "y": 280,
         "wires": [
             [
                 "38da93796fbd4580"
@@ -7619,5 +7627,81 @@
         "wires": [
             []
         ]
+    },
+    {
+        "id": "977b1122449c88d2",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "g": "d08139ad083ea05b",
+        "name": "set target_room_temperature",
+        "func": "flow.set(\"target_room_temperature\", msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ab02520826da9631",
+        "type": "mqtt in",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "topic": "sensors/heizkreis/1",
+        "qos": "0",
+        "datatype": "json",
+        "broker": "bcebf477.ab97e8",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 290,
+        "y": 380,
+        "wires": [
+            [
+                "33fc9ec9910df8ed"
+            ]
+        ]
+    },
+    {
+        "id": "33fc9ec9910df8ed",
+        "type": "function",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "set supply_temperature",
+        "func": "flow.set(\"supply_temperature\", msg.payload);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "// Code added here will be run once\n// whenever the node is deployed.\n\nflow.set(\"outdoor_temperature\", undefined);",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 380,
+        "wires": [
+            [
+                "e218ffb609df9150"
+            ]
+        ]
+    },
+    {
+        "id": "e218ffb609df9150",
+        "type": "debug",
+        "z": "bcf4ea8afb5c8eb2",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 830,
+        "y": 380,
+        "wires": []
     }
 ]
