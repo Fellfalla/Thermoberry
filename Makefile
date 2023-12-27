@@ -16,7 +16,8 @@ docker_install:
 docker_rootless:
 	sudo groupadd docker || true
 	sudo usermod -aG docker ${USER} || true
-	newgrp docker
+	# newgrp docker
+	echo "Please restart your machine!"
 
 .PHONY: docker_verify
 docker_verify:
@@ -32,9 +33,10 @@ docker_compose:
 setup:
 	make docker_install
 	make docker_rootless
+	make docker_compose
 
 .PHONY: run
-run: # Runs the docker container with according environment variables
+run: # Runs the docker container with according environment variables and enables autostart
 run:
 	env UID=${UID} GID=${GID} docker compose -f docker-compose.yml up -d
 
@@ -52,3 +54,8 @@ logs:
 secret: # create local secret
 secret:
 	echo "CREDENTIAL_FILE_KEY=$(shell gpg --gen-random --armor 1 18)" > .env.secret
+
+.PHONY: help
+help: # outputs help notifications about this file
+help: 
+	cat Makefile
